@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AgriMind</string>
+    <string name="check_backend_connection">Check Backend Connection</string>
+    <string name="backend_status_title">FastAPI Backend Status</string>
+    <string name="retry">Retry Connection</string>
+</resources>
+

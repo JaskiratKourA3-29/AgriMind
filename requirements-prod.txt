@@ -1,0 +1,28 @@
+# AgriMind Production Backend Dependencies (CPU Inference & RAG)
+fastapi>=0.115.0,<0.116.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.8.0,<3.0.0
+pydantic-settings>=2.4.0
+python-multipart>=0.0.9
+python-dotenv>=1.0.1
+bcrypt>=4.0.0
+requests>=2.31.0
+pillow>=10.4.0
+chromadb>=0.5.5
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+langgraph>=0.2.0
+langchain-google-genai>=2.0.0
+google-genai>=0.1.0
+
+# Agricultural RAG & Embedding Fallback
+pandas>=2.2.0
+scikit-learn>=1.4.0
+sentence-transformers>=3.0.0
+
+# PyTorch & Torchvision for CPU Vision Inference (ResNet-50)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.2.0
+torchvision>=0.17.0
+

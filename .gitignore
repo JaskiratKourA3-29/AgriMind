@@ -1,0 +1,100 @@
+# ==============================================================================
+# AgriMind - Comprehensive .gitignore
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Environment credentials, secrets, and private keys
+# ------------------------------------------------------------------------------
+.env
+.env.*
+*.env
+!.env.example
+*.pem
+*.key
+*.jks
+*.keystore
+
+# ------------------------------------------------------------------------------
+# 2. Android build artifacts, caches, and local configurations
+# ------------------------------------------------------------------------------
+android/.gradle/
+android/.kotlin/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+*.apk
+*.aab
+*.ap_
+
+# ------------------------------------------------------------------------------
+# 3. Model weights and large binary checkpoints (>100 MB)
+# ------------------------------------------------------------------------------
+*.pth
+*.pt
+*.bin
+*.onnx
+*.weights
+*.h5
+outputs/week2_vision/best_model.pth
+scripts/outputs/week2_vision/best_model.pth
+
+# ------------------------------------------------------------------------------
+# 4. Local SQLite databases, backups, and private farmer records
+# ------------------------------------------------------------------------------
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+*.bak
+data/cases.db
+data/cases.db.*
+data/cases_backup*.db
+data/chroma_db/
+data/vectorstore/chroma/
+data/community_uploads/*
+!data/community_uploads/.gitkeep
+
+# ------------------------------------------------------------------------------
+# 5. Tools and external executables
+# ------------------------------------------------------------------------------
+tools/cloudflared.exe
+*.exe
+
+# ------------------------------------------------------------------------------
+# 6. Test runs, research experiments, dumps, and scratch files
+#    (Excludes specific debug dumps only; preserves essential Android XML files)
+# ------------------------------------------------------------------------------
+outputs/
+scripts/outputs/
+scratch/
+*.log
+*.dex
+*.class
+docs/uidump*.xml
+docs/stage_c5_*_dump.xml
+docs/test_run_raw.txt
+
+# ------------------------------------------------------------------------------
+# 7. Python bytecode, caches, and virtual environments
+# ------------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+venv/
+.venv/
+env/
+ENV/
+
+# ------------------------------------------------------------------------------
+# 8. OS and IDE artifacts
+# ------------------------------------------------------------------------------
+Thumbs.db
+.DS_Store
+.vscode/
+.idea/

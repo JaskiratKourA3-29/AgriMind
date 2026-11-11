@@ -1,0 +1,1199 @@
+[
+  {
+    "chunk_id": "DOC-CORNELL-TOM-BS-01-C001",
+    "text": "# Bacterial Spot and Speck of Tomato (Cornell CALS)",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-BS-01-C001",
+      "doc_id": "DOC-CORNELL-TOM-BS-01",
+      "title": "Bacterial Spot and Speck of Tomato",
+      "institution": "Cornell University Plant Disease Diagnostic Clinic",
+      "authors": "Margery Daughtrey, Thomas A. Zitter",
+      "publication_year": 2021,
+      "source_url": "https://cals.cornell.edu/plant-disease-diagnostic-clinic/cradle-grave/fact-sheets/bacterial-spot-and-speck-tomato",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans / Xanthomonas campestris pv. vesicatoria",
+      "pathogen_type": "Bacterial",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Epidemiology",
+      "chunk_index": 1,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-BS-01-C002",
+    "text": "## Diagnostic Symptomology",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-BS-01-C002",
+      "doc_id": "DOC-CORNELL-TOM-BS-01",
+      "title": "Bacterial Spot and Speck of Tomato",
+      "institution": "Cornell University Plant Disease Diagnostic Clinic",
+      "authors": "Margery Daughtrey, Thomas A. Zitter",
+      "publication_year": 2021,
+      "source_url": "https://cals.cornell.edu/plant-disease-diagnostic-clinic/cradle-grave/fact-sheets/bacterial-spot-and-speck-tomato",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans / Xanthomonas campestris pv. vesicatoria",
+      "pathogen_type": "Bacterial",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Epidemiology",
+      "chunk_index": 2,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-BS-01-C003",
+    "text": "Bacterial spot of tomato is caused by several species of *Xanthomonas*, predominantly *Xanthomonas perforans* and *Xanthomonas campestris pv. vesicatoria*. Foliar symptoms begin as small, water-soaked, circular to irregular lesions (less than 1/8 inch or 3 mm in diameter) on leaves. As lesions age, they turn dark brown to black and often develop a greasy appearance. Lesions may coalesce, causing extensive foliar blighting, yellowing (chlorosis), and premature leaf drop",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-BS-01-C003",
+      "doc_id": "DOC-CORNELL-TOM-BS-01",
+      "title": "Bacterial Spot and Speck of Tomato",
+      "institution": "Cornell University Plant Disease Diagnostic Clinic",
+      "authors": "Margery Daughtrey, Thomas A. Zitter",
+      "publication_year": 2021,
+      "source_url": "https://cals.cornell.edu/plant-disease-diagnostic-clinic/cradle-grave/fact-sheets/bacterial-spot-and-speck-tomato",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans / Xanthomonas campestris pv. vesicatoria",
+      "pathogen_type": "Bacterial",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Epidemiology",
+      "chunk_index": 3,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-BS-01-C004",
+    "text": ". On green fruit, spots begin as small, slightly raised black blisters that enlarge up to 1/4 inch, becoming brown, scabby, rough, and sunken with irregular margins.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-BS-01-C004",
+      "doc_id": "DOC-CORNELL-TOM-BS-01",
+      "title": "Bacterial Spot and Speck of Tomato",
+      "institution": "Cornell University Plant Disease Diagnostic Clinic",
+      "authors": "Margery Daughtrey, Thomas A. Zitter",
+      "publication_year": 2021,
+      "source_url": "https://cals.cornell.edu/plant-disease-diagnostic-clinic/cradle-grave/fact-sheets/bacterial-spot-and-speck-tomato",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans / Xanthomonas campestris pv. vesicatoria",
+      "pathogen_type": "Bacterial",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Epidemiology",
+      "chunk_index": 4,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-BS-01-C005",
+    "text": "## Environmental Epidemiology\nThe bacteria survive on contaminated seed, volunteer tomato plants, and infected solanaceous crop debris. Infection and rapid disease spread are strongly favored by warm temperatures between 75\u00b0F and 86\u00b0F (24\u00b0C to 30\u00b0C) combined with high relative humidity, frequent rainfall, or overhead sprinkler irrigation. Bacteria enter through natural leaf openings (stomata) or physical wounds caused by wind, sandblasting, pruning, or insect feeding.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-BS-01-C005",
+      "doc_id": "DOC-CORNELL-TOM-BS-01",
+      "title": "Bacterial Spot and Speck of Tomato",
+      "institution": "Cornell University Plant Disease Diagnostic Clinic",
+      "authors": "Margery Daughtrey, Thomas A. Zitter",
+      "publication_year": 2021,
+      "source_url": "https://cals.cornell.edu/plant-disease-diagnostic-clinic/cradle-grave/fact-sheets/bacterial-spot-and-speck-tomato",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans / Xanthomonas campestris pv. vesicatoria",
+      "pathogen_type": "Bacterial",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Epidemiology",
+      "chunk_index": 5,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-BS-01-C006",
+    "text": "## Cultural Management Practices\n1. **Certified Disease-Free Seed:** Use only certified pathogen-free seed. If seed source is uncertain, treat seed with hot water (122\u00b0F / 50\u00b0C for exactly 25 minutes) to eradicate internal and external bacterial contamination without damaging germination.\n2. **Crop Rotation:** Implement a minimum 2-year crop rotation away from all solanaceous crops (tomatoes, peppers, potatoes, eggplants) to starve overwintering bacterial populations in the soil.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-BS-01-C006",
+      "doc_id": "DOC-CORNELL-TOM-BS-01",
+      "title": "Bacterial Spot and Speck of Tomato",
+      "institution": "Cornell University Plant Disease Diagnostic Clinic",
+      "authors": "Margery Daughtrey, Thomas A. Zitter",
+      "publication_year": 2021,
+      "source_url": "https://cals.cornell.edu/plant-disease-diagnostic-clinic/cradle-grave/fact-sheets/bacterial-spot-and-speck-tomato",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans / Xanthomonas campestris pv. vesicatoria",
+      "pathogen_type": "Bacterial",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Epidemiology",
+      "chunk_index": 6,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-BS-01-C007",
+    "text": "3. **Irrigation Management:** Avoid overhead irrigation. Use drip or trickle irrigation beneath plastic mulch to keep foliage dry.\n4. **Sanitation:** Never work in tomato fields when foliage is wet from dew or rain, as bacteria are easily transferred on workers' hands, clothing, and machinery. Thoroughly sanitize wooden stakes and harvest bins using a 10% sodium hypochlorite solution or quaternary ammonium sanitizers.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-BS-01-C007",
+      "doc_id": "DOC-CORNELL-TOM-BS-01",
+      "title": "Bacterial Spot and Speck of Tomato",
+      "institution": "Cornell University Plant Disease Diagnostic Clinic",
+      "authors": "Margery Daughtrey, Thomas A. Zitter",
+      "publication_year": 2021,
+      "source_url": "https://cals.cornell.edu/plant-disease-diagnostic-clinic/cradle-grave/fact-sheets/bacterial-spot-and-speck-tomato",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans / Xanthomonas campestris pv. vesicatoria",
+      "pathogen_type": "Bacterial",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Epidemiology",
+      "chunk_index": 7,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-BS-01-C008",
+    "text": "## Chemical Control & Bactericide Strategy\nPreventative bactericidal applications are essential because therapeutic cure of established bacterial infections is impossible:\n- **Copper + Mancozeb Tank Mix:** Apply fixed copper bactericides (such as copper hydroxide or basic copper sulfate at 1.5 to 2.0 lb/acre) combined with an EBDC fungicide (such as mancozeb at 1.5 lb/acre). The combination releases more free copper ions, overcoming moderate levels of bacterial copper tolerance.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-BS-01-C008",
+      "doc_id": "DOC-CORNELL-TOM-BS-01",
+      "title": "Bacterial Spot and Speck of Tomato",
+      "institution": "Cornell University Plant Disease Diagnostic Clinic",
+      "authors": "Margery Daughtrey, Thomas A. Zitter",
+      "publication_year": 2021,
+      "source_url": "https://cals.cornell.edu/plant-disease-diagnostic-clinic/cradle-grave/fact-sheets/bacterial-spot-and-speck-tomato",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans / Xanthomonas campestris pv. vesicatoria",
+      "pathogen_type": "Bacterial",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Epidemiology",
+      "chunk_index": 8,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-BS-01-C009",
+    "text": "- **Plant Defense Activator:** Apply acibenzolar-S-methyl (Actigard 50WG at 0.33 to 0.75 oz/acre) to induce systemic acquired resistance (SAR). Begin Actigard applications preventatively after transplanting when plants are established, prior to disease onset.\n- **Application Intervals:** Maintain a 7- to 10-day spray schedule under dry conditions, shortening intervals to 5 to 7 days during warm, rainy weather. Strictly observe label reentry intervals (REI) and pre-harvest intervals (PHI).",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-BS-01-C009",
+      "doc_id": "DOC-CORNELL-TOM-BS-01",
+      "title": "Bacterial Spot and Speck of Tomato",
+      "institution": "Cornell University Plant Disease Diagnostic Clinic",
+      "authors": "Margery Daughtrey, Thomas A. Zitter",
+      "publication_year": 2021,
+      "source_url": "https://cals.cornell.edu/plant-disease-diagnostic-clinic/cradle-grave/fact-sheets/bacterial-spot-and-speck-tomato",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans / Xanthomonas campestris pv. vesicatoria",
+      "pathogen_type": "Bacterial",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Epidemiology",
+      "chunk_index": 9,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UFIFAS-TOM-BS-02-C001",
+    "text": "# Management of Bacterial Spot on Tomato in Florida (UF/IFAS Extension)\n\n## Overview & Pathogen Biology\nBacterial spot caused by *Xanthomonas perforans* is the most economically damaging foliar disease of fresh-market tomato production in humid subtropical and tropical environments. The pathogen attacks all above-ground plant parts including leaves, stems, flowers, and fruit. Severe defoliation results in major yield loss and exposes developing tomato fruit to solar injury (sunscald).",
+    "metadata": {
+      "chunk_id": "DOC-UFIFAS-TOM-BS-02-C001",
+      "doc_id": "DOC-UFIFAS-TOM-BS-02",
+      "title": "Management of Bacterial Spot on Tomato in Florida",
+      "institution": "University of Florida IFAS Extension (EDIS PP-73)",
+      "authors": "Gary E. Vallad, Pamela D. Roberts",
+      "publication_year": 2022,
+      "source_url": "https://edis.ifas.ufl.edu/publication/PP121",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans",
+      "pathogen_type": "Bacterial",
+      "categories": "Chemical Management,Biological Control,Resistance Management,Sanitation",
+      "chunk_index": 1,
+      "total_doc_chunks": 6
+    }
+  },
+  {
+    "chunk_id": "DOC-UFIFAS-TOM-BS-02-C002",
+    "text": "## Copper Resistance & Chemical Strategies\nWidespread resistance to copper bactericides exists in field populations of *Xanthomonas perforans*:\n1. **Copper plus Mancozeb Synergism:** Routine reliance on copper alone frequently fails due to copper-tolerant strains. The tank-mixture of fixed copper (copper hydroxide or copper octanoate) with mancozeb is critical to generate toxic levels of soluble copper ions that kill resistant bacteria.",
+    "metadata": {
+      "chunk_id": "DOC-UFIFAS-TOM-BS-02-C002",
+      "doc_id": "DOC-UFIFAS-TOM-BS-02",
+      "title": "Management of Bacterial Spot on Tomato in Florida",
+      "institution": "University of Florida IFAS Extension (EDIS PP-73)",
+      "authors": "Gary E. Vallad, Pamela D. Roberts",
+      "publication_year": 2022,
+      "source_url": "https://edis.ifas.ufl.edu/publication/PP121",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans",
+      "pathogen_type": "Bacterial",
+      "categories": "Chemical Management,Biological Control,Resistance Management,Sanitation",
+      "chunk_index": 2,
+      "total_doc_chunks": 6
+    }
+  },
+  {
+    "chunk_id": "DOC-UFIFAS-TOM-BS-02-C003",
+    "text": "2. **Plant Host Defense Activators:** Acibenzolar-S-methyl (Actigard) induces systemic acquired resistance (SAR) in tomato plants. To optimize efficacy and avoid plant stunting, apply Actigard at recommended low doses (0.33 to 0.75 oz/acre) starting 7 to 10 days post-transplant, repeating every 7 to 10 days for up to six to eight applications per season.",
+    "metadata": {
+      "chunk_id": "DOC-UFIFAS-TOM-BS-02-C003",
+      "doc_id": "DOC-UFIFAS-TOM-BS-02",
+      "title": "Management of Bacterial Spot on Tomato in Florida",
+      "institution": "University of Florida IFAS Extension (EDIS PP-73)",
+      "authors": "Gary E. Vallad, Pamela D. Roberts",
+      "publication_year": 2022,
+      "source_url": "https://edis.ifas.ufl.edu/publication/PP121",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans",
+      "pathogen_type": "Bacterial",
+      "categories": "Chemical Management,Biological Control,Resistance Management,Sanitation",
+      "chunk_index": 3,
+      "total_doc_chunks": 6
+    }
+  },
+  {
+    "chunk_id": "DOC-UFIFAS-TOM-BS-02-C004",
+    "text": "3. **Bacteriophage Formulations:** Bacteriophage bio-bactericides (AgriPhage) target specific strains of *Xanthomonas*. Apply bacteriophages in early morning or evening to minimize degradation by solar ultraviolet (UV) radiation. Do not tank-mix phages directly with concentrated copper compounds without testing compatibility.",
+    "metadata": {
+      "chunk_id": "DOC-UFIFAS-TOM-BS-02-C004",
+      "doc_id": "DOC-UFIFAS-TOM-BS-02",
+      "title": "Management of Bacterial Spot on Tomato in Florida",
+      "institution": "University of Florida IFAS Extension (EDIS PP-73)",
+      "authors": "Gary E. Vallad, Pamela D. Roberts",
+      "publication_year": 2022,
+      "source_url": "https://edis.ifas.ufl.edu/publication/PP121",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans",
+      "pathogen_type": "Bacterial",
+      "categories": "Chemical Management,Biological Control,Resistance Management,Sanitation",
+      "chunk_index": 4,
+      "total_doc_chunks": 6
+    }
+  },
+  {
+    "chunk_id": "DOC-UFIFAS-TOM-BS-02-C005",
+    "text": "## Biological Control Options\n- **Microbial Antagonists:** Formulations of *Bacillus amyloliquefaciens* (strain D747) or *Bacillus subtilis* provide moderate suppression of bacterial spot when applied preventatively as protective foliage coatings. Biologicals are especially valuable in organic tomato production systems where synthetic bactericides are prohibited.",
+    "metadata": {
+      "chunk_id": "DOC-UFIFAS-TOM-BS-02-C005",
+      "doc_id": "DOC-UFIFAS-TOM-BS-02",
+      "title": "Management of Bacterial Spot on Tomato in Florida",
+      "institution": "University of Florida IFAS Extension (EDIS PP-73)",
+      "authors": "Gary E. Vallad, Pamela D. Roberts",
+      "publication_year": 2022,
+      "source_url": "https://edis.ifas.ufl.edu/publication/PP121",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans",
+      "pathogen_type": "Bacterial",
+      "categories": "Chemical Management,Biological Control,Resistance Management,Sanitation",
+      "chunk_index": 5,
+      "total_doc_chunks": 6
+    }
+  },
+  {
+    "chunk_id": "DOC-UFIFAS-TOM-BS-02-C006",
+    "text": "## Post-Harvest Field Hygiene & Sanitation\n- **Crop Residue Destruction:** Immediately disc, flail, or plow under tomato crop residues immediately following the final harvest. Rapid tissue decomposition degrades bacterial survival shelters in the soil.\n- **Volunteer Control:** Actively eradicate volunteer tomato and pepper plants, as well as nightshade weed species (such as *Solanum americanum*), in field perimeters, ditch banks, and adjacent fallow fields between growing seasons.",
+    "metadata": {
+      "chunk_id": "DOC-UFIFAS-TOM-BS-02-C006",
+      "doc_id": "DOC-UFIFAS-TOM-BS-02",
+      "title": "Management of Bacterial Spot on Tomato in Florida",
+      "institution": "University of Florida IFAS Extension (EDIS PP-73)",
+      "authors": "Gary E. Vallad, Pamela D. Roberts",
+      "publication_year": 2022,
+      "source_url": "https://edis.ifas.ufl.edu/publication/PP121",
+      "disease_targets": "Tomato___Bacterial_spot",
+      "pathogen": "Xanthomonas perforans",
+      "pathogen_type": "Bacterial",
+      "categories": "Chemical Management,Biological Control,Resistance Management,Sanitation",
+      "chunk_index": 6,
+      "total_doc_chunks": 6
+    }
+  },
+  {
+    "chunk_id": "DOC-PURDUE-TOM-EB-01-C001",
+    "text": "# Foliar Diseases of Tomato: Early Blight (Purdue Extension)",
+    "metadata": {
+      "chunk_id": "DOC-PURDUE-TOM-EB-01-C001",
+      "doc_id": "DOC-PURDUE-TOM-EB-01",
+      "title": "Foliar Diseases of Tomato: Early Blight, Septoria Leaf Spot, and Anthracnose",
+      "institution": "Purdue University Extension (BP-85-W)",
+      "authors": "Dan Egel",
+      "publication_year": 2020,
+      "source_url": "https://www.extension.purdue.edu/extmedia/BP/BP-85-W.pdf",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Crop Rotation",
+      "chunk_index": 1,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-PURDUE-TOM-EB-01-C002",
+    "text": "## Symptomology & Identification",
+    "metadata": {
+      "chunk_id": "DOC-PURDUE-TOM-EB-01-C002",
+      "doc_id": "DOC-PURDUE-TOM-EB-01",
+      "title": "Foliar Diseases of Tomato: Early Blight, Septoria Leaf Spot, and Anthracnose",
+      "institution": "Purdue University Extension (BP-85-W)",
+      "authors": "Dan Egel",
+      "publication_year": 2020,
+      "source_url": "https://www.extension.purdue.edu/extmedia/BP/BP-85-W.pdf",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Crop Rotation",
+      "chunk_index": 2,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-PURDUE-TOM-EB-01-C003",
+    "text": "Early blight is caused by the fungal pathogen *Alternaria solani*. Symptoms first emerge on the oldest, lowermost leaves as small, circular, brown to black spots. As spots expand to 1/4 to 1/2 inch in diameter, they develop distinctive concentric ridges resembling a target board or bullseye pattern. The tissue surrounding the lesion frequently becomes yellow (chlorotic). As lesions multiply, entire lower leaves turn brown, wither, and drop from the plant. This progressive defoliation works upward through the canopy, exposing fruit to sunscald",
+    "metadata": {
+      "chunk_id": "DOC-PURDUE-TOM-EB-01-C003",
+      "doc_id": "DOC-PURDUE-TOM-EB-01",
+      "title": "Foliar Diseases of Tomato: Early Blight, Septoria Leaf Spot, and Anthracnose",
+      "institution": "Purdue University Extension (BP-85-W)",
+      "authors": "Dan Egel",
+      "publication_year": 2020,
+      "source_url": "https://www.extension.purdue.edu/extmedia/BP/BP-85-W.pdf",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Crop Rotation",
+      "chunk_index": 3,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-PURDUE-TOM-EB-01-C004",
+    "text": ". This progressive defoliation works upward through the canopy, exposing fruit to sunscald. On stems, dark, sunken, oval cankers may form (termed collar rot when occurring at the soil line on young transplants). On green or ripe fruit, lesions occur near the stem attachment (calyx end) as dark, leathery, sunken, concentric depressions.",
+    "metadata": {
+      "chunk_id": "DOC-PURDUE-TOM-EB-01-C004",
+      "doc_id": "DOC-PURDUE-TOM-EB-01",
+      "title": "Foliar Diseases of Tomato: Early Blight, Septoria Leaf Spot, and Anthracnose",
+      "institution": "Purdue University Extension (BP-85-W)",
+      "authors": "Dan Egel",
+      "publication_year": 2020,
+      "source_url": "https://www.extension.purdue.edu/extmedia/BP/BP-85-W.pdf",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Crop Rotation",
+      "chunk_index": 4,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-PURDUE-TOM-EB-01-C005",
+    "text": "## Overwintering & Disease Cycle\n*Alternaria solani* overwinters in infested tomato vines, potato debris, and wild solanaceous weeds (such as black nightshade and horsenettle). Spores (conidia) are produced abundantly during warm, humid weather and are disseminated by wind currents, rain splash, and mechanical equipment. Infection occurs rapidly when leaf surfaces remain wet from dew or rain for 8 or more hours at temperatures between 75\u00b0F and 85\u00b0F (24\u00b0C to 29\u00b0C).",
+    "metadata": {
+      "chunk_id": "DOC-PURDUE-TOM-EB-01-C005",
+      "doc_id": "DOC-PURDUE-TOM-EB-01",
+      "title": "Foliar Diseases of Tomato: Early Blight, Septoria Leaf Spot, and Anthracnose",
+      "institution": "Purdue University Extension (BP-85-W)",
+      "authors": "Dan Egel",
+      "publication_year": 2020,
+      "source_url": "https://www.extension.purdue.edu/extmedia/BP/BP-85-W.pdf",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Crop Rotation",
+      "chunk_index": 5,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-PURDUE-TOM-EB-01-C006",
+    "text": "## Cultural Management Guidelines\n1. **Crop Rotation:** Practice a strict 2- to 3-year crop rotation out of solanaceous crops. Do not plant tomatoes where tomatoes, potatoes, eggplants, or peppers grew in the previous two seasons.\n2. **Plant Spacing & Trellising:** Space plants adequately (18 to 24 inches within rows, 5 to 6 feet between rows) and stake or cage plants to promote rapid drying of foliage after dew and rain.",
+    "metadata": {
+      "chunk_id": "DOC-PURDUE-TOM-EB-01-C006",
+      "doc_id": "DOC-PURDUE-TOM-EB-01",
+      "title": "Foliar Diseases of Tomato: Early Blight, Septoria Leaf Spot, and Anthracnose",
+      "institution": "Purdue University Extension (BP-85-W)",
+      "authors": "Dan Egel",
+      "publication_year": 2020,
+      "source_url": "https://www.extension.purdue.edu/extmedia/BP/BP-85-W.pdf",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Crop Rotation",
+      "chunk_index": 6,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-PURDUE-TOM-EB-01-C007",
+    "text": "3. **Mulching & Pruning:** Apply straw, plastic mulch, or landscape fabric to provide a physical barrier preventing rain from splashing soil-borne fungal spores onto lower leaves. Prune lower suckers and leaves up to 12 inches above the mulch line once the plant is established.\n4. **Watering Practices:** Use drip irrigation or soaker hoses. Avoid overhead irrigation; if overhead watering is unavoidable, irrigate early in the morning so sun and wind dry the leaves within 2 hours.",
+    "metadata": {
+      "chunk_id": "DOC-PURDUE-TOM-EB-01-C007",
+      "doc_id": "DOC-PURDUE-TOM-EB-01",
+      "title": "Foliar Diseases of Tomato: Early Blight, Septoria Leaf Spot, and Anthracnose",
+      "institution": "Purdue University Extension (BP-85-W)",
+      "authors": "Dan Egel",
+      "publication_year": 2020,
+      "source_url": "https://www.extension.purdue.edu/extmedia/BP/BP-85-W.pdf",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Crop Rotation",
+      "chunk_index": 7,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-PURDUE-TOM-EB-01-C008",
+    "text": "## Fungicide Spray Programs\n- **Preventative Protectants:** Begin applications early in the season before disease appears or when first fruit cluster reaches walnut size:\n  - Chlorothalonil (Bravo Weather Stik, Daconil at 1.5 to 2.0 pt/acre) or Mancozeb (Dithane, Manzate at 1.5 to 2.0 lb/acre) applied every 7 to 10 days.\n- **Targeted Systemic Fungicides:** When disease pressure is high, alternate protectants with systemic fungicides:\n  - Azoxystrobin (Quadris - FRAC 11), Boscalid (Endura - FRAC 7), or Difenoconazole / Cyprodinil (Inspire Super - FRAC 3/9).",
+    "metadata": {
+      "chunk_id": "DOC-PURDUE-TOM-EB-01-C008",
+      "doc_id": "DOC-PURDUE-TOM-EB-01",
+      "title": "Foliar Diseases of Tomato: Early Blight, Septoria Leaf Spot, and Anthracnose",
+      "institution": "Purdue University Extension (BP-85-W)",
+      "authors": "Dan Egel",
+      "publication_year": 2020,
+      "source_url": "https://www.extension.purdue.edu/extmedia/BP/BP-85-W.pdf",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Crop Rotation",
+      "chunk_index": 8,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-PURDUE-TOM-EB-01-C009",
+    "text": "- Always rotate FRAC codes to prevent the development of fungicide resistance.\n- **Organic Protectants:** Fixed copper fungicides (copper hydroxide) or sulfur products provide fair suppression when applied frequently before infection.",
+    "metadata": {
+      "chunk_id": "DOC-PURDUE-TOM-EB-01-C009",
+      "doc_id": "DOC-PURDUE-TOM-EB-01",
+      "title": "Foliar Diseases of Tomato: Early Blight, Septoria Leaf Spot, and Anthracnose",
+      "institution": "Purdue University Extension (BP-85-W)",
+      "authors": "Dan Egel",
+      "publication_year": 2020,
+      "source_url": "https://www.extension.purdue.edu/extmedia/BP/BP-85-W.pdf",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Cultural Control,Chemical Management,Crop Rotation",
+      "chunk_index": 9,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-EB-02-C001",
+    "text": "# Tomato: Early Blight Management (UC IPM Guidelines)",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-EB-02-C001",
+      "doc_id": "DOC-UCIPM-TOM-EB-02",
+      "title": "Tomato: Early Blight (Alternaria solani)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, G. Miyao",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Epidemiology,Fungicide Timing,Organic Control,Sanitation",
+      "chunk_index": 1,
+      "total_doc_chunks": 8
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-EB-02-C002",
+    "text": "## Disease Overview & Field Symptoms",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-EB-02-C002",
+      "doc_id": "DOC-UCIPM-TOM-EB-02",
+      "title": "Tomato: Early Blight (Alternaria solani)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, G. Miyao",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Epidemiology,Fungicide Timing,Organic Control,Sanitation",
+      "chunk_index": 2,
+      "total_doc_chunks": 8
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-EB-02-C003",
+    "text": "Early blight is caused by the fungus *Alternaria solani*. Although called \"early\" blight, the disease frequently becomes severe later in the season as the tomato fruit load increases and nitrogen levels in the canopy begin to decline. Stressed or heavy-yielding vines are particularly susceptible. Leaf spots are leathery, brown, circular, and show dark concentric rings, resembling an archery target. Collar rot symptoms can girdle the stems of transplants. Fruit infections occur at the stem-end calyx attachment, forming a sunken black crater covered with dark velvety spores.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-EB-02-C003",
+      "doc_id": "DOC-UCIPM-TOM-EB-02",
+      "title": "Tomato: Early Blight (Alternaria solani)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, G. Miyao",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Epidemiology,Fungicide Timing,Organic Control,Sanitation",
+      "chunk_index": 3,
+      "total_doc_chunks": 8
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-EB-02-C004",
+    "text": "## Environmental Triggers & Epidemiology\n- Optimum fungal growth occurs between 75\u00b0F and 85\u00b0F (24\u00b0C to 29\u00b0C).\n- Prolonged wet periods (at least 6 to 8 hours of continuous leaf wetness from rain, sprinkler irrigation, or heavy coastal fog) are necessary for spore germination and host penetration.\n- Spores survive for more than one year on buried plant residues and on alternative solanaceous hosts.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-EB-02-C004",
+      "doc_id": "DOC-UCIPM-TOM-EB-02",
+      "title": "Tomato: Early Blight (Alternaria solani)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, G. Miyao",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Epidemiology,Fungicide Timing,Organic Control,Sanitation",
+      "chunk_index": 4,
+      "total_doc_chunks": 8
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-EB-02-C005",
+    "text": "## Integrated Pest Management (IPM) Practices\n1. **Resistant & Tolerant Cultivars:** When available, select tomato varieties with partial resistance or tolerance to *Alternaria solani* to slow down epidemic progress.\n2. **Nutritional Balance:** Maintain adequate, balanced nitrogen fertilization throughout the growing season. Plants suffering nitrogen deficiency senesce prematurely and suffer accelerated early blight defoliation.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-EB-02-C005",
+      "doc_id": "DOC-UCIPM-TOM-EB-02",
+      "title": "Tomato: Early Blight (Alternaria solani)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, G. Miyao",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Epidemiology,Fungicide Timing,Organic Control,Sanitation",
+      "chunk_index": 5,
+      "total_doc_chunks": 8
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-EB-02-C006",
+    "text": "3. **Deep Plowing & Sanitation:** After harvest, deeply plow under crop residue to accelerate fungal decomposition by soil microorganisms. Eliminate volunteer solanaceous weeds around field borders.\n4. **Avoid Overhead Irrigation:** In arid and semi-arid production zones, furrow or subsurface drip irrigation keeps the plant canopy dry and almost completely suppresses early blight development.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-EB-02-C006",
+      "doc_id": "DOC-UCIPM-TOM-EB-02",
+      "title": "Tomato: Early Blight (Alternaria solani)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, G. Miyao",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Epidemiology,Fungicide Timing,Organic Control,Sanitation",
+      "chunk_index": 6,
+      "total_doc_chunks": 8
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-EB-02-C007",
+    "text": "## Chemical Control Schedules\n- Begin preventative fungicide applications when the first fruit cluster sets or when early blight symptoms are detected on lower leaves.\n- **Protectant Treatments:** Chlorothalonil or mancozeb provide reliable preventative protection. Apply on a 7- to 14-day schedule depending on rainfall frequency.\n- **Systemic Products:** When weather favors disease, incorporate translaminar and systemic materials such as pyraclostrobin (Cabrio - FRAC 11) or fluopyram + trifloxystrobin (Luna Sensation - FRAC 7/11).",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-EB-02-C007",
+      "doc_id": "DOC-UCIPM-TOM-EB-02",
+      "title": "Tomato: Early Blight (Alternaria solani)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, G. Miyao",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Epidemiology,Fungicide Timing,Organic Control,Sanitation",
+      "chunk_index": 7,
+      "total_doc_chunks": 8
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-EB-02-C008",
+    "text": "- **Organic Options:** Certified organic formulations of copper hydroxide (Kocide 3000) or *Bacillus subtilis* (Serenade ASO) applied preventatively can slow early blight progress under moderate disease pressure.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-EB-02-C008",
+      "doc_id": "DOC-UCIPM-TOM-EB-02",
+      "title": "Tomato: Early Blight (Alternaria solani)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, G. Miyao",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/",
+      "disease_targets": "Tomato___Early_blight",
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": "Epidemiology,Fungicide Timing,Organic Control,Sanitation",
+      "chunk_index": 8,
+      "total_doc_chunks": 8
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-LB-01-C001",
+    "text": "# Late Blight Management in Tomato (Cornell CALS & USABlight)",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-LB-01-C001",
+      "doc_id": "DOC-CORNELL-TOM-LB-01",
+      "title": "Late Blight Management in Tomato",
+      "institution": "Cornell University Cooperative Extension (Vegetable Program & USABlight)",
+      "authors": "Meg McGrath, Abby Seaman",
+      "publication_year": 2022,
+      "source_url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Symptomology,Epidemiology,Disease Forecasting,Chemical Management,Resistant Varieties",
+      "chunk_index": 1,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-LB-01-C002",
+    "text": "## Diagnostic Features of Late Blight\nLate blight is caused by the oomycete *Phytophthora infestans* (an organism related to brown algae rather than true fungi). It is an extremely destructive pathogen capable of completely destroying entire fields of tomato and potato crops within 7 to 10 days if left unmanaged.\n- **Foliar Symptoms:** Initial lesions appear as pale green, water-soaked, irregular areas on leaves. Under humid conditions, lesions expand rapidly into large, purplish-brown to dark brown necrotic patches.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-LB-01-C002",
+      "doc_id": "DOC-CORNELL-TOM-LB-01",
+      "title": "Late Blight Management in Tomato",
+      "institution": "Cornell University Cooperative Extension (Vegetable Program & USABlight)",
+      "authors": "Meg McGrath, Abby Seaman",
+      "publication_year": 2022,
+      "source_url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Symptomology,Epidemiology,Disease Forecasting,Chemical Management,Resistant Varieties",
+      "chunk_index": 2,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-LB-01-C003",
+    "text": "- **White Sporulation:** In damp, foggy, or rainy conditions (relative humidity > 90%), a characteristic white, delicate, cottony growth (sporangia and sporangiophores) forms on the undersides of infected leaves and along affected green stems.\n- **Stem & Petiole Cankers:** Dark brown, greasy lesions frequently girdle petioles and green stems, causing rapid collapse of distal foliage.\n- **Fruit Symptoms:** Green or ripe fruit develop large, firm, rough, dark brown to olive-colored greasy lesions that remain firm unless invaded by secondary bacterial soft rot organisms.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-LB-01-C003",
+      "doc_id": "DOC-CORNELL-TOM-LB-01",
+      "title": "Late Blight Management in Tomato",
+      "institution": "Cornell University Cooperative Extension (Vegetable Program & USABlight)",
+      "authors": "Meg McGrath, Abby Seaman",
+      "publication_year": 2022,
+      "source_url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Symptomology,Epidemiology,Disease Forecasting,Chemical Management,Resistant Varieties",
+      "chunk_index": 3,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-LB-01-C004",
+    "text": "## Epidemiology & Weather Requirements\nUnlike early blight and bacterial spot which prefer warm conditions, *Phytophthora infestans* thrives in cool, wet, humid weather:\n- Ideal daytime temperatures: 60\u00b0F to 75\u00b0F (15\u00b0C to 24\u00b0C).\n- Cool nighttime temperatures: 50\u00b0F to 60\u00b0F (10\u00b0C to 15\u00b0C) with fog, dew, or rain.\n- Temperatures above 86\u00b0F (30\u00b0C) halt pathogen spore production and slow down lesion expansion.\n- Millions of microscopic sporangia are produced per lesion and can be transported aloft by wind currents for 5 to 10 miles.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-LB-01-C004",
+      "doc_id": "DOC-CORNELL-TOM-LB-01",
+      "title": "Late Blight Management in Tomato",
+      "institution": "Cornell University Cooperative Extension (Vegetable Program & USABlight)",
+      "authors": "Meg McGrath, Abby Seaman",
+      "publication_year": 2022,
+      "source_url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Symptomology,Epidemiology,Disease Forecasting,Chemical Management,Resistant Varieties",
+      "chunk_index": 4,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-LB-01-C005",
+    "text": "## Disease Forecasting & Scouting\n- Monitor the national **USABlight** network and regional weather-based disease forecasting systems (such as BlightCast and NEWA).\n- When weather conditions reach high-risk severity thresholds (accumulated Late Blight Disease Severity Values, DSVs), preventative fungicide coverage must be established immediately prior to rain events.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-LB-01-C005",
+      "doc_id": "DOC-CORNELL-TOM-LB-01",
+      "title": "Late Blight Management in Tomato",
+      "institution": "Cornell University Cooperative Extension (Vegetable Program & USABlight)",
+      "authors": "Meg McGrath, Abby Seaman",
+      "publication_year": 2022,
+      "source_url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Symptomology,Epidemiology,Disease Forecasting,Chemical Management,Resistant Varieties",
+      "chunk_index": 5,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-LB-01-C006",
+    "text": "## Resistant Cultivars\nPlanting resistant tomato varieties offers durable genetic protection:\n- Cultivars carrying both the *Ph-2* and *Ph-3* resistance genes (such as **Mountain Magic**, **Defiant PHR**, **Plum Regal**, and **Iron Lady**) exhibit exceptional resistance to the predominant USABlight clonal lineages (including US-23).",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-LB-01-C006",
+      "doc_id": "DOC-CORNELL-TOM-LB-01",
+      "title": "Late Blight Management in Tomato",
+      "institution": "Cornell University Cooperative Extension (Vegetable Program & USABlight)",
+      "authors": "Meg McGrath, Abby Seaman",
+      "publication_year": 2022,
+      "source_url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Symptomology,Epidemiology,Disease Forecasting,Chemical Management,Resistant Varieties",
+      "chunk_index": 6,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-LB-01-C007",
+    "text": "## Fungicide Recommendations\n1. **Preventative Protectants:** Apply chlorothalonil, mancozeb, or copper fungicides on a 5- to 7-day interval before late blight is reported in the region.\n2. **Targeted Oomycete Systemics:** Once late blight is confirmed locally or weather is conducive, transition to targeted translaminar or systemic oomycete fungicides:\n   - **Cymoxanil (Curzate 60DF):** Possesses 24- to 48-hour curative / post-infection kickback activity; must be tank-mixed with a protectant (chlorothalonil or mancozeb).",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-LB-01-C007",
+      "doc_id": "DOC-CORNELL-TOM-LB-01",
+      "title": "Late Blight Management in Tomato",
+      "institution": "Cornell University Cooperative Extension (Vegetable Program & USABlight)",
+      "authors": "Meg McGrath, Abby Seaman",
+      "publication_year": 2022,
+      "source_url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Symptomology,Epidemiology,Disease Forecasting,Chemical Management,Resistant Varieties",
+      "chunk_index": 7,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-LB-01-C008",
+    "text": "- **Mandipropamid (Revus):** High preventative and anti-sporulant efficacy.\n   - **Fluopicolide (Presidio):** Systemic oomycide with excellent translaminar movement.\n   - **Propamocarb (Previcur Flex):** Systemic protectant.\n3. **Organic Production:** Fixed copper fungicides (such as Champ, Badge, or Cueva) provide preventative protection if leaf surfaces are completely coated prior to spore deposition. Copper has zero curative kickback activity once tissue is infected.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-LB-01-C008",
+      "doc_id": "DOC-CORNELL-TOM-LB-01",
+      "title": "Late Blight Management in Tomato",
+      "institution": "Cornell University Cooperative Extension (Vegetable Program & USABlight)",
+      "authors": "Meg McGrath, Abby Seaman",
+      "publication_year": 2022,
+      "source_url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Symptomology,Epidemiology,Disease Forecasting,Chemical Management,Resistant Varieties",
+      "chunk_index": 8,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-LB-01-C009",
+    "text": "4. **Immediate Rogueing:** When an initial hot-spot plant is detected, bag the plant in plastic on a dry sunny midday, cut at the base, and remove from the field to extinguish the localized spore source.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-LB-01-C009",
+      "doc_id": "DOC-CORNELL-TOM-LB-01",
+      "title": "Late Blight Management in Tomato",
+      "institution": "Cornell University Cooperative Extension (Vegetable Program & USABlight)",
+      "authors": "Meg McGrath, Abby Seaman",
+      "publication_year": 2022,
+      "source_url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Symptomology,Epidemiology,Disease Forecasting,Chemical Management,Resistant Varieties",
+      "chunk_index": 9,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-LB-02-C001",
+    "text": "# Tomato: Late Blight Management (UC IPM Guidelines)",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-LB-02-C001",
+      "doc_id": "DOC-UCIPM-TOM-LB-02",
+      "title": "Tomato: Late Blight (Phytophthora infestans)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, T. A. Turini",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Cultural Management,Sanitation,Fungicide Spray Intervals,Scouting",
+      "chunk_index": 1,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-LB-02-C002",
+    "text": "## Symptoms and Field Diagnosis",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-LB-02-C002",
+      "doc_id": "DOC-UCIPM-TOM-LB-02",
+      "title": "Tomato: Late Blight (Phytophthora infestans)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, T. A. Turini",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Cultural Management,Sanitation,Fungicide Spray Intervals,Scouting",
+      "chunk_index": 2,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-LB-02-C003",
+    "text": "*Phytophthora infestans* infects leaves, stems, and fruit of tomato. Foliar lesions begin as pale green, water-soaked spots that rapidly enlarge into dark brown to black blighted areas. When leaves are examined in the morning during periods of high humidity or wetness, a fine white moldy growth composed of sporangiophores and sporangia is visible on the underside of the leaves at the margins of the necrotic lesions. Stems develop dark brown cankers that can cause the collapse of entire branches",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-LB-02-C003",
+      "doc_id": "DOC-UCIPM-TOM-LB-02",
+      "title": "Tomato: Late Blight (Phytophthora infestans)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, T. A. Turini",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Cultural Management,Sanitation,Fungicide Spray Intervals,Scouting",
+      "chunk_index": 3,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-LB-02-C004",
+    "text": ". Stems develop dark brown cankers that can cause the collapse of entire branches. Green tomato fruit develop dark, firm, greasy-looking, rough brown lesions with distinct borders, which do not soften unless invaded by secondary rots.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-LB-02-C004",
+      "doc_id": "DOC-UCIPM-TOM-LB-02",
+      "title": "Tomato: Late Blight (Phytophthora infestans)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, T. A. Turini",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Cultural Management,Sanitation,Fungicide Spray Intervals,Scouting",
+      "chunk_index": 4,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-LB-02-C005",
+    "text": "## Pathogen Survival & Overwintering Reservoirs\nUnlike fungal pathogens that form dormant resting structures in dry crop residue, *Phytophthora infestans* requires living host tissue to survive from one season to the next:\n- It overwinters primarily in infected potato tubers (cull piles or unharvested volunteer potatoes) and in living volunteer tomato plants or solanaceous weeds in protected microclimates.\n- Eliminating cull piles, volunteers, and nightshade species within a 1-mile radius of commercial tomato plantings significantly reduces early-season epidemic risk.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-LB-02-C005",
+      "doc_id": "DOC-UCIPM-TOM-LB-02",
+      "title": "Tomato: Late Blight (Phytophthora infestans)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, T. A. Turini",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Cultural Management,Sanitation,Fungicide Spray Intervals,Scouting",
+      "chunk_index": 5,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-LB-02-C006",
+    "text": "## Cultural Practices & Irrigation Management\n1. **Certified Transplants:** Inspect all incoming tomato transplants thoroughly before setting into the field. Reject any flat showing suspicious water-soaked lesions or stem necrosis.\n2. **Irrigation Selection:** Avoid overhead sprinkler irrigation during periods of cool or cloudy weather. Drip irrigation keeps foliage completely dry, denying the pathogen the 6 to 8 hours of leaf wetness required for spore germination.\n3. **Field Layout:** Orient planting rows parallel to prevailing winds to encourage air movement and rapid canopy drying.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-LB-02-C006",
+      "doc_id": "DOC-UCIPM-TOM-LB-02",
+      "title": "Tomato: Late Blight (Phytophthora infestans)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, T. A. Turini",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Cultural Management,Sanitation,Fungicide Spray Intervals,Scouting",
+      "chunk_index": 6,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-LB-02-C007",
+    "text": "4. **Sanitation:** Disinfect pruning shears, stakes, and implements with bleach or quaternary ammonium compounds between field blocks.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-LB-02-C007",
+      "doc_id": "DOC-UCIPM-TOM-LB-02",
+      "title": "Tomato: Late Blight (Phytophthora infestans)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, T. A. Turini",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Cultural Management,Sanitation,Fungicide Spray Intervals,Scouting",
+      "chunk_index": 7,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-LB-02-C008",
+    "text": "## Chemical Control & Spray Programs\n- Fungicide applications must be initiated before infection occurs. Once late blight is established across more than 5% to 10% of the canopy, chemical control becomes ineffective.\n- **Protectant Regimens:** Chlorothalonil (1.5 to 2.1 pt/acre), mancozeb (1.5 to 2.0 lb/acre), or fixed copper applied every 7 to 10 days under low-risk weather, and every 5 days under cool, overcast, rainy conditions.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-LB-02-C008",
+      "doc_id": "DOC-UCIPM-TOM-LB-02",
+      "title": "Tomato: Late Blight (Phytophthora infestans)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, T. A. Turini",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Cultural Management,Sanitation,Fungicide Spray Intervals,Scouting",
+      "chunk_index": 8,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-UCIPM-TOM-LB-02-C009",
+    "text": "- **Translaminar / Systemic Regimens:** During active disease pressure, tank-mix protectants with specialized oomycide chemistry such as cymoxanil, dimethomorph (Acrobat), or mandipropamid. Always observe strict label restrictions on maximum applications per season to delay resistance development.",
+    "metadata": {
+      "chunk_id": "DOC-UCIPM-TOM-LB-02-C009",
+      "doc_id": "DOC-UCIPM-TOM-LB-02",
+      "title": "Tomato: Late Blight (Phytophthora infestans)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": "R. M. Davis, T. A. Turini",
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/late-blight/",
+      "disease_targets": "Tomato___Late_blight",
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": "Cultural Management,Sanitation,Fungicide Spray Intervals,Scouting",
+      "chunk_index": 9,
+      "total_doc_chunks": 9
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C001",
+    "text": "# Tomato Cultural Management and General Plant Health Guidelines",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C001",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 1,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C002",
+    "text": "## 1. Site Selection, Soil Preparation, and pH Balance\nGrowing healthy, high-yielding tomatoes begins with optimal site selection and soil preparation.\n- **Sunlight Requirements:** Tomatoes require full sunlight, needing at least 6 to 8 hours of direct, unobstructed sunlight daily to support vigorous vegetative development and fruit set.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C002",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 2,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C003",
+    "text": "- **Soil Quality and Drainage:** Tomatoes thrive in well-drained, loose, loamy soil enriched with well-decomposed organic matter or compost (2 to 3 inches incorporated into the top 6 to 8 inches of soil). Heavy, waterlogged clay soils restrict root respiration and encourage root rots and seedling damping-off.\n- **Soil pH:** The optimal soil pH for tomato nutrient uptake is between 6.2 and 6.8. If soil testing reveals a pH below 6.0, apply agricultural lime as recommended by a soil test. If pH exceeds 7.2, incorporate elemental sulfur.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C003",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 3,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C004",
+    "text": "## 2. Nutrient Management and Balanced Fertilization\nProper fertilization maintains plant vigor without inducing excessive vulnerability to foliar pathogens.\n- **Avoid Excessive Nitrogen:** High nitrogen rates stimulate dense, succulent vegetative foliage that impedes air circulation and significantly increases susceptibility to foliar blights and bacterial spot.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C004",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 4,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C005",
+    "text": "- **Balanced N-P-K Application:** Apply a balanced fertilizer (such as 10-10-10 or 5-10-10) at transplanting according to soil test recommendations. Sidedress with calcium nitrate or balanced fertilizer once the first fruit clusters reach marble size, avoiding direct contact with plant stems.\n- **Calcium Availability:** Ensure steady moisture to facilitate calcium uptake, which is essential to prevent blossom-end rot on developing tomato fruit.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C005",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 5,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C006",
+    "text": "## 3. Plant Spacing, Staking, and Trellising\nAdequate spacing and vertical support are the most effective cultural methods for minimizing foliar disease pressure.\n- **Spacing Guidelines:** Space indeterminate tomato plants 24 to 36 inches apart within rows, maintaining 48 to 60 inches between rows. Determinate varieties may be spaced 18 to 24 inches apart. Crowded plantings trap humid microclimates that promote pathogen sporulation.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C006",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 6,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C007",
+    "text": "- **Staking and Caging:** Support all tomato plants using wooden or metal stakes, sturdy wire cages, or the Florida weave trellis system. Keeping foliage and fruit elevated off the ground prevents direct soil contact, accelerates leaf drying after rain or dew, and improves spray coverage.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C007",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 7,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C008",
+    "text": "## 4. Water Management and Drip Irrigation\nMoisture management is critical to tomato vigor and pathogen prevention.\n- **Watering Technique:** Always apply water directly to the soil root zone using drip irrigation, soaker hoses, or targeted ground watering. Strictly avoid overhead sprinkler irrigation. Wet foliage provides the free moisture required for bacterial spot, early blight, and late blight spores to germinate and infect.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C008",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 8,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C009",
+    "text": "- **Irrigation Timing and Depth:** Irrigate thoroughly and deeply early in the morning (1 to 1.5 inches of water per week, adjusted for natural rainfall). Deep watering encourages extensive, drought-resilient root systems, whereas frequent shallow watering produces weak surface roots.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C009",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 9,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C010",
+    "text": "## 5. Mulching and Soil Splash Prevention\n- **Mulch Application:** Apply a 2 to 3-inch layer of clean organic mulch (such as clean straw, shredded bark, or untreated wood shavings) or black plastic mulch over the soil around the base of plants after the soil has warmed.\n- **Disease Prevention Mechanism:** Mulch conserves soil moisture, moderates soil temperature, suppresses weeds, and crucially acts as a physical barrier that prevents soil-borne fungal spores and bacteria from splashing onto lower leaves during rainfall.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C010",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 10,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C011",
+    "text": "## 6. Pruning, Lower Canopy Clearance, and Sanitation\n- **Lower Leaf Clearance:** Prune off the lowest 12 to 18 inches of leaves and branches once the plant is established and the first fruit cluster has set. Removing bottom foliage eliminates leaves most susceptible to soil splash and drastically enhances air circulation.\n- **Sucker Removal:** For indeterminate varieties, selectively pinch out small axillary suckers to focus plant energy on primary fruit production and keep the plant canopy open.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C011",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 11,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C012",
+    "text": "- **Sanitation Practices:** Always work in tomato plantings only when foliage is completely dry to prevent mechanical transmission of pathogens. Disinfect pruning shears, stakes, and cages between plants and seasons using a 10% bleach solution or 70% isopropyl alcohol.\n- **Rogueing Diseased Tissue:** Immediately remove and destroy heavily diseased lower leaves or severely infected plants. Never compost diseased tomato debris; dispose of it offsite or burn where permitted.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C012",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 12,
+      "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-CORNELL-TOM-GEN-01-C013",
+    "text": "## 7. Crop Rotation and Seed Selection\n- **Rotational Schedule:** Implement a strict 3 to 4-year crop rotation cycle. Never plant tomatoes in soil where tomatoes, potatoes, peppers, or eggplants (all members of the Solanaceae family) were cultivated in the preceding three years. Crop rotation starves soil-borne overwintering pathogens.\n- **Certified Seed and Transplants:** Always purchase certified disease-free seed or inspect nursery transplants with scrutiny. Select modern cultivars possessing genetic resistance to common foliar diseases whenever available.",
+    "metadata": {
+      "chunk_id": "DOC-CORNELL-TOM-GEN-01-C013",
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": "Steve Reiners, Abby Seaman, Meg McGrath",
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": "General_Tomato_Management",
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
+      "chunk_index": 13,
+      "total_doc_chunks": 13
+    }
+  }
+]

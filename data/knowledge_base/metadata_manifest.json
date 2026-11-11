@@ -1,0 +1,176 @@
+{
+  "manifest_version": "1.0.0",
+  "project": "AgriMind",
+  "domain": "Tomato Disease Management",
+  "total_documents": 7,
+  "target_diseases": [
+    "Tomato___Bacterial_spot",
+    "Tomato___Early_blight",
+    "Tomato___Late_blight"
+  ],
+  "documents": [
+    {
+      "doc_id": "DOC-CORNELL-TOM-BS-01",
+      "filename": "bacterial_spot_cornell.md",
+      "title": "Bacterial Spot and Speck of Tomato",
+      "institution": "Cornell University Plant Disease Diagnostic Clinic",
+      "authors": [
+        "Margery Daughtrey",
+        "Thomas A. Zitter"
+      ],
+      "publication_year": 2021,
+      "source_url": "https://cals.cornell.edu/plant-disease-diagnostic-clinic/cradle-grave/fact-sheets/bacterial-spot-and-speck-tomato",
+      "disease_targets": [
+        "Tomato___Bacterial_spot"
+      ],
+      "pathogen": "Xanthomonas perforans / Xanthomonas campestris pv. vesicatoria",
+      "pathogen_type": "Bacterial",
+      "categories": [
+        "Symptomology",
+        "Cultural Control",
+        "Chemical Management",
+        "Epidemiology"
+      ]
+    },
+    {
+      "doc_id": "DOC-UFIFAS-TOM-BS-02",
+      "filename": "bacterial_spot_uf_ifas.md",
+      "title": "Management of Bacterial Spot on Tomato in Florida",
+      "institution": "University of Florida IFAS Extension (EDIS PP-73)",
+      "authors": [
+        "Gary E. Vallad",
+        "Pamela D. Roberts"
+      ],
+      "publication_year": 2022,
+      "source_url": "https://edis.ifas.ufl.edu/publication/PP121",
+      "disease_targets": [
+        "Tomato___Bacterial_spot"
+      ],
+      "pathogen": "Xanthomonas perforans",
+      "pathogen_type": "Bacterial",
+      "categories": [
+        "Chemical Management",
+        "Biological Control",
+        "Resistance Management",
+        "Sanitation"
+      ]
+    },
+    {
+      "doc_id": "DOC-PURDUE-TOM-EB-01",
+      "filename": "early_blight_purdue.md",
+      "title": "Foliar Diseases of Tomato: Early Blight, Septoria Leaf Spot, and Anthracnose",
+      "institution": "Purdue University Extension (BP-85-W)",
+      "authors": [
+        "Dan Egel"
+      ],
+      "publication_year": 2020,
+      "source_url": "https://www.extension.purdue.edu/extmedia/BP/BP-85-W.pdf",
+      "disease_targets": [
+        "Tomato___Early_blight"
+      ],
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": [
+        "Symptomology",
+        "Cultural Control",
+        "Chemical Management",
+        "Crop Rotation"
+      ]
+    },
+    {
+      "doc_id": "DOC-UCIPM-TOM-EB-02",
+      "filename": "early_blight_uc_ipm.md",
+      "title": "Tomato: Early Blight (Alternaria solani)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": [
+        "R. M. Davis",
+        "G. Miyao"
+      ],
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/",
+      "disease_targets": [
+        "Tomato___Early_blight"
+      ],
+      "pathogen": "Alternaria solani",
+      "pathogen_type": "Fungal",
+      "categories": [
+        "Epidemiology",
+        "Fungicide Timing",
+        "Organic Control",
+        "Sanitation"
+      ]
+    },
+    {
+      "doc_id": "DOC-CORNELL-TOM-LB-01",
+      "filename": "late_blight_cornell.md",
+      "title": "Late Blight Management in Tomato",
+      "institution": "Cornell University Cooperative Extension (Vegetable Program & USABlight)",
+      "authors": [
+        "Meg McGrath",
+        "Abby Seaman"
+      ],
+      "publication_year": 2022,
+      "source_url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/late-blight/",
+      "disease_targets": [
+        "Tomato___Late_blight"
+      ],
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": [
+        "Symptomology",
+        "Epidemiology",
+        "Disease Forecasting",
+        "Chemical Management",
+        "Resistant Varieties"
+      ]
+    },
+    {
+      "doc_id": "DOC-UCIPM-TOM-LB-02",
+      "filename": "late_blight_uc_ipm.md",
+      "title": "Tomato: Late Blight (Phytophthora infestans)",
+      "institution": "University of California Statewide Integrated Pest Management Program (UC IPM)",
+      "authors": [
+        "R. M. Davis",
+        "T. A. Turini"
+      ],
+      "publication_year": 2021,
+      "source_url": "https://ipm.ucanr.edu/agriculture/tomato/late-blight/",
+      "disease_targets": [
+        "Tomato___Late_blight"
+      ],
+      "pathogen": "Phytophthora infestans",
+      "pathogen_type": "Oomycete",
+      "categories": [
+        "Cultural Management",
+        "Sanitation",
+        "Fungicide Spray Intervals",
+        "Scouting"
+      ]
+    },
+    {
+      "doc_id": "DOC-CORNELL-TOM-GEN-01",
+      "filename": "tomato_cultural_management_cornell.md",
+      "title": "Tomato Cultural Management and General Plant Health Guidelines",
+      "institution": "Cornell University Cooperative Extension & Vegetable Program",
+      "authors": [
+        "Steve Reiners",
+        "Abby Seaman",
+        "Meg McGrath"
+      ],
+      "publication_year": 2022,
+      "source_url": "https://gardening.cals.cornell.edu/crop-guidelines/tomatoes/",
+      "disease_targets": [
+        "General_Tomato_Management"
+      ],
+      "pathogen": "None (General Agronomic Management)",
+      "pathogen_type": "Cultural Management",
+      "categories": [
+        "Cultural Practices",
+        "Soil & Fertility",
+        "Irrigation & Spacing",
+        "Disease Prevention",
+        "Sanitation"
+      ]
+    }
+  ]
+}
