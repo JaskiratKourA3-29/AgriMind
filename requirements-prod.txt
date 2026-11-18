@@ -16,6 +16,10 @@ langgraph>=0.2.0
 langchain-google-genai>=2.0.0
 google-genai>=0.1.0
 
+# Cloud Database & Storage (Neon PostgreSQL & Supabase Storage)
+psycopg2-binary>=2.9.9
+supabase>=2.8.0
+
 # Agricultural RAG & Embedding Fallback
 pandas>=2.2.0
 scikit-learn>=1.4.0
@@ -25,4 +29,5 @@ sentence-transformers>=3.0.0
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch>=2.2.0
 torchvision>=0.17.0
+
 

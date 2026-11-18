@@ -1,14 +1,22 @@
 """
-Vision Inference Engine for AgriMind (Week 6).
+Vision Inference Engine for AgriMind (Week 6 & Cloud Upgrade).
 Executes single-image disease classification using the fine-tuned ResNet-50 baseline checkpoint.
-Supports in-process execution and cross-environment execution via subprocess without requiring
-Pydantic in the vision environment.
+Provides in-memory model caching to prevent deserializing 282.6 MB weights on every invocation,
+drastically reducing serverless execution latency and memory churn.
 """
 import os
 import sys
 import json
+import logging
 import argparse
 from typing import Dict, Any, Optional
+import hashlib
+import tempfile
+import ipaddress
+import urllib.parse
+import urllib.request
+
+logger = logging.getLogger(__name__)
 
 WORKSPACE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 if WORKSPACE_DIR not in sys.path:
@@ -25,6 +33,200 @@ SUPPORTED_CLASSES = [
     "Tomato___Early_blight",
     "Tomato___Late_blight"
 ]
+
+# Module-level model singleton to eliminate cold-start checkpoint reloads on warm requests
+_CACHED_MODEL = None
+_CACHED_MODEL_PATH = None
+_CACHED_DEVICE = None
+
+
+ALLOWED_RELEASE_HOSTS = frozenset({
+    "github.com",
+    "api.github.com",
+    "objects.githubusercontent.com",
+    "release-assets.githubusercontent.com",
+    "github-production-release-asset-2e65be.s3.amazonaws.com",
+    "github-production-release-asset-2e65be.s3.us-east-1.amazonaws.com",
+})
+
+
+def is_private_or_reserved_host(hostname: str) -> bool:
+    """
+    Checks if a hostname or IP string represents localhost, private, loopback,
+    link-local, multicast, or reserved address spaces.
+    """
+    lower_host = hostname.lower().strip()
+    if lower_host in ("localhost", "localhost.localdomain", "127.0.0.1", "::1"):
+        return True
+    try:
+        ip = ipaddress.ip_address(lower_host)
+        return (
+            ip.is_private or
+            ip.is_loopback or
+            ip.is_link_local or
+            ip.is_multicast or
+            ip.is_reserved or
+            ip.is_unspecified
+        )
+    except ValueError:
+        return False
+
+
+def validate_release_destination(url: str, allowed_hosts: frozenset = ALLOWED_RELEASE_HOSTS) -> urllib.parse.SplitResult:
+    """
+    Validates that a URL:
+    1. Uses strictly HTTPS.
+    2. Contains no embedded user credentials (e.g. user:pass@).
+    3. Has a valid non-empty hostname.
+    4. Does not point to localhost, private, loopback, or reserved IP spaces.
+    5. Host matches the strictly authorized release hosts allowlist.
+    """
+    parsed = urllib.parse.urlsplit(url)
+    if parsed.scheme.lower() != "https":
+        raise ValueError(f"Insecure scheme '{parsed.scheme}'. Only HTTPS is permitted.")
+    if parsed.username or parsed.password:
+        raise ValueError("URLs containing embedded userinfo/credentials are strictly prohibited.")
+
+    hostname = (parsed.hostname or "").lower().strip()
+    if not hostname:
+        raise ValueError("URL contains no valid host.")
+
+    if is_private_or_reserved_host(hostname):
+        raise ValueError(f"Prohibited private, loopback, or reserved destination host: {hostname}")
+
+    if hostname not in allowed_hosts:
+        raise ValueError(f"Unauthorized destination host '{hostname}'. Expected authorized GitHub release hosts.")
+
+    return parsed
+
+
+class SecureGitHubReleaseRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """
+    Custom redirect handler that validates redirect destinations against strict security rules
+    before following any HTTP redirect.
+    """
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        validate_release_destination(newurl)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+EXPECTED_MODEL_SHA256 = "eb40b4d9ff9bc8278b63392809702fc17dbe701b05974c8a620588ab56c196d5"
+EXPECTED_MODEL_SIZE = 282626785
+
+
+def ensure_model_checkpoint(checkpoint_path: str = DEFAULT_CHECKPOINT) -> str:
+    """
+    Ensures that the ResNet-50 model checkpoint exists and is verified before loading.
+    1. If checkpoint_path exists locally, returns it directly.
+    2. In cloud/serverless environments where weights are not bundled, checks ephemeral
+       storage (/tmp/agrimind_best_model.pth).
+    3. If absent from ephemeral storage, downloads atomically from AGRIMIND_MODEL_URL,
+       enforcing strict HTTPS, redirect allowlists, size bounds, and SHA-256 verification.
+    """
+    if os.path.exists(checkpoint_path):
+        return checkpoint_path
+
+    tmp_dir = "/tmp" if os.path.exists("/tmp") else tempfile.gettempdir()
+    cloud_cached_path = os.path.join(tmp_dir, "agrimind_best_model.pth")
+
+    if os.path.exists(cloud_cached_path):
+        try:
+            if os.path.getsize(cloud_cached_path) == EXPECTED_MODEL_SIZE:
+                return cloud_cached_path
+        except OSError:
+            pass
+
+    model_url = os.environ.get("AGRIMIND_MODEL_URL", "").strip()
+    if not model_url:
+        raise FileNotFoundError(
+            f"Vision model checkpoint not found at: {checkpoint_path}. "
+            f"Please configure AGRIMIND_MODEL_PATH or AGRIMIND_MODEL_URL for remote retrieval."
+        )
+
+    # Validate initial URL against strict HTTPS and release host allowlist
+    validate_release_destination(model_url)
+
+    logger.info(f"[VisionEngine] Downloading model checkpoint from remote URL to {cloud_cached_path}...")
+    temp_target = f"{cloud_cached_path}.tmp.{os.getpid()}"
+    hasher = hashlib.sha256()
+
+    try:
+        req = urllib.request.Request(
+            model_url,
+            headers={"User-Agent": "AgriMind-Backend/1.0"}
+        )
+        opener = urllib.request.build_opener(SecureGitHubReleaseRedirectHandler)
+        bytes_downloaded = 0
+
+        with opener.open(req, timeout=60) as resp, open(temp_target, "wb") as out_f:
+            while chunk := resp.read(1048576):
+                bytes_downloaded += len(chunk)
+                if bytes_downloaded > EXPECTED_MODEL_SIZE:
+                    raise ValueError(
+                        f"Download stream exceeded expected maximum size ({EXPECTED_MODEL_SIZE} bytes)."
+                    )
+                hasher.update(chunk)
+                out_f.write(chunk)
+
+        if bytes_downloaded < EXPECTED_MODEL_SIZE:
+            raise ValueError(
+                f"Download was truncated: received {bytes_downloaded} bytes, "
+                f"expected exactly {EXPECTED_MODEL_SIZE} bytes."
+            )
+
+        computed_sha = hasher.hexdigest()
+        if computed_sha != EXPECTED_MODEL_SHA256:
+            raise ValueError(
+                f"Model integrity verification failed. Expected SHA-256 {EXPECTED_MODEL_SHA256}, got {computed_sha}."
+            )
+
+        os.replace(temp_target, cloud_cached_path)
+        logger.info("[VisionEngine] Checkpoint successfully downloaded and verified.")
+        return cloud_cached_path
+
+    except Exception as e:
+        if os.path.exists(temp_target):
+            try:
+                os.remove(temp_target)
+            except OSError:
+                pass
+        if isinstance(e, (FileNotFoundError, ValueError)):
+            raise
+        raise RuntimeError(f"Failed to retrieve model checkpoint from remote URL: {e}") from e
+
+def get_or_load_model(checkpoint_path: str = DEFAULT_CHECKPOINT, device: str = "cpu"):
+    """
+    Returns singleton cached ResNet-50 PyTorch model in RAM.
+    Avoids repeatedly deserializing the 282.6 MB checkpoint on consecutive serverless requests.
+    """
+    global _CACHED_MODEL, _CACHED_MODEL_PATH, _CACHED_DEVICE
+
+    resolved_path = ensure_model_checkpoint(checkpoint_path)
+    if _CACHED_MODEL is not None and _CACHED_MODEL_PATH == resolved_path and _CACHED_DEVICE == device:
+        return _CACHED_MODEL
+
+
+    import torch
+    from src.vision.model import create_model
+
+    logger.info(f"[VisionEngine] Loading ResNet-50 weights from {resolved_path} on {device}...")
+    model = create_model(num_classes=3, pretrained=False)
+    checkpoint = torch.load(resolved_path, map_location=device)
+    if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
+        model.load_state_dict(checkpoint["model_state_dict"])
+    elif isinstance(checkpoint, dict):
+        model.load_state_dict(checkpoint)
+    else:
+        raise ValueError(f"Unrecognized checkpoint format at: {resolved_path}")
+
+    model.to(device)
+    model.eval()
+
+    _CACHED_MODEL = model
+    _CACHED_MODEL_PATH = resolved_path
+    _CACHED_DEVICE = device
+    logger.info("[VisionEngine] Model successfully loaded and cached in memory.")
+    return _CACHED_MODEL
 
 
 def verify_image_integrity(image_path: str) -> bool:
@@ -58,29 +260,17 @@ def verify_image_integrity(image_path: str) -> bool:
 def run_raw_inference(image_path: str, checkpoint_path: str = DEFAULT_CHECKPOINT, device: str = "cpu") -> Dict[str, Any]:
     """
     Direct ResNet-50 inference function requiring only PyTorch, Torchvision, and Pillow.
+    Uses cached model instance in RAM for high performance.
     Returns plain Python dictionary (zero Pydantic dependency).
     """
     import torch
     from PIL import Image
-    from src.vision.model import create_model
     from src.vision.dataset import get_val_transforms, IDX_TO_LABEL
 
     if not os.path.exists(image_path):
         raise FileNotFoundError(f"Image not found at path: {image_path}")
-    if not os.path.exists(checkpoint_path):
-        raise FileNotFoundError(f"Vision model checkpoint not found at: {checkpoint_path}")
 
-    model = create_model(num_classes=3, pretrained=False)
-    checkpoint = torch.load(checkpoint_path, map_location=device)
-    if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
-        model.load_state_dict(checkpoint["model_state_dict"])
-    elif isinstance(checkpoint, dict):
-        model.load_state_dict(checkpoint)
-    else:
-        raise ValueError(f"Unrecognized checkpoint format at: {checkpoint_path}")
-
-    model.to(device)
-    model.eval()
+    model = get_or_load_model(checkpoint_path=checkpoint_path, device=device)
 
     img = Image.open(image_path).convert("RGB")
     transform = get_val_transforms(image_size=224)

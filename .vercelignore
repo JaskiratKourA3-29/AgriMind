@@ -1,0 +1,24 @@
+# Ignore large client, android, local db, and training datasets
+android/
+outputs/
+data/cases.db*
+data/chroma_db/
+data/vectorstore/
+data/splits/
+data_splits/
+docs/
+scratch/
+tests/
+tools/
+.git/
+.idea/
+.venv/
+*.pth
+*.pt
+*.bin
+*.apk
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.log

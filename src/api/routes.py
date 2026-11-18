@@ -18,6 +18,16 @@ import json
 import uuid
 import tempfile
 import logging
+import socket
+import ipaddress
+import urllib.parse
+import requests
+import requests.adapters
+import urllib3
+import urllib3.connection
+import urllib3.connectionpool
+import urllib3.poolmanager
+import urllib3.util.connection
 from datetime import datetime, timezone
 from typing import Dict, Any, Optional, List
 
@@ -322,6 +332,60 @@ def build_diagnosis_response_from_state(
     )
 
 
+
+# =====================================================================
+# Security Dependencies (Moved up for route-level dependency resolution)
+# =====================================================================
+
+async def get_current_user(authorization: Optional[str] = Header(None)) -> Dict[str, Any]:
+    """Validates incoming Bearer session token and extracts verified claims."""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication required. Please provide a valid Bearer token."
+        )
+    token = authorization.split(" ", 1)[1].strip()
+    auth_svc = get_auth_service()
+    claims = auth_svc.verify_token(token)
+    if not claims or not claims.get("sub"):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid, expired, or revoked access token."
+        )
+    # Verify account exists and is active in persistent database
+    user_record = auth_svc.get_user_by_id(claims["sub"])
+    if not user_record or not user_record.get("is_active"):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Account does not exist, has been removed, or is deactivated."
+        )
+    # Authoritatively synchronize role and email from persistent database
+    claims["role"] = user_record["role"]
+    claims["email"] = user_record["email"]
+    claims["user_id"] = user_record["user_id"]
+    claims["full_name"] = user_record["full_name"]
+    return claims
+
+
+async def get_optional_current_user(authorization: Optional[str] = Header(None)) -> Optional[Dict[str, Any]]:
+    """Optional authentication context: returns claims if valid token provided, else None."""
+    if not authorization or not authorization.startswith("Bearer "):
+        return None
+    token = authorization.split(" ", 1)[1].strip()
+    auth_svc = get_auth_service()
+    claims = auth_svc.verify_token(token)
+    if not claims or not claims.get("sub"):
+        return None
+    user_record = auth_svc.get_user_by_id(claims["sub"])
+    if not user_record or not user_record.get("is_active"):
+        return None
+    claims["role"] = user_record["role"]
+    claims["email"] = user_record["email"]
+    claims["user_id"] = user_record["user_id"]
+    claims["full_name"] = user_record["full_name"]
+    return claims
+
+
 # =====================================================================
 # GET /health
 # =====================================================================
@@ -367,6 +431,323 @@ async def health_check():
 
 
 # =====================================================================
+# Secure Cloud Image Download Helper (SSRF & DNS Rebinding Protection)
+# =====================================================================
+class PinnedIPPoolManager(urllib3.poolmanager.PoolManager):
+    """
+    Custom urllib3 PoolManager that binds HTTPS connections directly to a pre-validated IP address,
+    preventing DNS rebinding and TOCTOU vulnerabilities while maintaining the original hostname for
+    TLS SNI and certificate verification.
+    """
+    def __init__(self, pinned_ip: str, *args, **kwargs):
+        self.pinned_ip = pinned_ip
+        super().__init__(*args, **kwargs)
+
+    def _new_pool(self, scheme: str, host: str, port: int, request_context: Optional[Dict[str, Any]] = None):
+        if scheme == "https":
+            pinned_ip = self.pinned_ip
+
+            class PinnedHTTPSConnection(urllib3.connection.HTTPSConnection):
+                def _new_conn(_self):
+                    return urllib3.util.connection.create_connection(
+                        (pinned_ip, _self.port),
+                        _self.timeout,
+                        source_address=_self.source_address,
+                        socket_options=_self.socket_options,
+                    )
+
+            class PinnedHTTPSConnectionPool(urllib3.connectionpool.HTTPSConnectionPool):
+                ConnectionCls = PinnedHTTPSConnection
+
+            if request_context is None:
+                request_context = self.connection_pool_kw.copy()
+            for key in ("scheme", "host", "port"):
+                request_context.pop(key, None)
+            return PinnedHTTPSConnectionPool(host, port, **request_context)
+
+        return super()._new_pool(scheme, host, port, request_context=request_context)
+
+
+class PinnedIPAdapter(requests.adapters.HTTPAdapter):
+    """
+    HTTPAdapter that binds the outbound TCP socket directly to a pre-validated IP address,
+    preventing DNS rebinding and TOCTOU vulnerabilities while preserving full TLS certificate
+    validation, Server Name Indication (SNI), and HTTP Host headers.
+    """
+    def __init__(self, pinned_ip: str, *args, **kwargs):
+        self.pinned_ip = pinned_ip
+        super().__init__(*args, **kwargs)
+
+    def init_poolmanager(self, connections, maxsize, block=requests.adapters.DEFAULT_POOLBLOCK, **pool_kwargs):
+        self._pool_connections = connections
+        self._pool_maxsize = maxsize
+        self._pool_block = block
+        self.poolmanager = PinnedIPPoolManager(
+            self.pinned_ip,
+            num_pools=connections,
+            maxsize=maxsize,
+            block=block,
+            **pool_kwargs
+        )
+
+
+def download_secure_image(image_url: str, max_bytes: int = MAX_FILE_SIZE_BYTES) -> bytes:
+    """
+    Safely retrieves an image from authorized cloud storage over HTTPS.
+    Enforces strict protocol, hostname allowlist, DNS pre-flight verification,
+    actual TCP socket connection binding (anti-DNS-rebinding), anti-redirect guards,
+    bounded streaming download, and generic error handling to eliminate SSRF, DoS,
+    and internal network enumeration vulnerabilities.
+    """
+    norm_url = (image_url or "").strip()
+    if not norm_url:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid image_url: URL cannot be empty."
+        )
+
+    # 1. Strict URL syntax and protocol parsing
+    try:
+        parsed = urllib.parse.urlsplit(norm_url)
+    except Exception as e:
+        logger.warning(f"Failed parsing image_url: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid image_url format."
+        )
+
+    # Scheme check: HTTPS only (reject plain HTTP, file://, ftp://, gopher://, etc.)
+    if parsed.scheme.lower() != "https":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid image_url: Only secure HTTPS URLs are permitted."
+        )
+
+    # Embedded credentials check (e.g. https://user:pass@host/)
+    if parsed.username or parsed.password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid image_url: Embedded credentials are prohibited."
+        )
+
+    # Port check: only port 443 or default HTTPS port allowed
+    if parsed.port is not None and parsed.port != 443:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid image_url: Non-standard ports are prohibited."
+        )
+
+    # URL fragment check
+    if parsed.fragment:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid image_url: URL fragments are prohibited."
+        )
+
+    # Hostname validation
+    hostname = (parsed.hostname or "").strip().lower()
+    if not hostname:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid image_url: Missing or malformed hostname."
+        )
+
+    # Reject IP address literals (e.g. https://127.0.0.1/ or https://169.254.169.254/)
+    try:
+        ipaddress.ip_address(hostname)
+        is_ip_literal = True
+    except ValueError:
+        is_ip_literal = False
+
+    if is_ip_literal:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid image_url: Direct IP address literals are prohibited."
+        )
+
+    # 2. Strict Storage Hostname Allowlist Check
+    supabase_env = os.environ.get("SUPABASE_URL", "").strip()
+    if not supabase_env:
+        logger.warning("Image URL download rejected: SUPABASE_URL environment variable is not configured.")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Image URL downloads require cloud storage configuration (SUPABASE_URL is not set)."
+        )
+
+    try:
+        expected_host = (urllib.parse.urlsplit(supabase_env).hostname or "").strip().lower()
+    except Exception:
+        expected_host = ""
+
+    if not expected_host:
+        logger.error("Image URL download rejected: SUPABASE_URL contains no valid hostname.")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal configuration error: Invalid cloud storage configuration."
+        )
+
+    if hostname != expected_host:
+        logger.warning(
+            f"Image URL download rejected: Host '{hostname}' does not match authorized storage host '{expected_host}'."
+        )
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid image_url: Host is not authorized for cloud image downloads."
+        )
+
+    # 3. DNS Pre-Resolution & Prohibited IP Address Filtering
+    try:
+        addr_info = socket.getaddrinfo(hostname, 443, proto=socket.IPPROTO_TCP)
+    except socket.gaierror as dns_err:
+        logger.warning(f"DNS resolution failed for storage host '{hostname}': {dns_err}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Unable to resolve image storage host."
+        )
+
+    if not addr_info:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Unable to resolve image storage host."
+        )
+
+    valid_ips = []
+    for _, _, _, _, sockaddr in addr_info:
+        ip_str = sockaddr[0]
+        try:
+            ip_obj = ipaddress.ip_address(ip_str)
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid IP address encountered during host resolution."
+            )
+
+        if (
+            ip_obj.is_loopback
+            or ip_obj.is_private
+            or ip_obj.is_link_local
+            or ip_obj.is_unspecified
+            or ip_obj.is_multicast
+            or ip_obj.is_reserved
+        ):
+            logger.warning(
+                f"SSRF attempt blocked: Storage host '{hostname}' resolved to prohibited IP '{ip_str}'."
+            )
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Access to private or local network destinations is prohibited."
+            )
+        valid_ips.append(ip_str)
+
+    if not valid_ips:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Unable to resolve image storage host to a valid destination."
+        )
+
+    # Deterministically bind TCP socket to the first validated IP address
+    target_ip = valid_ips[0]
+
+    # 4. Outbound Connection Binding via PinnedIPAdapter & Dedicated Session (Anti-DNS-Rebinding)
+    sanitized_log_url = urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", ""))
+
+    session = requests.Session()
+    adapter = PinnedIPAdapter(target_ip)
+    session.mount(f"https://{hostname}", adapter)
+    session.mount(f"https://{hostname}:443", adapter)
+    session.mount("https://", adapter)
+
+    resp = None
+    try:
+        try:
+            resp = session.get(
+                norm_url,
+                stream=True,
+                allow_redirects=False,
+                timeout=(5.0, 15.0)  # (connect timeout: 5s, read timeout: 15s)
+            )
+        except requests.exceptions.Timeout:
+            logger.warning(f"Connection timeout downloading image from: {sanitized_log_url}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Image download timed out while connecting to storage server."
+            )
+        except requests.exceptions.SSLError as ssl_err:
+            logger.warning(f"TLS certificate verification failed for {sanitized_log_url}: {type(ssl_err).__name__}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="TLS certificate verification failed for storage server."
+            )
+        except requests.exceptions.RequestException as req_err:
+            logger.warning(f"Network error downloading image from {sanitized_log_url}: {type(req_err).__name__}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Failed to download image from cloud storage."
+            )
+
+        # Redirect check: Reject all HTTP redirects (301, 302, 303, 307, 308)
+        if resp.is_redirect or resp.status_code in (301, 302, 303, 307, 308):
+            logger.warning(f"Image download from {sanitized_log_url} returned redirect status HTTP {resp.status_code}.")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Redirects are prohibited for image downloads."
+            )
+
+        if resp.status_code != 200:
+            logger.warning(f"Image download from {sanitized_log_url} returned status HTTP {resp.status_code}.")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Failed to fetch image from storage (HTTP {resp.status_code})."
+            )
+
+        # Inspect Content-Length header if present
+        cl_header = resp.headers.get("Content-Length")
+        if cl_header:
+            try:
+                cl_val = int(cl_header.strip())
+                if cl_val > max_bytes:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail=f"Image exceeds maximum size limit of {max_bytes // (1024 * 1024)}MB."
+                    )
+                if cl_val == 0:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Image file is empty (0 bytes)."
+                    )
+            except ValueError:
+                pass
+
+        # Stream bounded chunks
+        chunks = []
+        total_bytes = 0
+        chunk_size = 65536  # 64 KB
+
+        for chunk in resp.iter_content(chunk_size=chunk_size):
+            if chunk:
+                total_bytes += len(chunk)
+                if total_bytes > max_bytes:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail=f"Image exceeds maximum size limit of {max_bytes // (1024 * 1024)}MB."
+                    )
+                chunks.append(chunk)
+
+        if total_bytes == 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Image file is empty (0 bytes)."
+            )
+
+        return b"".join(chunks)
+
+    finally:
+        if resp is not None:
+            resp.close()
+        session.close()
+
+
+# =====================================================================
 # POST /diagnose
 # =====================================================================
 @router.post(
@@ -377,7 +758,8 @@ async def health_check():
                 "and the complete LangGraph multi-agent decision workflow."
 )
 async def diagnose(
-    file: UploadFile = File(..., description="Tomato leaf image file (JPEG, PNG, GIF, BMP, max 15MB)"),
+    file: Optional[UploadFile] = File(None, description="Tomato leaf image file (JPEG, PNG, GIF, BMP, max 15MB)"),
+    image_url: Optional[str] = Form(None, description="Direct cloud storage image URL (bypassing multipart upload limit)"),
     leaf_damage_percentage: Optional[float] = Form(None, description="Estimated leaf damage percentage (0-100)"),
     affected_organs: Optional[str] = Form(None, description="Comma-separated affected organs (e.g. leaves,stems)"),
     canopy_spread: Optional[str] = Form(None, description="Canopy spread (e.g. lower_canopy, whole_plant)"),
@@ -388,17 +770,19 @@ async def diagnose(
     latitude: Optional[float] = Form(None, description="Optional GPS latitude for live weather risk."),
     longitude: Optional[float] = Form(None, description="Optional GPS longitude for live weather risk."),
     use_live_weather: bool = Form(False, description="Whether to query live Open-Meteo meteorological data."),
-    language: str = Form("en", description="Preferred response language ('en' or 'hi')")
+    language: str = Form("en", description="Preferred response language ('en' or 'hi')"),
+    current_user: Optional[Dict[str, Any]] = Depends(get_optional_current_user)
 ):
-    # 1. Validate file existence and basic metadata
-    if not file or not file.filename:
+    # 1. Validate file existence or image_url
+    if file and file.filename:
+        content = await file.read()
+    elif image_url and image_url.strip():
+        content = download_secure_image(image_url)
+    else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No file uploaded or filename is missing."
+            detail="No image provided. Please upload an image file or provide an image_url."
         )
-
-    # 2. Read image content into memory and validate size
-    content = await file.read()
     if len(content) == 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -563,9 +947,10 @@ async def diagnose(
         # Build clean serializable state for future reassessments
         serializable_state = serialize_state_for_json(completed_state)
 
-        # Persist authoritative case state server-side
+        # Persist authoritative case state server-side with owner_user_id
+        owner_id = (current_user.get("user_id") or current_user.get("sub")) if current_user else None
         case_store = get_case_store()
-        case_store.save_case(case_id, serializable_state)
+        case_store.save_case(case_id, serializable_state, owner_user_id=owner_id)
 
         diag_resp = build_diagnosis_response_from_state(
             case_id=case_id,
@@ -987,16 +1372,36 @@ async def get_case_outcome(case_id: str) -> Optional[CaseOutcomeResponse]:
     summary="Retrieve Authoritative Diagnostic Case",
     description="Retrieves a persisted case state by case_id from server-side storage."
 )
-async def get_case_by_id(case_id: str):
+async def get_case_by_id(
+    case_id: str,
+    current_user: Optional[Dict[str, Any]] = Depends(get_optional_current_user)
+):
     clean_id = case_id.strip()
     case_store = get_case_store()
-    state = case_store.get_case(clean_id)
-    if not state:
+    record = case_store.get_case_record(clean_id)
+    if not record:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Case ID '{clean_id}' was not found in authoritative storage."
         )
-    return build_diagnosis_response_from_state(clean_id, state)
+
+    # Privacy & Access Control Enforcement:
+    owner_id = record.get("owner_user_id")
+    if owner_id:
+        if not current_user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication required to view this private diagnostic case."
+            )
+        caller_id = current_user.get("user_id") or current_user.get("sub")
+        caller_role = current_user.get("role", "farmer")
+        if caller_id != owner_id and caller_role not in ("admin", "owner", "sub_owner"):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Access denied: You do not have permission to view another farmer's private case."
+            )
+
+    return build_diagnosis_response_from_state(clean_id, record["state"])
 
 
 # =====================================================================
@@ -1416,10 +1821,7 @@ async def admin_system_status(user: Dict[str, Any] = Depends(require_permission(
     sharing_svc = get_case_sharing_service()
     auth_svc = get_auth_service()
 
-    total_cases = 0
-    with case_store._connection() as conn:
-        row = conn.execute("SELECT count(*) FROM cases;").fetchone()
-        if row: total_cases = row[0]
+    total_cases = case_store.get_case_count()
 
     sys_stats = auth_svc.get_system_stats()
     shared_cases = sharing_svc.list_shared_cases(target_entity="cooperative_all", limit=1000)
@@ -1427,8 +1829,8 @@ async def admin_system_status(user: Dict[str, Any] = Depends(require_permission(
     # Count comments
     total_comments = 0
     with sharing_svc._connection() as conn:
-        row = conn.execute("SELECT count(*) FROM case_comments;").fetchone()
-        if row: total_comments = row[0]
+        row = conn.execute("SELECT count(*) AS count FROM case_comments;").fetchone()
+        if row: total_comments = row["count"]
 
     return AdminSystemStatusResponse(
         server_time=datetime.now(timezone.utc).isoformat(),
@@ -1840,6 +2242,68 @@ async def list_community_reports(
     if not ok:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=msg)
     return [CommunityReportResponse(**r) for r in reports]
+
+
+
+# =====================================================================
+# POST /api/uploads/presigned-url (Direct-to-Cloud Storage)
+# =====================================================================
+@router.post(
+    "/api/uploads/presigned-url",
+    summary="Generate Restricted Presigned Upload URL",
+    description="Issues a short-lived, authenticated presigned upload URL for direct-to-cloud storage."
+)
+async def create_presigned_upload_url(
+    payload: Dict[str, Any],
+    user: Dict[str, Any] = Depends(get_current_user)
+) -> Dict[str, Any]:
+    filename = payload.get("filename", "image.jpg")
+    content_type = payload.get("content_type", "image/jpeg")
+
+    ext = os.path.splitext(filename)[1].lower()
+    if ext not in (".jpg", ".jpeg", ".png", ".webp"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Unsupported image format. Allowed formats: .jpg, .jpeg, .png, .webp"
+        )
+
+    user_id = user.get("user_id") or user.get("sub", "anon")
+    safe_name = f"user_{user_id}_{uuid.uuid4().hex[:12]}{ext}"
+
+    supabase_url = os.environ.get("SUPABASE_URL")
+    supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+    bucket_name = os.environ.get("SUPABASE_STORAGE_BUCKET", "community_images")
+
+    if supabase_url and supabase_key:
+        try:
+            from supabase import create_client
+            sb_client = create_client(supabase_url, supabase_key)
+            res = sb_client.storage.from_(bucket_name).create_signed_upload_url(safe_name)
+            upload_url = res.get("signed_url") or res.get("signedUrl")
+            token = res.get("token")
+            public_url = sb_client.storage.from_(bucket_name).get_public_url(safe_name)
+            return {
+                "upload_url": upload_url,
+                "public_url": public_url,
+                "token": token,
+                "expires_in_seconds": 300,
+                "storage_provider": "supabase"
+            }
+        except Exception as e:
+            logger.error(f"Error generating Supabase signed upload URL: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to generate signed upload URL: {str(e)}"
+            )
+    else:
+        # Fallback for local development and offline environments
+        return {
+            "upload_url": "/community/upload-image",
+            "public_url": f"/community/images/{safe_name}",
+            "token": "local-dev-token",
+            "expires_in_seconds": 300,
+            "storage_provider": "local_fallback"
+        }
 
 
 @router.post(

@@ -17,11 +17,47 @@ from contextlib import contextmanager
 
 WORKSPACE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DEFAULT_DB_PATH = os.environ.get(
-    "AGRIMIND_DB_PATH",
-    os.path.join(WORKSPACE_DIR, "data", "cases.db")
+    "DATABASE_URL",
+    os.environ.get("AGRIMIND_DB_URL", os.path.join(WORKSPACE_DIR, "data", "cases.db"))
 )
 
 logger = logging.getLogger(__name__)
+
+
+try:
+    import psycopg2
+    import psycopg2.extras
+    PSYCOPG2_AVAILABLE = True
+except ImportError:
+    PSYCOPG2_AVAILABLE = False
+
+
+class DBConnectionWrapper:
+    """
+    Transparent connection wrapper enabling uniform parameterized query execution
+    across Neon PostgreSQL (psycopg2) and local development / test SQLite instances.
+    """
+    def __init__(self, raw_conn, is_postgres: bool):
+        self._conn = raw_conn
+        self.is_postgres = is_postgres
+
+    def execute(self, sql: str, params: tuple = ()):
+        formatted_sql = sql.replace("?", "%s") if self.is_postgres else sql.replace("%s", "?")
+        if self.is_postgres:
+            cur = self._conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        else:
+            cur = self._conn.cursor()
+        cur.execute(formatted_sql, params)
+        return cur
+
+    def commit(self):
+        self._conn.commit()
+
+    def rollback(self):
+        self._conn.rollback()
+
+    def close(self):
+        self._conn.close()
 
 
 class CaseSharingService:
@@ -29,10 +65,13 @@ class CaseSharingService:
 
     def __init__(self, db_path: str = DEFAULT_DB_PATH):
         self.db_path = db_path
+        self.is_postgres = str(db_path).startswith("postgres://") or str(db_path).startswith("postgresql://")
+        if self.is_postgres and not PSYCOPG2_AVAILABLE:
+            raise RuntimeError("PostgreSQL database URL specified, but 'psycopg2' is not installed.")
         self._ensure_db()
 
     def _ensure_db(self):
-        if self.db_path != ":memory:":
+        if not self.is_postgres and self.db_path != ":memory:":
             os.makedirs(os.path.dirname(os.path.abspath(self.db_path)), exist_ok=True)
         with self._connection() as conn:
             conn.execute("""
@@ -81,12 +120,30 @@ class CaseSharingService:
 
     @contextmanager
     def _connection(self):
-        conn = sqlite3.connect(self.db_path, timeout=10.0)
-        conn.row_factory = sqlite3.Row
-        try:
-            yield conn
-        finally:
-            conn.close()
+        if self.is_postgres:
+            raw_conn = psycopg2.connect(self.db_path)
+            raw_conn.autocommit = False
+            wrapper = DBConnectionWrapper(raw_conn, is_postgres=True)
+            try:
+                yield wrapper
+                wrapper.commit()
+            except Exception:
+                wrapper.rollback()
+                raise
+            finally:
+                wrapper.close()
+        else:
+            raw_conn = sqlite3.connect(self.db_path, timeout=10.0)
+            raw_conn.row_factory = sqlite3.Row
+            wrapper = DBConnectionWrapper(raw_conn, is_postgres=False)
+            try:
+                yield wrapper
+                wrapper.commit()
+            except Exception:
+                wrapper.rollback()
+                raise
+            finally:
+                wrapper.close()
 
     def share_case(
         self,
@@ -152,7 +209,7 @@ class CaseSharingService:
         """Retrieves a shared case if authorized via token or matching requester."""
         with self._connection() as conn:
             row = conn.execute(
-                "SELECT * FROM shared_cases WHERE share_id = ? AND status = 'active'",
+                "SELECT * FROM shared_cases WHERE share_id = %s AND status = 'active'",
                 (share_id,)
             ).fetchone()
 
@@ -197,7 +254,7 @@ class CaseSharingService:
                 SELECT share_id, case_id, owner_farmer_id, target_entity,
                        access_level, anonymize_pii, notes, created_at, shared_data_json
                 FROM shared_cases
-                WHERE status = 'active' AND (target_entity = ? OR target_entity = 'cooperative_all')
+                WHERE status = 'active' AND (target_entity = %s OR target_entity = 'cooperative_all')
                 ORDER BY created_at DESC
                 LIMIT ?
             """, (target_entity, limit)).fetchall()
@@ -229,7 +286,7 @@ class CaseSharingService:
             cursor = conn.execute("""
                 UPDATE shared_cases
                 SET status = 'revoked'
-                WHERE share_id = ? AND owner_farmer_id = ?
+                WHERE share_id = %s AND owner_farmer_id = %s
             """, (share_id, owner_farmer_id))
             conn.commit()
             return cursor.rowcount > 0
@@ -272,7 +329,7 @@ class CaseSharingService:
             rows = conn.execute("""
                 SELECT comment_id, case_id, author_id, author_role, comment_text, created_at, is_ai
                 FROM case_comments
-                WHERE case_id = ?
+                WHERE case_id = %s
                 ORDER BY created_at ASC
             """, (case_id,)).fetchall()
             return [
@@ -331,7 +388,7 @@ class CaseSharingService:
             row = conn.execute("""
                 SELECT case_id, farmer_id, outcome, details, updated_at
                 FROM case_outcomes
-                WHERE case_id = ?
+                WHERE case_id = %s
             """, (case_id,)).fetchone()
             if not row:
                 return None

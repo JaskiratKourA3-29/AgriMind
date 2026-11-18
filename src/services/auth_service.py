@@ -23,14 +23,50 @@ from typing import Dict, Any, Optional, List, Tuple
 
 WORKSPACE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DEFAULT_DB_PATH = os.environ.get(
-    "AGRIMIND_DB_PATH",
-    os.path.join(WORKSPACE_DIR, "data", "cases.db")
+    "DATABASE_URL",
+    os.environ.get("AGRIMIND_DB_URL", os.path.join(WORKSPACE_DIR, "data", "cases.db"))
 )
 
 # Secret key for HMAC token signing (can be overridden via environment variable)
 AUTH_SECRET_KEY = os.environ.get("AGRIMIND_AUTH_SECRET", "agrimind-secure-auth-secret-key-2026-production")
 TOKEN_TTL_HOURS = 24 * 7  # 7 days session lifetime
 PBKDF2_ITERATIONS = 100_000
+
+
+try:
+    import psycopg2
+    import psycopg2.extras
+    PSYCOPG2_AVAILABLE = True
+except ImportError:
+    PSYCOPG2_AVAILABLE = False
+
+
+class DBConnectionWrapper:
+    """
+    Transparent connection wrapper enabling uniform parameterized query execution
+    across Neon PostgreSQL (psycopg2) and local development / test SQLite instances.
+    """
+    def __init__(self, raw_conn, is_postgres: bool):
+        self._conn = raw_conn
+        self.is_postgres = is_postgres
+
+    def execute(self, sql: str, params: tuple = ()):
+        formatted_sql = sql.replace("?", "%s") if self.is_postgres else sql.replace("%s", "?")
+        if self.is_postgres:
+            cur = self._conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        else:
+            cur = self._conn.cursor()
+        cur.execute(formatted_sql, params)
+        return cur
+
+    def commit(self):
+        self._conn.commit()
+
+    def rollback(self):
+        self._conn.rollback()
+
+    def close(self):
+        self._conn.close()
 
 
 class AuthService:
@@ -42,21 +78,71 @@ class AuthService:
     def __init__(self, db_path: str = DEFAULT_DB_PATH, secret_key: str = AUTH_SECRET_KEY):
         self.db_path = db_path
         self.secret_key = secret_key
+        self.is_postgres = str(db_path).startswith("postgres://") or str(db_path).startswith("postgresql://")
+        if self.is_postgres and not PSYCOPG2_AVAILABLE:
+            raise RuntimeError("PostgreSQL database URL specified, but 'psycopg2' is not installed.")
         self._ensure_dir()
         self._init_db()
 
     def _ensure_dir(self):
-        if self.db_path != ":memory:":
+        if not self.is_postgres and self.db_path != ":memory:":
             os.makedirs(os.path.dirname(os.path.abspath(self.db_path)), exist_ok=True)
 
     @contextmanager
     def _connection(self):
-        conn = sqlite3.connect(self.db_path, timeout=10.0)
-        conn.row_factory = sqlite3.Row
-        try:
-            yield conn
-        finally:
-            conn.close()
+        if self.is_postgres:
+            raw_conn = psycopg2.connect(self.db_path)
+            raw_conn.autocommit = False
+            wrapper = DBConnectionWrapper(raw_conn, is_postgres=True)
+            try:
+                yield wrapper
+                wrapper.commit()
+            except Exception:
+                wrapper.rollback()
+                raise
+            finally:
+                wrapper.close()
+        else:
+            raw_conn = sqlite3.connect(self.db_path, timeout=10.0)
+            raw_conn.row_factory = sqlite3.Row
+            wrapper = DBConnectionWrapper(raw_conn, is_postgres=False)
+            try:
+                yield wrapper
+                wrapper.commit()
+            except Exception:
+                wrapper.rollback()
+                raise
+            finally:
+                wrapper.close()
+
+    def _table_exists(self, conn, table_name: str) -> bool:
+        """Checks if a table exists in an engine-safe manner without aborting transactions."""
+        if self.is_postgres:
+            cur = conn.execute("""
+                SELECT 1 FROM information_schema.tables 
+                WHERE table_schema = current_schema() AND table_name = %s;
+            """, (table_name,))
+            return bool(cur.fetchone())
+        else:
+            cur = conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name = ?;", (table_name,))
+            return bool(cur.fetchone())
+
+    def _column_exists(self, conn, table_name: str, column_name: str) -> bool:
+        """Checks if a column exists in a table in an engine-safe manner without aborting transactions."""
+        if self.is_postgres:
+            cur = conn.execute("""
+                SELECT 1 FROM information_schema.columns 
+                WHERE table_schema = current_schema() 
+                  AND table_name = %s 
+                  AND column_name = %s;
+            """, (table_name, column_name))
+            return bool(cur.fetchone())
+        else:
+            if not self._table_exists(conn, table_name):
+                return False
+            cur = conn.execute(f'PRAGMA table_info("{table_name}");')
+            cols = [row[1] for row in cur.fetchall()]
+            return column_name in cols
 
     def _init_db(self):
         """Initializes users, token revocation, and audit logs tables."""
@@ -102,15 +188,11 @@ class AuthService:
                     timestamp TEXT NOT NULL
                 );
             """)
-            # Safe column additions if upgrading existing schema
-            try:
+            # Safe column additions if upgrading existing schema (check existence first to prevent aborted transactions)
+            if self._table_exists(conn, "cases") and not self._column_exists(conn, "cases", "owner_user_id"):
                 conn.execute("ALTER TABLE cases ADD COLUMN owner_user_id TEXT;")
-            except sqlite3.OperationalError:
-                pass
-            try:
+            if not self._column_exists(conn, "users", "updated_at"):
                 conn.execute("ALTER TABLE users ADD COLUMN updated_at TEXT;")
-            except sqlite3.OperationalError:
-                pass
 
             conn.commit()
 
@@ -233,13 +315,13 @@ class AuthService:
         jti = claims["jti"]
         now = datetime.now(timezone.utc).isoformat()
         with self._connection() as conn:
-            conn.execute("INSERT OR REPLACE INTO revoked_tokens (token_jti, revoked_at) VALUES (?, ?);", (jti, now))
+            conn.execute("INSERT INTO revoked_tokens (token_jti, revoked_at) VALUES (%s, %s) ON CONFLICT (token_jti) DO NOTHING;", (jti, now))
             conn.commit()
         return True
 
     def _is_token_revoked(self, jti: str) -> bool:
         with self._connection() as conn:
-            row = conn.execute("SELECT token_jti FROM revoked_tokens WHERE token_jti = ?;", (jti,)).fetchone()
+            row = conn.execute("SELECT token_jti FROM revoked_tokens WHERE token_jti = %s;", (jti,)).fetchone()
             return row is not None
 
     # =========================================================================
@@ -297,7 +379,7 @@ class AuthService:
         with self._connection() as conn:
             row = conn.execute("""
                 SELECT user_id, email, full_name, password_hash, salt, role, phone, created_at, is_active
-                FROM users WHERE email = ?;
+                FROM users WHERE email = %s;
             """, (clean_email,)).fetchone()
 
             if not row:
@@ -324,7 +406,7 @@ class AuthService:
         with self._connection() as conn:
             row = conn.execute("""
                 SELECT user_id, email, full_name, role, phone, created_at, is_active
-                FROM users WHERE user_id = ?;
+                FROM users WHERE user_id = %s;
             """, (user_id,)).fetchone()
             if not row:
                 return None
@@ -338,7 +420,7 @@ class AuthService:
         with self._connection() as conn:
             rows = conn.execute("""
                 SELECT user_id, email, full_name, role, phone, created_at, is_active
-                FROM users ORDER BY created_at DESC LIMIT ?;
+                FROM users ORDER BY created_at DESC LIMIT %s;
             """, (limit,)).fetchall()
             results = []
             for r in rows:
@@ -351,7 +433,7 @@ class AuthService:
     def set_user_active_status(self, user_id: str, is_active: bool) -> bool:
         """Admin operation: activate or deactivate user account (legacy method)."""
         with self._connection() as conn:
-            cur = conn.execute("UPDATE users SET is_active = ?, updated_at = ? WHERE user_id = ?;", (1 if is_active else 0, datetime.now(timezone.utc).isoformat(), user_id))
+            cur = conn.execute("UPDATE users SET is_active = %s, updated_at = %s WHERE user_id = %s;", (1 if is_active else 0, datetime.now(timezone.utc).isoformat(), user_id))
             conn.commit()
             return cur.rowcount > 0
 
@@ -361,8 +443,8 @@ class AuthService:
         if not target or target["role"] == "owner":
             return False
         with self._connection() as conn:
-            conn.execute("DELETE FROM sub_owner_permissions WHERE user_id = ?;", (user_id,))
-            cur = conn.execute("DELETE FROM users WHERE user_id = ?;", (user_id,))
+            conn.execute("DELETE FROM sub_owner_permissions WHERE user_id = %s;", (user_id,))
+            cur = conn.execute("DELETE FROM users WHERE user_id = %s;", (user_id,))
             conn.commit()
             return cur.rowcount > 0
 
@@ -388,10 +470,10 @@ class AuthService:
 
         # Check if email is already registered as a farmer/admin
         with self._connection() as conn:
-            existing = conn.execute("SELECT user_id, email, full_name FROM users WHERE email = ?;", (email.strip().lower(),)).fetchone()
+            existing = conn.execute("SELECT user_id, email, full_name FROM users WHERE email = %s;", (email.strip().lower(),)).fetchone()
             if existing:
                 now = datetime.now(timezone.utc).isoformat()
-                conn.execute("UPDATE users SET role = 'owner', updated_at = ? WHERE user_id = ?;", (now, existing["user_id"]))
+                conn.execute("UPDATE users SET role = 'owner', updated_at = %s WHERE user_id = %s;", (now, existing["user_id"]))
                 conn.commit()
                 self.log_audit_event(
                     actor_id=existing["user_id"],
@@ -469,9 +551,9 @@ class AuthService:
                     return False, "Forbidden: Cannot demote the last remaining administrative account."
 
             now = datetime.now(timezone.utc).isoformat()
-            conn.execute("UPDATE users SET role = ?, updated_at = ? WHERE user_id = ?;", (new_role, now, target_user_id))
+            conn.execute("UPDATE users SET role = %s, updated_at = %s WHERE user_id = %s;", (new_role, now, target_user_id))
             if old_role == "sub_owner" and new_role != "sub_owner":
-                conn.execute("DELETE FROM sub_owner_permissions WHERE user_id = ?;", (target_user_id,))
+                conn.execute("DELETE FROM sub_owner_permissions WHERE user_id = %s;", (target_user_id,))
             conn.commit()
 
         self.log_audit_event(
@@ -518,7 +600,7 @@ class AuthService:
 
         with self._connection() as conn:
             now = datetime.now(timezone.utc).isoformat()
-            conn.execute("UPDATE users SET is_active = ?, updated_at = ? WHERE user_id = ?;", (1 if is_active else 0, now, target_user_id))
+            conn.execute("UPDATE users SET is_active = %s, updated_at = %s WHERE user_id = %s;", (1 if is_active else 0, now, target_user_id))
             conn.commit()
 
         status_str = "ACTIVE" if is_active else "SUSPENDED"
@@ -566,20 +648,20 @@ class AuthService:
         with self._connection() as conn:
             rows = conn.execute("""
                 SELECT log_id, actor_id, actor_email, actor_role, target_user_id, action, details, timestamp
-                FROM audit_logs ORDER BY timestamp DESC LIMIT ?;
+                FROM audit_logs ORDER BY timestamp DESC LIMIT %s;
             """, (limit,)).fetchall()
             return [dict(r) for r in rows]
 
     def get_system_stats(self) -> Dict[str, Any]:
         """Retrieves system counts for admin dashboard."""
         with self._connection() as conn:
-            total_users = conn.execute("SELECT COUNT(*) FROM users;").fetchone()[0]
-            total_farmers = conn.execute("SELECT COUNT(*) FROM users WHERE role = 'farmer';").fetchone()[0]
-            total_admins = conn.execute("SELECT COUNT(*) FROM users WHERE role IN ('admin', 'owner');").fetchone()[0]
-            total_sub_owners = conn.execute("SELECT COUNT(*) FROM users WHERE role = 'sub_owner';").fetchone()[0]
-            active_users = conn.execute("SELECT COUNT(*) FROM users WHERE is_active = 1;").fetchone()[0]
-            suspended_users = conn.execute("SELECT COUNT(*) FROM users WHERE is_active = 0;").fetchone()[0]
-            total_audits = conn.execute("SELECT COUNT(*) FROM audit_logs;").fetchone()[0]
+            total_users = conn.execute("SELECT COUNT(*) AS count FROM users;").fetchone()["count"]
+            total_farmers = conn.execute("SELECT COUNT(*) AS count FROM users WHERE role = 'farmer';").fetchone()["count"]
+            total_admins = conn.execute("SELECT COUNT(*) AS count FROM users WHERE role IN ('admin', 'owner');").fetchone()["count"]
+            total_sub_owners = conn.execute("SELECT COUNT(*) AS count FROM users WHERE role = 'sub_owner';").fetchone()["count"]
+            active_users = conn.execute("SELECT COUNT(*) AS count FROM users WHERE is_active = 1;").fetchone()["count"]
+            suspended_users = conn.execute("SELECT COUNT(*) AS count FROM users WHERE is_active = 0;").fetchone()["count"]
+            total_audits = conn.execute("SELECT COUNT(*) AS count FROM audit_logs;").fetchone()["count"]
 
         return {
             "total_users": total_users,
@@ -605,7 +687,7 @@ class AuthService:
     def get_sub_owner_permissions(self, user_id: str) -> List[str]:
         """Returns the list of administrative permissions assigned to a Sub-Owner."""
         with self._connection() as conn:
-            row = conn.execute("SELECT permissions_json FROM sub_owner_permissions WHERE user_id = ?;", (user_id,)).fetchone()
+            row = conn.execute("SELECT permissions_json FROM sub_owner_permissions WHERE user_id = %s;", (user_id,)).fetchone()
             if row and row["permissions_json"]:
                 try:
                     return json.loads(row["permissions_json"])
@@ -684,11 +766,15 @@ class AuthService:
 
         now = datetime.now(timezone.utc).isoformat()
         with self._connection() as conn:
-            conn.execute("UPDATE users SET role = 'sub_owner', updated_at = ? WHERE user_id = ?;", (now, target_user_id))
+            conn.execute("UPDATE users SET role = 'sub_owner', updated_at = %s WHERE user_id = %s;", (now, target_user_id))
             conn.execute("""
-                INSERT OR REPLACE INTO sub_owner_permissions (user_id, permissions_json, granted_by, created_at, updated_at)
-                VALUES (?, ?, ?, COALESCE((SELECT created_at FROM sub_owner_permissions WHERE user_id = ?), ?), ?);
-            """, (target_user_id, json.dumps(valid_perms), actor_email, target_user_id, now, now))
+                INSERT INTO sub_owner_permissions (user_id, permissions_json, granted_by, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s)
+                ON CONFLICT (user_id) DO UPDATE SET
+                    permissions_json = EXCLUDED.permissions_json,
+                    granted_by = EXCLUDED.granted_by,
+                    updated_at = EXCLUDED.updated_at;
+            """, (target_user_id, json.dumps(valid_perms), actor_email, now, now))
             conn.commit()
 
         self.log_audit_event(
@@ -739,8 +825,8 @@ class AuthService:
 
         now = datetime.now(timezone.utc).isoformat()
         with self._connection() as conn:
-            conn.execute("UPDATE users SET role = 'farmer', updated_at = ? WHERE user_id = ?;", (now, target_user_id))
-            conn.execute("DELETE FROM sub_owner_permissions WHERE user_id = ?;", (target_user_id,))
+            conn.execute("UPDATE users SET role = 'farmer', updated_at = %s WHERE user_id = %s;", (now, target_user_id))
+            conn.execute("DELETE FROM sub_owner_permissions WHERE user_id = %s;", (target_user_id,))
             conn.commit()
 
         self.log_audit_event(
@@ -776,7 +862,7 @@ class AuthService:
         now = datetime.now(timezone.utc).isoformat()
         with self._connection() as conn:
             conn.execute("""
-                UPDATE sub_owner_permissions SET permissions_json = ?, updated_at = ? WHERE user_id = ?;
+                UPDATE sub_owner_permissions SET permissions_json = %s, updated_at = %s WHERE user_id = %s;
             """, (json.dumps(valid_perms), now, target_user_id))
             conn.commit()
 

@@ -228,8 +228,18 @@ class DiagnosisViewModel(application: Application) : AndroidViewModel(applicatio
                 val app = getApplication<Application>()
                 val captureDir = File(app.cacheDir, "camera_captures").apply { mkdirs() }
                 val file = File(captureDir, "camera_${System.currentTimeMillis()}.jpg")
+
+                // Downscale large camera bitmap for network efficiency and Vercel 4.5 MB serverless limit
+                val scaled = if (bitmap.width > 1280 || bitmap.height > 1280) {
+                    val ratio = bitmap.width.toFloat() / bitmap.height.toFloat()
+                    val (w, h) = if (ratio > 1f) 1280 to (1280 / ratio).toInt() else (1280 * ratio).toInt() to 1280
+                    Bitmap.createScaledBitmap(bitmap, w, h, true)
+                } else {
+                    bitmap
+                }
+
                 val outputStream = FileOutputStream(file)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 92, outputStream)
+                scaled.compress(Bitmap.CompressFormat.JPEG, 85, outputStream)
                 outputStream.flush()
                 outputStream.close()
 
@@ -286,17 +296,27 @@ class DiagnosisViewModel(application: Application) : AndroidViewModel(applicatio
             return
         }
 
-        val bytes = selectedImageBytes
+        val rawBytes = selectedImageBytes
         val bitmap = cachedBitmap
         val uri = cachedUri
 
-        if (bytes == null || bitmap == null || uri == null) {
+        if (rawBytes == null || bitmap == null || uri == null) {
             _uiState.value = DiagnosisUiState.Error(
                 errorMessage = "No valid image selected. Please choose a tomato leaf photo first.",
                 bitmap = null,
                 canRetry = false
             )
             return
+        }
+
+        // Guarantee payload stays safely below Vercel's 4.5 MB serverless request ceiling
+        val bytes = if (rawBytes.size > 3 * 1024 * 1024) {
+            val stream = java.io.ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, stream)
+            val downsampled = stream.toByteArray()
+            if (downsampled.isNotEmpty()) downsampled else rawBytes
+        } else {
+            rawBytes
         }
 
         isSubmittingDiagnosis = true

@@ -15,8 +15,8 @@ from contextlib import contextmanager
 
 WORKSPACE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DEFAULT_DB_PATH = os.environ.get(
-    "AGRIMIND_DB_PATH",
-    os.path.join(WORKSPACE_DIR, "data", "cases.db")
+    "DATABASE_URL",
+    os.environ.get("AGRIMIND_DB_URL", os.path.join(WORKSPACE_DIR, "data", "cases.db"))
 )
 COMMUNITY_UPLOADS_DIR = os.environ.get(
     "AGRIMIND_UPLOADS_DIR",
@@ -47,16 +47,56 @@ CATEGORY_LABELS = {
 }
 
 
+try:
+    import psycopg2
+    import psycopg2.extras
+    PSYCOPG2_AVAILABLE = True
+except ImportError:
+    PSYCOPG2_AVAILABLE = False
+
+
+class DBConnectionWrapper:
+    """
+    Transparent connection wrapper enabling uniform parameterized query execution
+    across Neon PostgreSQL (psycopg2) and local development / test SQLite instances.
+    """
+    def __init__(self, raw_conn, is_postgres: bool):
+        self._conn = raw_conn
+        self.is_postgres = is_postgres
+
+    def execute(self, sql: str, params: tuple = ()):
+        formatted_sql = sql.replace("?", "%s") if self.is_postgres else sql.replace("%s", "?")
+        if self.is_postgres:
+            cur = self._conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        else:
+            cur = self._conn.cursor()
+        cur.execute(formatted_sql, params)
+        return cur
+
+    def commit(self):
+        self._conn.commit()
+
+    def rollback(self):
+        self._conn.rollback()
+
+    def close(self):
+        self._conn.close()
+
+
 class CommunityService:
     """Manages farmer community posts, comments, threaded replies, reactions, and reports."""
 
     def __init__(self, db_path: str = DEFAULT_DB_PATH):
         self.db_path = db_path
+        self.is_postgres = str(db_path).startswith("postgres://") or str(db_path).startswith("postgresql://")
+        if self.is_postgres and not PSYCOPG2_AVAILABLE:
+            raise RuntimeError("PostgreSQL database URL specified, but 'psycopg2' is not installed.")
         self._ensure_db()
-        os.makedirs(COMMUNITY_UPLOADS_DIR, exist_ok=True)
+        if not self.is_postgres:
+            os.makedirs(COMMUNITY_UPLOADS_DIR, exist_ok=True)
 
     def _ensure_db(self):
-        if self.db_path != ":memory:":
+        if not self.is_postgres and self.db_path != ":memory:":
             os.makedirs(os.path.dirname(os.path.abspath(self.db_path)), exist_ok=True)
 
         with self._connection() as conn:
@@ -143,12 +183,30 @@ class CommunityService:
 
     @contextmanager
     def _connection(self):
-        conn = sqlite3.connect(self.db_path, timeout=10.0)
-        conn.row_factory = sqlite3.Row
-        try:
-            yield conn
-        finally:
-            conn.close()
+        if self.is_postgres:
+            raw_conn = psycopg2.connect(self.db_path)
+            raw_conn.autocommit = False
+            wrapper = DBConnectionWrapper(raw_conn, is_postgres=True)
+            try:
+                yield wrapper
+                wrapper.commit()
+            except Exception:
+                wrapper.rollback()
+                raise
+            finally:
+                wrapper.close()
+        else:
+            raw_conn = sqlite3.connect(self.db_path, timeout=10.0)
+            raw_conn.row_factory = sqlite3.Row
+            wrapper = DBConnectionWrapper(raw_conn, is_postgres=False)
+            try:
+                yield wrapper
+                wrapper.commit()
+            except Exception:
+                wrapper.rollback()
+                raise
+            finally:
+                wrapper.close()
 
     # =========================================================================
     # Posts Management
@@ -246,7 +304,8 @@ class CommunityService:
 
         with self._connection() as conn:
             # Count total
-            total_count = conn.execute(f"SELECT COUNT(*) FROM community_posts p WHERE {where_str};", params).fetchone()[0]
+            total_count_row = conn.execute(f"SELECT COUNT(*) AS count FROM community_posts p WHERE {where_str};", params).fetchone()
+            total_count = total_count_row["count"] if total_count_row else 0
 
             # Fetch page
             query_sql = f"""
@@ -299,8 +358,8 @@ class CommunityService:
                        CASE WHEN r.reaction_id IS NOT NULL THEN 1 ELSE 0 END AS has_liked
                 FROM community_posts p
                 LEFT JOIN community_reactions r
-                    ON r.target_type = 'post' AND r.target_id = p.post_id AND r.user_id = ?
-                WHERE p.post_id = ?;
+                    ON r.target_type = 'post' AND r.target_id = p.post_id AND r.user_id = %s
+                WHERE p.post_id = %s;
             """, (current_user_id or "", post_id)).fetchone()
 
             if not row:
@@ -402,15 +461,15 @@ class CommunityService:
             return False, "Forbidden: You do not have permission to delete this post."
 
         with self._connection() as conn:
-            conn.execute("DELETE FROM community_reports WHERE target_type = 'post' AND target_id = ?;", (post_id,))
-            conn.execute("DELETE FROM community_reactions WHERE target_type = 'post' AND target_id = ?;", (post_id,))
+            conn.execute("DELETE FROM community_reports WHERE target_type = 'post' AND target_id = %s;", (post_id,))
+            conn.execute("DELETE FROM community_reactions WHERE target_type = 'post' AND target_id = %s;", (post_id,))
             # Delete comments and comment reactions
-            comment_ids = [row[0] for row in conn.execute("SELECT comment_id FROM community_comments WHERE post_id = ?;", (post_id,)).fetchall()]
+            comment_ids = [row["comment_id"] for row in conn.execute("SELECT comment_id FROM community_comments WHERE post_id = %s;", (post_id,)).fetchall()]
             for cid in comment_ids:
-                conn.execute("DELETE FROM community_reactions WHERE target_type = 'comment' AND target_id = ?;", (cid,))
-                conn.execute("DELETE FROM community_reports WHERE target_type = 'comment' AND target_id = ?;", (cid,))
-            conn.execute("DELETE FROM community_comments WHERE post_id = ?;", (post_id,))
-            conn.execute("DELETE FROM community_posts WHERE post_id = ?;", (post_id,))
+                conn.execute("DELETE FROM community_reactions WHERE target_type = 'comment' AND target_id = %s;", (cid,))
+                conn.execute("DELETE FROM community_reports WHERE target_type = 'comment' AND target_id = %s;", (cid,))
+            conn.execute("DELETE FROM community_comments WHERE post_id = %s;", (post_id,))
+            conn.execute("DELETE FROM community_posts WHERE post_id = %s;", (post_id,))
             conn.commit()
 
         # Audit moderation deletion
@@ -450,7 +509,7 @@ class CommunityService:
         # Verify parent comment exists if provided
         if parent_comment_id:
             with self._connection() as conn:
-                parent = conn.execute("SELECT comment_id FROM community_comments WHERE comment_id = ? AND post_id = ?;", (parent_comment_id, post_id)).fetchone()
+                parent = conn.execute("SELECT comment_id FROM community_comments WHERE comment_id = %s AND post_id = %s;", (parent_comment_id, post_id)).fetchone()
                 if not parent:
                     return False, f"Parent comment '{parent_comment_id}' not found on this post.", None
 
@@ -474,7 +533,7 @@ class CommunityService:
                 clean_text, now, now
             ))
             # Increment post comments_count
-            conn.execute("UPDATE community_posts SET comments_count = comments_count + 1 WHERE post_id = ?;", (post_id,))
+            conn.execute("UPDATE community_posts SET comments_count = comments_count + 1 WHERE post_id = %s;", (post_id,))
             conn.commit()
 
         comment_dict = {
@@ -509,8 +568,8 @@ class CommunityService:
                        CASE WHEN r.reaction_id IS NOT NULL THEN 1 ELSE 0 END AS has_liked
                 FROM community_comments c
                 LEFT JOIN community_reactions r
-                    ON r.target_type = 'comment' AND r.target_id = c.comment_id AND r.user_id = ?
-                WHERE c.post_id = ?
+                    ON r.target_type = 'comment' AND r.target_id = c.comment_id AND r.user_id = %s
+                WHERE c.post_id = %s
                 ORDER BY c.is_accepted DESC, c.created_at ASC;
             """, (current_user_id or "", post_id)).fetchall()
 
@@ -549,7 +608,7 @@ class CommunityService:
     ) -> Tuple[bool, str]:
         """Deletes a comment. Permitted for comment author or authorized moderator."""
         with self._connection() as conn:
-            row = conn.execute("SELECT comment_id, post_id, author_id, author_name FROM community_comments WHERE comment_id = ?;", (comment_id,)).fetchone()
+            row = conn.execute("SELECT comment_id, post_id, author_id, author_name FROM community_comments WHERE comment_id = %s;", (comment_id,)).fetchone()
             if not row:
                 return False, f"Comment '{comment_id}' not found."
 
@@ -569,19 +628,20 @@ class CommunityService:
                 return False, "Forbidden: You do not have permission to delete this comment."
 
             # Delete child replies and reactions
-            child_ids = [r[0] for r in conn.execute("SELECT comment_id FROM community_comments WHERE parent_comment_id = ?;", (comment_id,)).fetchall()]
+            child_ids = [r["comment_id"] for r in conn.execute("SELECT comment_id FROM community_comments WHERE parent_comment_id = %s;", (comment_id,)).fetchall()]
             for cid in child_ids:
-                conn.execute("DELETE FROM community_reactions WHERE target_type = 'comment' AND target_id = ?;", (cid,))
-                conn.execute("DELETE FROM community_reports WHERE target_type = 'comment' AND target_id = ?;", (cid,))
-            conn.execute("DELETE FROM community_comments WHERE parent_comment_id = ?;", (comment_id,))
+                conn.execute("DELETE FROM community_reactions WHERE target_type = 'comment' AND target_id = %s;", (cid,))
+                conn.execute("DELETE FROM community_reports WHERE target_type = 'comment' AND target_id = %s;", (cid,))
+            conn.execute("DELETE FROM community_comments WHERE parent_comment_id = %s;", (comment_id,))
 
-            conn.execute("DELETE FROM community_reactions WHERE target_type = 'comment' AND target_id = ?;", (comment_id,))
-            conn.execute("DELETE FROM community_reports WHERE target_type = 'comment' AND target_id = ?;", (comment_id,))
-            conn.execute("DELETE FROM community_comments WHERE comment_id = ?;", (comment_id,))
+            conn.execute("DELETE FROM community_reactions WHERE target_type = 'comment' AND target_id = %s;", (comment_id,))
+            conn.execute("DELETE FROM community_reports WHERE target_type = 'comment' AND target_id = %s;", (comment_id,))
+            conn.execute("DELETE FROM community_comments WHERE comment_id = %s;", (comment_id,))
 
-            # Decrement comment count on post
+            # Decrement comment count on post (GREATEST for PostgreSQL, MAX for SQLite)
             deleted_count = 1 + len(child_ids)
-            conn.execute("UPDATE community_posts SET comments_count = MAX(0, comments_count - ?) WHERE post_id = ?;", (deleted_count, post_id))
+            max_fn = "GREATEST" if self.is_postgres else "MAX"
+            conn.execute(f"UPDATE community_posts SET comments_count = {max_fn}(0, comments_count - %s) WHERE post_id = %s;", (deleted_count, post_id))
             conn.commit()
 
         if not is_author and auth_service:
@@ -615,7 +675,7 @@ class CommunityService:
             return False, "Forbidden: Only the question author can accept a community solution."
 
         with self._connection() as conn:
-            comm = conn.execute("SELECT comment_id, is_accepted FROM community_comments WHERE comment_id = ? AND post_id = ?;", (comment_id, post_id)).fetchone()
+            comm = conn.execute("SELECT comment_id, is_accepted FROM community_comments WHERE comment_id = %s AND post_id = %s;", (comment_id, post_id)).fetchone()
             if not comm:
                 return False, f"Comment '{comment_id}' does not exist on post '{post_id}'."
 
@@ -624,10 +684,10 @@ class CommunityService:
 
             # Clear any previously accepted comments on this post if setting new one
             if new_status:
-                conn.execute("UPDATE community_comments SET is_accepted = 0 WHERE post_id = ?;", (post_id,))
+                conn.execute("UPDATE community_comments SET is_accepted = 0 WHERE post_id = %s;", (post_id,))
 
-            conn.execute("UPDATE community_comments SET is_accepted = ? WHERE comment_id = ?;", (1 if new_status else 0, comment_id))
-            conn.execute("UPDATE community_posts SET is_resolved = ? WHERE post_id = ?;", (1 if new_status else 0, post_id))
+            conn.execute("UPDATE community_comments SET is_accepted = %s WHERE comment_id = %s;", (1 if new_status else 0, comment_id))
+            conn.execute("UPDATE community_posts SET is_resolved = %s WHERE post_id = %s;", (1 if new_status else 0, post_id))
             conn.commit()
 
         msg = "Solution marked as accepted answer." if new_status else "Solution acceptance removed."
@@ -657,20 +717,21 @@ class CommunityService:
 
         with self._connection() as conn:
             # Check target exists
-            target = conn.execute(f"SELECT {id_col}, likes_count FROM {table_name} WHERE {id_col} = ?;", (target_id,)).fetchone()
+            target = conn.execute(f"SELECT {id_col}, likes_count FROM {table_name} WHERE {id_col} = %s;", (target_id,)).fetchone()
             if not target:
                 return False, f"Target {clean_target_type} '{target_id}' not found.", {}
 
             # Check if reaction exists
             existing = conn.execute("""
                 SELECT reaction_id FROM community_reactions
-                WHERE target_type = ? AND target_id = ? AND user_id = ? AND reaction_type = ?;
+                WHERE target_type = %s AND target_id = %s AND user_id = %s AND reaction_type = %s;
             """, (clean_target_type, target_id, user_id, clean_rx_type)).fetchone()
 
             if existing:
-                # Remove reaction
-                conn.execute("DELETE FROM community_reactions WHERE reaction_id = ?;", (existing["reaction_id"],))
-                conn.execute(f"UPDATE {table_name} SET likes_count = MAX(0, likes_count - 1) WHERE {id_col} = ?;", (target_id,))
+                # Remove reaction (GREATEST for PostgreSQL, MAX for SQLite)
+                max_fn = "GREATEST" if self.is_postgres else "MAX"
+                conn.execute("DELETE FROM community_reactions WHERE reaction_id = %s;", (existing["reaction_id"],))
+                conn.execute(f"UPDATE {table_name} SET likes_count = {max_fn}(0, likes_count - 1) WHERE {id_col} = %s;", (target_id,))
                 conn.commit()
                 has_liked = False
                 msg = "Reaction removed."
@@ -682,12 +743,12 @@ class CommunityService:
                     INSERT INTO community_reactions (reaction_id, target_type, target_id, user_id, reaction_type, created_at)
                     VALUES (?, ?, ?, ?, ?, ?);
                 """, (rx_id, clean_target_type, target_id, user_id, clean_rx_type, now))
-                conn.execute(f"UPDATE {table_name} SET likes_count = likes_count + 1 WHERE {id_col} = ?;", (target_id,))
+                conn.execute(f"UPDATE {table_name} SET likes_count = likes_count + 1 WHERE {id_col} = %s;", (target_id,))
                 conn.commit()
                 has_liked = True
                 msg = "Reaction recorded."
 
-            new_count = conn.execute(f"SELECT likes_count FROM {table_name} WHERE {id_col} = ?;", (target_id,)).fetchone()["likes_count"]
+            new_count = conn.execute(f"SELECT likes_count FROM {table_name} WHERE {id_col} = %s;", (target_id,)).fetchone()["likes_count"]
 
         return True, msg, {
             "target_type": clean_target_type,
@@ -756,7 +817,7 @@ class CommunityService:
                 SELECT report_id, reporter_id, target_type, target_id,
                        reason, details, status, created_at, reviewed_by, reviewed_at
                 FROM community_reports
-                ORDER BY created_at DESC LIMIT ?;
+                ORDER BY created_at DESC LIMIT %s;
             """, (limit,)).fetchall()
             return True, "Reports retrieved.", [dict(r) for r in rows]
 
@@ -782,9 +843,30 @@ class CommunityService:
             return False, "Unsupported image type. Please upload a JPG, PNG, or WEBP image.", None
 
         safe_name = f"community_{uuid.uuid4().hex[:12]}{ext}"
-        target_path = os.path.join(COMMUNITY_UPLOADS_DIR, safe_name)
 
+        # Cloud storage via Supabase Storage if configured
+        supabase_url = os.environ.get("SUPABASE_URL")
+        supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+        if supabase_url and supabase_key:
+            try:
+                from supabase import create_client
+                sb_client = create_client(supabase_url, supabase_key)
+                bucket_name = os.environ.get("SUPABASE_STORAGE_BUCKET", "community_images")
+                content_type = "image/png" if ext == ".png" else ("image/webp" if ext == ".webp" else "image/jpeg")
+                sb_client.storage.from_(bucket_name).upload(
+                    path=safe_name,
+                    file=file_bytes,
+                    file_options={"content-type": content_type}
+                )
+                public_url = sb_client.storage.from_(bucket_name).get_public_url(safe_name)
+                return True, "Image uploaded to Supabase Storage successfully.", public_url
+            except Exception as sb_err:
+                logger.warning(f"Supabase Storage upload failed, falling back to local: {sb_err}")
+
+        # Local storage fallback
+        target_path = os.path.join(COMMUNITY_UPLOADS_DIR, safe_name)
         try:
+            os.makedirs(COMMUNITY_UPLOADS_DIR, exist_ok=True)
             with open(target_path, "wb") as f:
                 f.write(file_bytes)
             relative_url = f"/community/images/{safe_name}"
