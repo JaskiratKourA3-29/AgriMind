@@ -44,12 +44,12 @@ class HealthViewModel : ViewModel() {
                 }
             } catch (e: SocketTimeoutException) {
                 _uiState.value = HealthUiState.Error(
-                    message = "Connection timed out (15s). Ensure Uvicorn server is bound to 0.0.0.0:8000.",
+                    message = "Connection timed out (15s). Ensure the cloud backend is reachable.",
                     urlAttempted = targetUrl
                 )
             } catch (e: ConnectException) {
                 _uiState.value = HealthUiState.Error(
-                    message = "Connection refused at $targetUrl. Verify FastAPI is running in WSL2 and accessible via 10.0.2.2.",
+                    message = "Connection refused at $targetUrl. Verify cloud backend server is reachable.",
                     urlAttempted = targetUrl
                 )
             } catch (e: IOException) {

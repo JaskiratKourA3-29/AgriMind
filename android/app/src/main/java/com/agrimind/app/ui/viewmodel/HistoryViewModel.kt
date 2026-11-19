@@ -52,7 +52,21 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun deleteCase(caseId: String) {
+        // Delete locally first for immediate UI responsiveness
         repository.deleteCase(caseId)
+
+        // Asynchronously notify cloud backend to purge from Neon DB / Supabase Storage & log audit trail
+        viewModelScope.launch {
+            try {
+                val sessionManager = com.agrimind.app.data.local.UserSessionManager.getInstance(getApplication())
+                val authHeader = sessionManager.getAuthHeader()
+                withContext(Dispatchers.IO) {
+                    RetrofitClient.apiService.deleteCase(caseId, authHeader)
+                }
+            } catch (_: Exception) {
+                // If offline or network unavailable, local device deletion remains authoritative
+            }
+        }
     }
 
     fun clearAllHistory() {

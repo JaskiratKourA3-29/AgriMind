@@ -201,14 +201,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             return Pair(null, "URL must contain a valid host name or IP address.")
         }
 
-        // Android cleartext policy enforcement:
-        // Cleartext HTTP is only allowed for local emulator (10.0.2.2) and loopback addresses
-        val isLocalhostOrEmulator = host.equals("10.0.2.2", ignoreCase = true) ||
-                host.equals("127.0.0.1", ignoreCase = true) ||
-                host.equals("localhost", ignoreCase = true)
-
-        if (trimmed.startsWith("http://", ignoreCase = true) && !isLocalhostOrEmulator) {
-            return Pair(null, "Remote gateways must use secure HTTPS (https://) to comply with Android security.")
+        // Production TLS enforcement: All remote gateway URLs must use secure HTTPS
+        if (trimmed.startsWith("http://", ignoreCase = true)) {
+            return Pair(null, "Production gateways must use secure HTTPS (https://). Cleartext HTTP is strictly prohibited.")
         }
 
         val normalized = if (trimmed.endsWith("/")) trimmed else "$trimmed/"

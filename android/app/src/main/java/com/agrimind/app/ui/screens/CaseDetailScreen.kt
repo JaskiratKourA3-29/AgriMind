@@ -33,6 +33,7 @@ import com.agrimind.app.data.model.ReassessmentTriggers
 import com.agrimind.app.data.model.CaseComment
 import com.agrimind.app.data.model.CaseOutcome
 import com.agrimind.app.report.PdfReportGenerator
+import kotlinx.coroutines.launch
 import com.agrimind.app.ui.theme.*
 import com.agrimind.app.ui.viewmodel.CaseDetailViewModel
 import com.agrimind.app.ui.viewmodel.CaseShareState
@@ -61,6 +62,8 @@ fun CaseDetailScreen(
 
     var showReassessSheet by remember { mutableStateOf(false) }
     var showShareDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
     var shareTargetEntity by remember { mutableStateOf("cooperative_all") }
     var shareAnonymize by remember { mutableStateOf(true) }
     var shareNotes by remember { mutableStateOf("") }
@@ -148,6 +151,15 @@ fun CaseDetailScreen(
                         Icon(
                             imageVector = Icons.Default.PictureAsPdf,
                             contentDescription = "Export PDF Report",
+                            tint = Color.White
+                        )
+                    }
+                    IconButton(
+                        onClick = { showDeleteDialog = true }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DeleteOutline,
+                            contentDescription = "Delete Case",
                             tint = Color.White
                         )
                     }
@@ -1090,6 +1102,45 @@ fun CaseDetailScreen(
                     showShareDialog = false
                 }) {
                     Text("Done")
+                }
+            }
+        )
+    }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            icon = { Icon(Icons.Default.DeleteOutline, contentDescription = null, tint = ErrorRed) },
+            title = { Text("Delete Diagnostic Case", fontWeight = FontWeight.Bold) },
+            text = {
+                Text(
+                    "Are you sure you want to permanently delete case ${current.caseId}? " +
+                    "This action will remove the case record from this device and cloud history."
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        val sessionManager = com.agrimind.app.data.local.UserSessionManager.getInstance(context)
+                        val authHeader = sessionManager.getAuthHeader()
+                        com.agrimind.app.data.repository.LocalCaseRepository.getInstance(context).deleteCase(current.caseId)
+                        scope.launch {
+                            try {
+                                com.agrimind.app.data.api.RetrofitClient.apiService.deleteCase(current.caseId, authHeader)
+                            } catch (_: Exception) {}
+                        }
+                        showDeleteDialog = false
+                        Toast.makeText(context, "Case ${current.caseId} deleted", Toast.LENGTH_SHORT).show()
+                        onBackClicked()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = ErrorRed)
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancel")
                 }
             }
         )

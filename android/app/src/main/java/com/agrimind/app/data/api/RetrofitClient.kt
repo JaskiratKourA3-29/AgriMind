@@ -8,14 +8,13 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Singleton Retrofit HTTP client for AgriMind Android application.
- * Configured with Android Emulator host loopback address (10.0.2.2:8000)
- * and extended timeouts to accommodate CPU-based neural network inference.
+ * Configured with live Vercel cloud production gateway (https://agrimind-seven.vercel.app/)
+ * and extended timeouts to accommodate ResNet-50 serverless cold start and inference.
  */
 object RetrofitClient {
 
     // Default cloud production gateway URL (Vercel HTTPS deployment):
-    const val DEFAULT_BASE_URL = "https://agrimind-backend.vercel.app/"
-    const val EMULATOR_FALLBACK_URL = "http://10.0.2.2:8000/"
+    const val DEFAULT_BASE_URL = "https://agrimind-seven.vercel.app/"
 
     private var currentBaseUrl: String = DEFAULT_BASE_URL
     private var cachedApiService: AgriMindApiService? = null

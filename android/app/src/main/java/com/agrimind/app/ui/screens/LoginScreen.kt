@@ -97,7 +97,7 @@ fun LoginScreen(
                     }
                 }
             } catch (e: Exception) {
-                errorMessage = "Connection error: ${e.localizedMessage ?: "Backend server unreachable. Make sure FastAPI is running on port 8000."}"
+                errorMessage = "Connection error: ${e.localizedMessage ?: "Backend server unreachable. Make sure your internet connection is active."}"
             } finally {
                 isLoading = false
             }

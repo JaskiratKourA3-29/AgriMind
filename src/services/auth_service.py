@@ -348,10 +348,27 @@ class AuthService:
         if role not in ("farmer", "admin", "owner"):
             return False, "Invalid role. Allowed roles are 'farmer', 'admin', or 'owner'.", None
 
+        # Pre-check existence using safe parameterized query to prevent aborted transactions
+        try:
+            with self._connection() as conn:
+                existing = conn.execute("SELECT 1 FROM users WHERE email = %s;", (clean_email,)).fetchone()
+                if existing:
+                    return False, f"Account with email '{clean_email}' already exists.", None
+        except Exception as e:
+            pass
+
         user_id = f"USER-{uuid.uuid4().hex[:8].upper()}"
         salt = uuid.uuid4().hex
         pw_hash = self._hash_password(password, salt)
         now = datetime.now(timezone.utc).isoformat()
+
+        integrity_errors = (sqlite3.IntegrityError,)
+        if PSYCOPG2_AVAILABLE:
+            try:
+                import psycopg2.errors
+                integrity_errors = (sqlite3.IntegrityError, psycopg2.IntegrityError, psycopg2.errors.UniqueViolation)
+            except Exception:
+                integrity_errors = (sqlite3.IntegrityError, psycopg2.IntegrityError)
 
         try:
             with self._connection() as conn:
@@ -366,21 +383,41 @@ class AuthService:
                 "full_name": full_name.strip(),
                 "role": role,
                 "phone": phone or "",
-                "created_at": now
+                "created_at": now,
+                "is_active": True,
+                "permissions": self.get_user_permissions(user_id, role)
             }
-        except sqlite3.IntegrityError:
+        except integrity_errors:
             return False, f"Account with email '{clean_email}' already exists.", None
+        except Exception as e:
+            return False, "Registration failed due to a database error. Please try again.", None
+
+    def update_password(self, email: str, new_password: str) -> bool:
+        """Updates password hash and salt for an existing user account."""
+        clean_email = email.strip().lower()
+        if len(new_password) < 6:
+            return False
+        new_salt = uuid.uuid4().hex
+        new_hash = self._hash_password(new_password, new_salt)
+        now = datetime.now(timezone.utc).isoformat()
+        with self._connection() as conn:
+            cur = conn.execute("""
+                UPDATE users SET password_hash = %s, salt = %s, updated_at = %s WHERE email = %s;
+            """, (new_hash, new_salt, now, clean_email))
+            conn.commit()
+            return cur.rowcount > 0
 
     def authenticate_user(self, email: str, password: str) -> Tuple[bool, str, Optional[Dict[str, Any]]]:
         """
-        Validates user credentials. Returns (success, message, user_profile).
+        Validates user credentials. Supports email or user_id identifier.
+        Returns (success, message, user_profile).
         """
-        clean_email = email.strip().lower()
+        clean_id = email.strip().lower()
         with self._connection() as conn:
             row = conn.execute("""
                 SELECT user_id, email, full_name, password_hash, salt, role, phone, created_at, is_active
-                FROM users WHERE email = %s;
-            """, (clean_email,)).fetchone()
+                FROM users WHERE email = %s OR user_id = %s;
+            """, (clean_id, email.strip())).fetchone()
 
             if not row:
                 return False, "Invalid email or password.", None
@@ -391,15 +428,21 @@ class AuthService:
             if not self._verify_password(password, row["salt"], row["password_hash"]):
                 return False, "Invalid email or password.", None
 
+            permissions = []
+            try:
+                permissions = self.get_user_permissions(row["user_id"], row["role"])
+            except Exception:
+                pass
+
             return True, "Authentication successful.", {
                 "user_id": row["user_id"],
                 "email": row["email"],
                 "full_name": row["full_name"],
                 "role": row["role"],
-                "phone": row["phone"],
+                "phone": row["phone"] or "",
                 "created_at": row["created_at"],
                 "is_active": bool(row["is_active"]),
-                "permissions": self.get_user_permissions(row["user_id"], row["role"])
+                "permissions": permissions
             }
 
     def get_user_by_id(self, user_id: str) -> Optional[Dict[str, Any]]:

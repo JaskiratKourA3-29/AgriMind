@@ -210,14 +210,14 @@ private fun LoadingStatusCard() {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Connecting to FastAPI Backend...",
+                text = "Connecting to AgriMind Cloud Gateway...",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = ForestGreenPrimary
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = "Querying GET /health via http://10.0.2.2:8000/",
+                text = "Querying GET /health via cloud production gateway...",
                 style = MaterialTheme.typography.bodySmall,
                 color = TextMuted
             )

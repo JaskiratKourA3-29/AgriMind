@@ -554,7 +554,7 @@ class ChatViewModel @JvmOverloads constructor(
                 }
             } catch (e: ConnectException) {
                 Log.e("AgriMindChat", "Network ConnectException: ${e.message}")
-                val msg = "Cannot connect to AgriMind backend (10.0.2.2:8000). Please ensure FastAPI is running."
+                val msg = "Cannot connect to AgriMind backend. Please check your network connection."
                 _messages.value = _messages.value + UiChatMessage(role = "assistant", content = "⚠️ $msg", isError = true)
                 _uiState.value = ChatUiState.Error(msg)
             } catch (e: SocketTimeoutException) {

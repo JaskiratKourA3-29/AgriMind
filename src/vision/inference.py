@@ -261,9 +261,12 @@ def run_raw_inference(image_path: str, checkpoint_path: str = DEFAULT_CHECKPOINT
     """
     Direct ResNet-50 inference function requiring only PyTorch, Torchvision, and Pillow.
     Uses cached model instance in RAM for high performance.
+    Integrates 2048-D embedding centroid analysis for robust healthy leaf classification
+    and out-of-distribution (OOD) uncertainty estimation.
     Returns plain Python dictionary (zero Pydantic dependency).
     """
     import torch
+    import numpy as np
     from PIL import Image
     from src.vision.dataset import get_val_transforms, IDX_TO_LABEL
 
@@ -276,21 +279,83 @@ def run_raw_inference(image_path: str, checkpoint_path: str = DEFAULT_CHECKPOINT
     transform = get_val_transforms(image_size=224)
     tensor = transform(img).unsqueeze(0).to(device)
 
-    with torch.no_grad():
-        outputs = model(tensor)
-        probs = torch.softmax(outputs, dim=1)[0].cpu().numpy()
+    # Register forward hook on avgpool layer to capture 2048-D penultimate feature vector
+    features = {}
+    def hook_fn(module, input, output):
+        features["feat"] = torch.flatten(output, 1)
+
+    hook = model.avgpool.register_forward_hook(hook_fn)
+    try:
+        with torch.no_grad():
+            outputs = model(tensor)
+            probs = torch.softmax(outputs, dim=1)[0].cpu().numpy()
+    finally:
+        hook.remove()
 
     pred_idx = int(probs.argmax())
-    pred_class = IDX_TO_LABEL[pred_idx]
-    conf = float(probs[pred_idx])
-    class_probs = {IDX_TO_LABEL[i]: round(float(probs[i]), 4) for i in range(len(probs))}
+    raw_class = IDX_TO_LABEL[pred_idx]
+    raw_conf = float(probs[pred_idx])
+
+    centroids_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "class_centroids.npz")
+    if os.path.exists(centroids_file) and "feat" in features:
+        feat = features["feat"][0].cpu().numpy()
+        feat_norm = feat / (np.linalg.norm(feat) + 1e-7)
+
+        c_data = np.load(centroids_file)
+        c_bact = c_data["Tomato___Bacterial_spot"]
+        c_early = c_data["Tomato___Early_blight"]
+        c_late = c_data["Tomato___Late_blight"]
+        c_healthy = c_data["Tomato___healthy"]
+
+        sim_bact = float(np.dot(feat_norm, c_bact))
+        sim_early = float(np.dot(feat_norm, c_early))
+        sim_late = float(np.dot(feat_norm, c_late))
+        sim_healthy = float(np.dot(feat_norm, c_healthy))
+
+        max_dis = max(sim_bact, sim_early, sim_late)
+
+        # Decision 1: Dominant healthy leaf feature similarity
+        if sim_healthy > max_dis:
+            pred_class = "Tomato___healthy"
+            conf = round(float(min(0.95, sim_healthy)), 4)
+            is_supported_disease = False
+            class_probs = {
+                "Tomato___healthy": round(sim_healthy, 4),
+                "Tomato___Bacterial_spot": round(sim_bact, 4),
+                "Tomato___Early_blight": round(sim_early, 4),
+                "Tomato___Late_blight": round(sim_late, 4)
+            }
+        # Decision 2: Out-of-Distribution or Ambiguous Condition
+        elif max_dis < 0.38 and sim_healthy < 0.40:
+            pred_class = "Tomato___unsupported_or_ambiguous"
+            conf = round(float(max_dis), 4)
+            is_supported_disease = False
+            class_probs = {
+                "Tomato___unsupported_or_ambiguous": round(conf, 4),
+                "Tomato___healthy": round(sim_healthy, 4),
+                "Tomato___Bacterial_spot": round(sim_bact, 4),
+                "Tomato___Early_blight": round(sim_early, 4),
+                "Tomato___Late_blight": round(sim_late, 4)
+            }
+        # Decision 3: High-confidence supported tomato disease
+        else:
+            pred_class = raw_class
+            conf = round(raw_conf, 4)
+            is_supported_disease = True
+            class_probs = {IDX_TO_LABEL[i]: round(float(probs[i]), 4) for i in range(len(probs))}
+            class_probs["Tomato___healthy"] = round(sim_healthy, 4)
+    else:
+        pred_class = raw_class
+        conf = round(raw_conf, 4)
+        is_supported_disease = pred_class in SUPPORTED_CLASSES
+        class_probs = {IDX_TO_LABEL[i]: round(float(probs[i]), 4) for i in range(len(probs))}
 
     return {
         "predicted_class": pred_class,
         "confidence": conf,
         "class_probabilities": class_probs,
         "model_name": "ResNet-50-Tomato3-Baseline",
-        "is_supported_disease": pred_class in SUPPORTED_CLASSES
+        "is_supported_disease": is_supported_disease
     }
 
 

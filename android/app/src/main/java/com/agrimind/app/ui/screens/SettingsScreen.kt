@@ -198,9 +198,9 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = if (uiState.language == "hi")
-                        "स्थानीय एमुलेटर (10.0.2.2:8000) या क्लाउडफ़्लेयर HTTPS टनल URL दर्ज करें:"
+                        "एग्रीमाइंड क्लाउड प्रोडक्शन गेटवे (HTTPS) URL दर्ज करें:"
                     else
-                        "Configure connection to local emulator (10.0.2.2:8000) or Cloudflare HTTPS tunnel:",
+                        "Configure AgriMind cloud production gateway (HTTPS) URL:",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.DarkGray
                 )
@@ -211,7 +211,7 @@ fun SettingsScreen(
                     value = uiState.gatewayInput,
                     onValueChange = { viewModel.setGatewayInput(it) },
                     label = { Text(if (uiState.language == "hi") "सर्वर गेटवे URL" else "Server Gateway URL") },
-                    placeholder = { Text("https://xxxx.trycloudflare.com/") },
+                    placeholder = { Text("https://agrimind-seven.vercel.app/") },
                     singleLine = true,
                     isError = uiState.gatewayError != null,
                     supportingText = {

@@ -18,6 +18,9 @@ WORKSPACE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if WORKSPACE_DIR not in sys.path:
     sys.path.insert(0, WORKSPACE_DIR)
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from src.services.auth_service import AuthService, DEFAULT_DB_PATH
 
 
@@ -41,81 +44,56 @@ def setup_owner(
 
     auth_svc = AuthService(db_path=db_path)
 
-    # 1. Inspect existing state
-    with sqlite3.connect(db_path) as conn:
-        conn.row_factory = sqlite3.Row
-        cur = conn.cursor()
-
-        # Check existing accounts
-        existing_users = cur.execute("SELECT user_id, email, full_name, role FROM users;").fetchall()
+    # 1. Inspect existing state using DB connection wrapper
+    with auth_svc._connection() as conn:
+        existing_users = conn.execute("SELECT user_id, email, full_name, role FROM users;").fetchall()
         print(f"[INFO] Current users in database ({len(existing_users)}):")
         for u in existing_users:
             print(f"  • {u['user_id']} | {u['email']} | {u['full_name']} | {u['role']}")
 
-        # 2. Transactional cleanup of the three demo accounts:
-        # - admin@agrimind.jammu.gov.in
-        # - farmer_local@agrimind.in
-        # - owner@agrimind.jammu.gov.in
-        demo_emails = [
-            "admin@agrimind.jammu.gov.in",
-            "farmer_local@agrimind.in",
-            "owner@agrimind.jammu.gov.in"
-        ]
-
-        # Verify whether target email is one of the demo emails
-        demo_emails_to_remove = [e for e in demo_emails if e != clean_email]
-
-        print(f"\n[INFO] Safely removing demonstration accounts: {demo_emails_to_remove}...")
-        cur.execute(
-            f"DELETE FROM users WHERE email IN ({','.join(['?']*len(demo_emails_to_remove))});",
-            demo_emails_to_remove
-        )
-        removed_count = cur.rowcount
-        print(f"[SUCCESS] Removed {removed_count} demonstration accounts from users table.")
-
-        # 3. Create or promote Jaskirat Kour as Owner
+        # 2. Create or promote Jaskirat Kour as Owner
         user_id = f"USER-{uuid.uuid4().hex[:8].upper()}"
         salt = uuid.uuid4().hex
         pw_hash = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), 100_000).hex()
         now = datetime.now(timezone.utc).isoformat()
 
-        # Check if clean_email already exists in users table (e.g., if Jaskirat had registered as a farmer)
-        existing_target = cur.execute("SELECT user_id, role FROM users WHERE email = ?;", (clean_email,)).fetchone()
+        # Check if clean_email already exists in users table
+        existing_target = conn.execute("SELECT user_id, role FROM users WHERE email = %s;", (clean_email,)).fetchone()
         if existing_target:
             target_user_id = existing_target["user_id"]
-            cur.execute(
-                "UPDATE users SET role = 'owner', full_name = ?, password_hash = ?, salt = ?, is_active = 1, updated_at = ? WHERE user_id = ?;",
+            conn.execute(
+                "UPDATE users SET role = 'owner', full_name = %s, password_hash = %s, salt = %s, is_active = 1, updated_at = %s WHERE user_id = %s;",
                 (clean_name, pw_hash, salt, now, target_user_id)
             )
             print(f"[SUCCESS] Updated existing account {clean_email} to Project Owner (role: 'owner').")
         else:
             target_user_id = user_id
-            cur.execute(
+            conn.execute(
                 "INSERT INTO users (user_id, email, full_name, password_hash, salt, role, phone, created_at, updated_at, is_active) "
-                "VALUES (?, ?, ?, ?, ?, 'owner', ?, ?, ?, 1);",
-                (target_user_id, clean_email, clean_name, pw_hash, salt, phone, now, now)
+                "VALUES (%s, %s, %s, %s, %s, 'owner', %s, %s, %s, 1);",
+                (target_user_id, clean_email, clean_name, pw_hash, salt, phone or "", now, now)
             )
             print(f"[SUCCESS] Created Project Owner account for {clean_name} ({clean_email}).")
 
-        # 4. Record Audit Log for Owner Setup
+        # 3. Record Audit Log for Owner Setup
         log_id = f"AUDIT-{uuid.uuid4().hex[:12].upper()}"
-        cur.execute(
+        conn.execute(
             "INSERT INTO audit_logs (log_id, actor_id, actor_email, actor_role, target_user_id, action, details, timestamp) "
-            "VALUES (?, ?, ?, 'owner', ?, 'OWNER_BOOTSTRAP', ?, ?);",
+            "VALUES (%s, %s, %s, 'owner', %s, 'OWNER_BOOTSTRAP', %s, %s);",
             (
                 log_id,
                 target_user_id,
                 clean_email,
                 target_user_id,
-                f"Established verified Project Owner account for {clean_name} ({clean_email}) and removed demo accounts.",
+                f"Configured Project Owner account for {clean_name} ({clean_email}).",
                 now
             )
         )
 
         conn.commit()
 
-        # 5. Display final database state
-        final_users = cur.execute("SELECT user_id, email, full_name, role, is_active FROM users;").fetchall()
+        # 4. Display final database state
+        final_users = conn.execute("SELECT user_id, email, full_name, role, is_active FROM users;").fetchall()
         print("\n=================================================================")
         print("                 FINAL ACTIVE DATABASE USERS                     ")
         print("=================================================================")

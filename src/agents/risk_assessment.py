@@ -47,6 +47,24 @@ class RiskAssessmentAgent:
         is_early_blight = "Early_blight" in disease
         is_bacterial_spot = "Bacterial_spot" in disease
 
+        # Rule 0: Healthy tomato foliage
+        if "healthy" in disease.lower():
+            return RiskAssessmentResult(
+                assessment_id=assessment_id,
+                investigation_id=investigation.investigation_id,
+                disease=disease,
+                identification_confidence=id_confidence,
+                assigned_severity=SeverityLevel.LOW,
+                severity_confidence="high",
+                rubric_basis=["Tomato foliage exhibits healthy laminar structure with no active pathogen lesions."],
+                epidemic_risk="low",
+                uncertainty_factors=[],
+                scouting_recommendations=["Continue routine weekly crop scouting."],
+                requires_immediate_action=False,
+                requires_human_expert_review=False,
+                pesticide_safety_notice=None
+            )
+
         # Rule 1: Guard against conflicting or unsupported evidence
         if status == EvidenceStatus.UNSUPPORTED_DISEASE:
             return RiskAssessmentResult(

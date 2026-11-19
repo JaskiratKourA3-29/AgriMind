@@ -178,8 +178,12 @@ def retrieval_node(state: AgriMindState) -> Dict[str, Any]:
         }
 
     registry = get_node_registry()
-    disease_filter = vision_pred.predicted_class if vision_pred.is_supported_disease else None
-    query = state.get("user_query") or f"Management and diagnostic symptoms of {vision_pred.predicted_class}"
+    if "healthy" in vision_pred.predicted_class.lower():
+        query = state.get("user_query") or "Agronomic practices and preventative maintenance for healthy tomato foliage"
+        disease_filter = None
+    else:
+        disease_filter = vision_pred.predicted_class if vision_pred.is_supported_disease else None
+        query = state.get("user_query") or f"Management and diagnostic symptoms of {vision_pred.predicted_class}"
 
     try:
         raw_retrieval = registry.retriever.retrieve(

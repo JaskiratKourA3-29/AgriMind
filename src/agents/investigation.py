@@ -195,12 +195,18 @@ class InvestigationAgent:
 
         # Section 1: Visual Model Findings
         lines.append("#### 1. Visual Model Classification")
-        lines.append(f"- **Primary Pathogen Predicted:** `{vision_prediction.predicted_class}`")
-        lines.append(f"- **Classification Confidence:** `{vision_prediction.confidence:.2%}` (Model: {vision_prediction.model_name})")
-        if vision_prediction.class_probabilities:
-            prob_str = ", ".join(f"{k.split('___')[-1]}: {v:.2%}" for k, v in vision_prediction.class_probabilities.items())
-            lines.append(f"- **Class Probability Distribution:** {prob_str}")
-        lines.append(f"- **Scope Status:** {'In-Scope Tomato Pathogen' if vision_prediction.is_supported_disease else 'OUT-OF-SCOPE / UNSUPPORTED'}")
+        is_healthy = "healthy" in vision_prediction.predicted_class.lower()
+        if is_healthy:
+            lines.append("- **Condition:** `Tomato___healthy` (Healthy Foliage)")
+            lines.append(f"- **Confidence:** `{vision_prediction.confidence:.2%}` (Model: {vision_prediction.model_name})")
+            lines.append("- **Scope Status:** Verified Healthy Tomato Specimen")
+        else:
+            lines.append(f"- **Primary Pathogen Predicted:** `{vision_prediction.predicted_class}`")
+            lines.append(f"- **Classification Confidence:** `{vision_prediction.confidence:.2%}` (Model: {vision_prediction.model_name})")
+            if vision_prediction.class_probabilities:
+                prob_str = ", ".join(f"{k.split('___')[-1]}: {v:.2%}" for k, v in vision_prediction.class_probabilities.items())
+                lines.append(f"- **Class Probability Distribution:** {prob_str}")
+            lines.append(f"- **Scope Status:** {'In-Scope Tomato Pathogen' if vision_prediction.is_supported_disease else 'OUT-OF-SCOPE / UNSUPPORTED'}")
 
         # Section 2: Canopy & Field Observations
         lines.append("\n#### 2. Field & Canopy Observations")

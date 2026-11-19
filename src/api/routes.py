@@ -1405,6 +1405,93 @@ async def get_case_by_id(
 
 
 # =====================================================================
+# DELETE /cases/{case_id}
+# =====================================================================
+@router.delete(
+    "/cases/{case_id}",
+    summary="Delete Diagnostic Case",
+    description="Deletes a diagnostic case from authoritative storage. Farmers can delete their own cases; "
+                "Admins and Owners can delete any case. Cleans up associated storage and logs an audit event."
+)
+async def delete_case(
+    case_id: str,
+    current_user: Optional[Dict[str, Any]] = Depends(get_optional_current_user)
+) -> Dict[str, Any]:
+    clean_id = case_id.strip()
+    case_store = get_case_store()
+    auth_svc = get_auth_service()
+
+    record = case_store.get_case_record(clean_id)
+    if not record:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Case ID '{clean_id}' was not found in authoritative storage."
+        )
+
+    # Privacy & Access Control Enforcement
+    owner_id = record.get("owner_user_id")
+    caller_id = current_user.get("user_id") or current_user.get("sub", "") if current_user else ""
+    caller_email = current_user.get("email", "") if current_user else ""
+    caller_role = current_user.get("role", "farmer") if current_user else "anonymous"
+
+    is_owner_or_admin = caller_role in ("admin", "owner", "sub_owner")
+    is_case_owner = bool(owner_id and caller_id and owner_id == caller_id)
+
+    if owner_id and not is_case_owner and not is_owner_or_admin:
+        if not current_user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication required to delete this diagnostic case."
+            )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: You do not have permission to delete another farmer's private case."
+        )
+
+    # Attempt Supabase cloud storage image cleanup if applicable
+    try:
+        case_state = record.get("state") or {}
+        image_url = case_state.get("image_url") or ""
+        supabase_url = os.environ.get("SUPABASE_URL")
+        supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+        if image_url and supabase_url and supabase_key and "supabase.co" in image_url:
+            from supabase import create_client
+            sb_client = create_client(supabase_url, supabase_key)
+            bucket_name = os.environ.get("SUPABASE_STORAGE_BUCKET", "community_images")
+            parts = image_url.split(f"/{bucket_name}/")
+            if len(parts) > 1:
+                obj_path = parts[1].split("?")[0]
+                sb_client.storage.from_(bucket_name).remove([obj_path])
+                logger.info(f"Cleaned up Supabase image '{obj_path}' for deleted case {clean_id}")
+    except Exception as sb_err:
+        logger.warning(f"Storage cleanup exception during case deletion (non-fatal): {sb_err}")
+
+    # Delete case from database
+    deleted = case_store.delete_case(clean_id)
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to delete case '{clean_id}' from storage."
+        )
+
+    # Log immutable audit event visible to Owner
+    auth_svc.log_audit_event(
+        actor_id=caller_id or "anonymous",
+        actor_email=caller_email,
+        actor_role=caller_role,
+        action="CASE_DELETED",
+        details=f"Diagnostic case {clean_id} deleted by {caller_role} ({caller_email or caller_id or 'guest'}).",
+        target_user_id=owner_id
+    )
+
+    return {
+        "status": "success",
+        "message": f"Case {clean_id} deleted successfully.",
+        "case_id": clean_id
+    }
+
+
+# =====================================================================
 # POST /chat
 # =====================================================================
 @router.post(
@@ -1615,25 +1702,34 @@ async def require_owner(user: Dict[str, Any] = Depends(get_current_user)) -> Dic
 )
 async def signup(request: UserSignupRequest) -> AuthTokenResponse:
     auth_svc = get_auth_service()
-    # Public signup is strictly restricted to farmer role to prevent privilege escalation
-    success, msg, user = auth_svc.register_user(
-        email=request.email,
-        password=request.password,
-        full_name=request.full_name,
-        role="farmer",
-        phone=request.phone
-    )
-    if not success or not user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=msg
+    try:
+        # Public signup is strictly restricted to farmer role to prevent privilege escalation
+        success, msg, user = auth_svc.register_user(
+            email=request.email,
+            password=request.password,
+            full_name=request.full_name,
+            role="farmer",
+            phone=request.phone
         )
-    token = auth_svc.create_token(user_id=user["user_id"], email=user["email"], role=user["role"])
-    return AuthTokenResponse(
-        access_token=token,
-        token_type="bearer",
-        user=UserProfileResponse(**user)
-    )
+        if not success or not user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=msg
+            )
+        token = auth_svc.create_token(user_id=user["user_id"], email=user["email"], role=user["role"])
+        return AuthTokenResponse(
+            access_token=token,
+            token_type="bearer",
+            user=UserProfileResponse(**user)
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected signup error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Registration failed. Please verify your connection and try again."
+        )
 
 
 @router.post(

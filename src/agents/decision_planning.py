@@ -48,6 +48,55 @@ class DecisionPlanningAgent:
         citation_nums = [c.get("citation_number", 1) for c in citations] if citations else [1]
 
         # -------------------------------------------------------------
+        # Case 0: Healthy Tomato Foliage
+        # -------------------------------------------------------------
+        if "healthy" in disease.lower():
+            urgency = PlanUrgency.LOW
+            expert_review_required = False
+            uncertainty_disclosures.append(
+                "Plant foliage appears healthy with no characteristic symptoms of Bacterial Spot, Early Blight, or Late Blight."
+            )
+            cultural_controls.append(
+                ManagementAction(
+                    category="cultural",
+                    action_summary="Maintain balanced cultivation, drip irrigation, and canopy airflow",
+                    details=(
+                        "Continue standard agronomic practices. Use drip irrigation to keep foliage dry, "
+                        "maintain adequate plant spacing for ventilation, and follow balanced N-P-K fertilization."
+                    ),
+                    is_chemical=False,
+                    citation_numbers=[]
+                )
+            )
+            monitoring_actions.append(
+                ManagementAction(
+                    category="monitoring",
+                    action_summary="Routine weekly crop scouting",
+                    details=(
+                        "Inspect lower canopy leaves weekly, especially after rainfall or high humidity events, "
+                        "to catch any early pathogen symptoms."
+                    ),
+                    is_chemical=False,
+                    citation_numbers=[]
+                )
+            )
+            return DecisionPlan(
+                plan_id=plan_id,
+                assessment_id=risk.assessment_id,
+                investigation_id=investigation.investigation_id,
+                disease=disease,
+                urgency=urgency,
+                cultural_controls=cultural_controls,
+                resistant_varieties=resistant_varieties,
+                chemical_controls=[],
+                monitoring_actions=monitoring_actions,
+                uncertainty_disclosures=uncertainty_disclosures,
+                expert_review_required=expert_review_required,
+                pesticide_safety_notice=None,
+                citations=citations
+            )
+
+        # -------------------------------------------------------------
         # Case 1: Conflicting Evidence or Unsupported Disease
         # -------------------------------------------------------------
         if status in [EvidenceStatus.CONFLICTING, EvidenceStatus.UNSUPPORTED_DISEASE]:

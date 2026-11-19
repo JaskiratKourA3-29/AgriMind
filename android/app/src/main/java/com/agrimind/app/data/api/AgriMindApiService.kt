@@ -8,6 +8,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -33,6 +34,12 @@ interface AgriMindApiService {
     suspend fun getCase(
         @Path("case_id") caseId: String
     ): Response<DiagnosisResponse>
+
+    @DELETE("cases/{case_id}")
+    suspend fun deleteCase(
+        @Path("case_id") caseId: String,
+        @Header("Authorization") authHeader: String? = null
+    ): Response<Map<String, Any>>
 
     @Multipart
     @POST("diagnose")

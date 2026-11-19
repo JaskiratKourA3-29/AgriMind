@@ -43,7 +43,40 @@ fun HistoryScreen(
     val cooperativePdfState by viewModel.cooperativePdfState.collectAsState()
 
     var selectedSegment by remember { mutableIntStateOf(0) }
+    var caseToDelete by remember { mutableStateOf<LocalCaseRecord?>(null) }
     val context = LocalContext.current
+
+    // Confirmation dialog for deleting a diagnostic case
+    caseToDelete?.let { record ->
+        AlertDialog(
+            onDismissRequest = { caseToDelete = null },
+            icon = { Icon(Icons.Default.DeleteOutline, contentDescription = null, tint = ErrorRed) },
+            title = { Text("Delete Diagnostic Case", fontWeight = FontWeight.Bold) },
+            text = {
+                Text(
+                    "Are you sure you want to delete case ${record.caseId} (${record.activeDiagnosis.replace("Tomato___", "").replace("_", " ")})? " +
+                    "This action will permanently delete the diagnostic record from this device and cloud history."
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.deleteCase(record.caseId)
+                        caseToDelete = null
+                        Toast.makeText(context, "Case ${record.caseId} deleted", Toast.LENGTH_SHORT).show()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = ErrorRed)
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { caseToDelete = null }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 
     // Listen for Cooperative PDF export result
     LaunchedEffect(cooperativePdfState) {
@@ -217,7 +250,8 @@ fun HistoryScreen(
                     items(filteredCases, key = { it.caseId }) { record ->
                         HistoryItemCard(
                             record = record,
-                            onClick = { onCaseSelected(record) }
+                            onClick = { onCaseSelected(record) },
+                            onDelete = { caseToDelete = record }
                         )
                     }
                 }
@@ -667,7 +701,8 @@ private fun MetricCard(title: String, value: String, modifier: Modifier = Modifi
 @Composable
 private fun HistoryItemCard(
     record: LocalCaseRecord,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onDelete: () -> Unit
 ) {
     ElevatedCard(
         modifier = Modifier
@@ -678,7 +713,7 @@ private fun HistoryItemCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 1.5.dp)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
-            // Header Row: Case ID & Date
+            // Header Row: Case ID, Date & Delete Action
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -700,11 +735,25 @@ private fun HistoryItemCard(
                     )
                 }
 
-                Text(
-                    text = record.createdAtIso.take(16).replace("T", " "),
-                    fontSize = 11.sp,
-                    color = TextMuted
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = record.createdAtIso.take(16).replace("T", " "),
+                        fontSize = 11.sp,
+                        color = TextMuted
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    IconButton(
+                        onClick = onDelete,
+                        modifier = Modifier.size(24.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DeleteOutline,
+                            contentDescription = "Delete Case",
+                            tint = ErrorRed.copy(alpha = 0.7f),
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(8.dp))

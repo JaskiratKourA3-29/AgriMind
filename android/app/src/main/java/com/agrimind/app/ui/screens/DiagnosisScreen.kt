@@ -774,25 +774,44 @@ private fun DiagnosisErrorCard(
     onRetryClicked: () -> Unit,
     onResetClicked: () -> Unit
 ) {
+    val isImageUnsuitable = errorMessage.contains("plant", ignoreCase = true) ||
+            errorMessage.contains("human", ignoreCase = true) ||
+            errorMessage.contains("person", ignoreCase = true) ||
+            errorMessage.contains("skin", ignoreCase = true) ||
+            errorMessage.contains("sky", ignoreCase = true) ||
+            errorMessage.contains("vehicle", ignoreCase = true) ||
+            errorMessage.contains("wall", ignoreCase = true) ||
+            errorMessage.contains("dark", ignoreCase = true) ||
+            errorMessage.contains("glare", ignoreCase = true) ||
+            errorMessage.contains("blurry", ignoreCase = true) ||
+            errorMessage.contains("पौधा", ignoreCase = true) ||
+            errorMessage.contains("इंसान", ignoreCase = true) ||
+            errorMessage.contains("तस्वीर", ignoreCase = true)
+
+    val containerBg = if (isImageUnsuitable) WarningOrangeLight else ErrorRedLight
+    val accentColor = if (isImageUnsuitable) WarningOrange else ErrorRed
+    val cardTitle = if (isImageUnsuitable) "Image Unsuitable for Diagnosis" else "Diagnosis Submission Failed"
+    val cardIcon = if (isImageUnsuitable) Icons.Default.Warning else Icons.Default.Error
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = ErrorRedLight)
+        colors = CardDefaults.cardColors(containerColor = containerBg)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = Icons.Default.Error,
-                    contentDescription = "Error",
-                    tint = ErrorRed,
+                    imageVector = cardIcon,
+                    contentDescription = "Status",
+                    tint = accentColor,
                     modifier = Modifier.size(28.dp)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = "Diagnosis Submission Failed",
+                    text = cardTitle,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = ErrorRed
+                    color = accentColor
                 )
             }
 
@@ -810,10 +829,10 @@ private fun DiagnosisErrorCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                if (canRetry) {
+                if (canRetry && !isImageUnsuitable) {
                     Button(
                         onClick = onRetryClicked,
-                        colors = ButtonDefaults.buttonColors(containerColor = ErrorRed),
+                        colors = ButtonDefaults.buttonColors(containerColor = accentColor),
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f)
                     ) {
@@ -821,12 +840,13 @@ private fun DiagnosisErrorCard(
                     }
                 }
 
-                OutlinedButton(
+                Button(
                     onClick = onResetClicked,
+                    colors = ButtonDefaults.buttonColors(containerColor = if (isImageUnsuitable) accentColor else ForestGreenPrimary),
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Choose Another")
+                    Text("Select Another Photo")
                 }
             }
         }
