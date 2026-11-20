@@ -13,6 +13,9 @@
 *.key
 *.jks
 *.keystore
+.credentials/
+credentials/
+*.credentials
 
 # ------------------------------------------------------------------------------
 # 2. Android build artifacts, caches, and local configurations
