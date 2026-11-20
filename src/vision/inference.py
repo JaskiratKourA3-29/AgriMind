@@ -31,8 +31,15 @@ VISION_PYTHON_ENV = "/home/jaskirat/agrimind-vision-env/bin/python"
 SUPPORTED_CLASSES = [
     "Tomato___Bacterial_spot",
     "Tomato___Early_blight",
-    "Tomato___Late_blight"
+    "Tomato___Late_blight",
+    "Tomato___Leaf_Mold",
+    "Tomato___Septoria_leaf_spot",
+    "Tomato___Spider_mites Two-spotted_spider_mite",
+    "Tomato___Target_Spot",
+    "Tomato___Tomato_mosaic_virus",
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus"
 ]
+TOMATO_ALL_CLASSES = SUPPORTED_CLASSES + ["Tomato___healthy"]
 
 # Module-level model singleton to eliminate cold-start checkpoint reloads on warm requests
 _CACHED_MODEL = None
@@ -297,56 +304,55 @@ def run_raw_inference(image_path: str, checkpoint_path: str = DEFAULT_CHECKPOINT
     raw_conf = float(probs[pred_idx])
 
     centroids_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "class_centroids.npz")
+    head_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tomato_classifier_head.npz")
+
     if os.path.exists(centroids_file) and "feat" in features:
         feat = features["feat"][0].cpu().numpy()
         feat_norm = feat / (np.linalg.norm(feat) + 1e-7)
 
         c_data = np.load(centroids_file)
-        c_bact = c_data["Tomato___Bacterial_spot"]
-        c_early = c_data["Tomato___Early_blight"]
-        c_late = c_data["Tomato___Late_blight"]
-        c_healthy = c_data["Tomato___healthy"]
+        sim_scores = {c_name: float(np.dot(feat_norm, c_data[c_name])) for c_name in c_data.files}
+        max_sim = max(sim_scores.values()) if sim_scores else 0.0
 
-        sim_bact = float(np.dot(feat_norm, c_bact))
-        sim_early = float(np.dot(feat_norm, c_early))
-        sim_late = float(np.dot(feat_norm, c_late))
-        sim_healthy = float(np.dot(feat_norm, c_healthy))
-
-        max_dis = max(sim_bact, sim_early, sim_late)
-
-        # Decision 1: Dominant healthy leaf feature similarity
-        if sim_healthy > max_dis:
-            pred_class = "Tomato___healthy"
-            conf = round(float(min(0.95, sim_healthy)), 4)
-            is_supported_disease = False
-            class_probs = {
-                "Tomato___healthy": round(sim_healthy, 4),
-                "Tomato___Bacterial_spot": round(sim_bact, 4),
-                "Tomato___Early_blight": round(sim_early, 4),
-                "Tomato___Late_blight": round(sim_late, 4)
-            }
-        # Decision 2: Out-of-Distribution or Ambiguous Condition
-        elif max_dis < 0.38 and sim_healthy < 0.40:
+        # Out-of-Distribution (OOD) / Non-Plant / Non-Tomato Detection
+        # If maximum cosine similarity across all 10 tomato conditions is below 0.44:
+        if max_sim < 0.44:
             pred_class = "Tomato___unsupported_or_ambiguous"
-            conf = round(float(max_dis), 4)
+            conf = round(float(max_sim), 4)
             is_supported_disease = False
-            class_probs = {
-                "Tomato___unsupported_or_ambiguous": round(conf, 4),
-                "Tomato___healthy": round(sim_healthy, 4),
-                "Tomato___Bacterial_spot": round(sim_bact, 4),
-                "Tomato___Early_blight": round(sim_early, 4),
-                "Tomato___Late_blight": round(sim_late, 4)
-            }
-        # Decision 3: High-confidence supported tomato disease
+            class_probs = {k: round(v, 4) for k, v in sim_scores.items()}
+            class_probs["Tomato___unsupported_or_ambiguous"] = conf
         else:
-            pred_class = raw_class
-            conf = round(raw_conf, 4)
-            is_supported_disease = True
-            class_probs = {IDX_TO_LABEL[i]: round(float(probs[i]), 4) for i in range(len(probs))}
-            class_probs["Tomato___healthy"] = round(sim_healthy, 4)
+            # Calibrated Multi-Class Classifier Head
+            if os.path.exists(head_file):
+                h_data = np.load(head_file)
+                coef = h_data["coef"]
+                intercept = h_data["intercept"]
+                class_names = list(h_data["classes"])
+
+                # Logits: W * x + b with temperature scaling T=1.25 for calibration
+                raw_logits = np.dot(coef, feat_norm) + intercept
+                T = 1.25
+                scaled_logits = raw_logits / T
+                exp_logits = np.exp(scaled_logits - np.max(scaled_logits))
+                probs_10 = exp_logits / np.sum(exp_logits)
+
+                top_idx = int(np.argmax(probs_10))
+                pred_class = class_names[top_idx]
+                raw_prob = float(probs_10[top_idx])
+                # Cap maximum reported single confidence at 0.95 to eliminate false 100% certainty
+                conf = round(float(min(0.95, raw_prob)), 4)
+                is_supported_disease = (pred_class != "Tomato___healthy") and (pred_class in SUPPORTED_CLASSES)
+                class_probs = {class_names[i]: round(float(probs_10[i]), 4) for i in range(len(class_names))}
+            else:
+                sorted_sims = sorted(sim_scores.items(), key=lambda x: x[1], reverse=True)
+                pred_class = sorted_sims[0][0]
+                conf = round(float(min(0.95, sorted_sims[0][1])), 4)
+                is_supported_disease = (pred_class != "Tomato___healthy") and (pred_class in SUPPORTED_CLASSES)
+                class_probs = {k: round(v, 4) for k, v in sim_scores.items()}
     else:
         pred_class = raw_class
-        conf = round(raw_conf, 4)
+        conf = round(float(min(0.95, raw_conf)), 4)
         is_supported_disease = pred_class in SUPPORTED_CLASSES
         class_probs = {IDX_TO_LABEL[i]: round(float(probs[i]), 4) for i in range(len(probs))}
 
@@ -354,7 +360,7 @@ def run_raw_inference(image_path: str, checkpoint_path: str = DEFAULT_CHECKPOINT
         "predicted_class": pred_class,
         "confidence": conf,
         "class_probabilities": class_probs,
-        "model_name": "ResNet-50-Tomato3-Baseline",
+        "model_name": "ResNet-50-MultiClass-Calibrated",
         "is_supported_disease": is_supported_disease
     }
 

@@ -189,13 +189,13 @@ def get_langchain_vectorstore(
     ensure_collection_populated(client, collection_name=collection_name, embeddings_model=emb)
 
     # In serverless or ephemeral mode, wrap the client directly
-    if is_serverless_env() or isinstance(client, getattr(__import__("chromadb"), "EphemeralClient", type(None))):
+    try:
         store = Chroma(
             client=client,
             collection_name=collection_name,
             embedding_function=emb
         )
-    else:
+    except Exception:
         store = Chroma(
             collection_name=collection_name,
             persist_directory=persist_directory,

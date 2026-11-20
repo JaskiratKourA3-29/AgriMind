@@ -25,7 +25,7 @@ MAX_MEAN_LUMINANCE = 225.0  # Above this is severely overexposed (glare/whiteout
 MIN_LAPLACIAN_VARIANCE = 25.0
 
 # Foliar green coverage threshold (fraction of pixels with green plant coloration)
-MIN_FOLIAR_COVERAGE_RATIO = 0.08  # At least 8% of image must exhibit foliar hues
+MIN_FOLIAR_COVERAGE_RATIO = 0.05  # At least 5% of image must exhibit foliar hues (allowing severe necrosis)
 
 
 # Localized guidance messages

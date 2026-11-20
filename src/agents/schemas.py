@@ -8,10 +8,17 @@ from pydantic import BaseModel, Field, ConfigDict
 
 
 class SupportedTomatoDisease(str, Enum):
-    """Supported tomato disease classes from Week 1-3 scope."""
+    """Supported tomato disease classes covering full PlantVillage tomato scope."""
     BACTERIAL_SPOT = "Tomato___Bacterial_spot"
     EARLY_BLIGHT = "Tomato___Early_blight"
     LATE_BLIGHT = "Tomato___Late_blight"
+    LEAF_MOLD = "Tomato___Leaf_Mold"
+    SEPTORIA_LEAF_SPOT = "Tomato___Septoria_leaf_spot"
+    SPIDER_MITES = "Tomato___Spider_mites Two-spotted_spider_mite"
+    TARGET_SPOT = "Tomato___Target_Spot"
+    MOSAIC_VIRUS = "Tomato___Tomato_mosaic_virus"
+    YELLOW_LEAF_CURL_VIRUS = "Tomato___Tomato_Yellow_Leaf_Curl_Virus"
+    HEALTHY = "Tomato___healthy"
 
 
 class SeverityLevel(str, Enum):

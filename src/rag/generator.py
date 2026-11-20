@@ -221,6 +221,139 @@ MULTI_CROP_KNOWLEDGE: Dict[str, Dict[str, Any]] = {
             "institution": "Indian Council of Agricultural Research (ICAR)",
             "evidence_grade": "National Extension Guideline"
         }
+    },
+    "maize": {
+        "crop_en": "Maize / Corn (Zea mays)",
+        "crop_hi": "मक्का / भुट्टा",
+        "patterns": [r"\b(maize|corn|makka|makki|bhutta)\b", r"मक्का|मकई|भुट्टा"],
+        "advisory_en": (
+            "**Agronomic Guidance for Maize & Fall Armyworm IPM (ICAR-IIMR Advisory)**:\n"
+            "• **Sowing & Spacing**: Sow with onset of monsoon (Kharif) or October-November (Rabi) at 60×20 cm spacing, seed rate 20 kg/ha.\n"
+            "• **Fall Armyworm (FAW - Spodoptera frugiperda) IPM**:\n"
+            "  - Deep summer ploughing to expose pupae to predatory birds.\n"
+            "  - Install pheromone traps @ 10 traps/ha for monitoring moth flight.\n"
+            "  - Intercrop with pulses/cowpea (2:1 or 3:1) to enhance natural parasitoids.\n"
+            "  - Apply 5% Neem Seed Kernel Extract (NSKE) or Azadirachtin 1500 ppm @ 5 ml/L at early whorl stage.\n"
+            "  - Release egg parasitoid Trichogramma pretiosum @ 50,000/ha.\n"
+            "  - In severe whorl infestations, apply whorl application of sand/ash mixed with lime (9:1) or biocontrol agent Bacillus thuringiensis (Bt) kurstaki @ 2 g/L.\n"
+            "• **Balanced Nutrition**: Apply 120:60:40 kg NPK/ha; apply Zinc Sulfate @ 25 kg/ha at sowing in zinc-deficient soils.\n\n"
+            "📌 *Vision Scanner Note: AgriMind camera vision scanner is currently specialized for tomato foliage. For maize and field crops, AgriMind provides advisory and IPM guidance based on ICAR extension literature.*"
+        ),
+        "advisory_hi": (
+            "**मक्का की फसल एवं फॉल आर्मीवर्म (FAW) नियंत्रण परामर्श (भाकृअनुप-IIMR)**:\n"
+            "• **बुवाई एवं कतार दूरी**: खरीफ में मानसून की शुरुआत में और रबी में अक्टूबर-नवंबर में 60×20 सेमी की दूरी पर 20 किग्रा/हेक्टेयर बीज दर से बुवाई करें।\n"
+            "• **फॉल आर्मीवर्म (सैनिक कीट) एकीकृत प्रबंधन (IPM)**:\n"
+            "  - गर्मियों में गहरी जुताई करें ताकि प्यूपा नष्ट हो सकें।\n"
+            "  - निगरानी के लिए 10 फेरोमोन ट्रैप (Pheromone traps) प्रति हेक्टेयर लगाएं।\n"
+            "  - मक्का के साथ दलहनी फसलों (लोबिया/उड़द) की अंतःफसल (Intercropping) लें।\n"
+            "  - शुरुआती अवस्था में 5% नीम के बीज का अर्क (NSKE) या एज़ाडिरैक्टीन 1500 पीपीएम (5 मिली/लीटर) का पोंगे (whorl) में छिड़काव करें।\n"
+            "  - ट्राइकोग्रामा प्रेटियोसम (50,000/हेक्टेयर) परजीवी कीट छोड़ें।\n"
+            "• **संतुलित पोषण**: 120:60:40 किग्रा NPK प्रति हेक्टेयर दें तथा जिंक की कमी वाले खेतों में 25 किग्रा जिंक सल्फेट बुवाई के समय डालें।\n\n"
+            "📌 *कैमरा विज़न स्कैनर सूचना: एग्रीमाइंड का कैमरा विज़न मॉडल वर्तमान में टमाटर की फसल के रोगों के लिए प्रशिक्षित है। मक्का के लिए यह भाकृअनुप साहित्य पर आधारित परामर्श प्रदान करता है।*"
+        ),
+        "citation": {
+            "source": "ICAR-Indian Institute of Maize Research (IIMR), Ludhiana",
+            "section": "Integrated Pest Management of Fall Armyworm in Maize (2023)",
+            "institution": "Indian Council of Agricultural Research (ICAR)",
+            "evidence_grade": "National Extension Guideline"
+        }
+    },
+    "soil_health": {
+        "crop_en": "Soil Health, Testing & Fertility Management",
+        "crop_hi": "मृदा स्वास्थ्य, परीक्षण एवं उर्वरता प्रबंधन",
+        "patterns": [r"\b(soil|soil health|soil test|soil ph|organic carbon|biofertilizer|rhizobium|azotobacter|psb|liming|gypsum)\b", r"मिट्टी|मृदा|खाद|जैविक खाद|बायोफर्टिलाइजर|मृदा परीक्षण|पीएच"],
+        "advisory_en": (
+            "**Advisory on Soil Health, Testing & Fertility (ICAR-IISS Advisory)**:\n"
+            "• **Soil Testing & Sampling**: Collect representative V-notch core samples (0–15 cm depth) from 8–10 spots per field before planting. Test for pH, Electrical Conductivity (EC), Organic Carbon (OC), available N-P-K, and micronutrients (Zn, Fe, B).\n"
+            "• **Soil Organic Carbon (SOC)**: Maintain SOC > 0.75% through regular additions of well-rotted Farmyard Manure (FYM @ 10–15 t/ha), vermicompost (2.5–5 t/ha), or green manuring with Dhaincha/Sunhemp.\n"
+            "• **Soil pH Correction**:\n"
+            "  - Acidic soils (pH < 6.0): Apply agricultural lime or dolomite based on lime requirement test.\n"
+            "  - Alkaline/Sodic soils (pH > 8.5): Apply agricultural gypsum (calcium sulfate) with adequate irrigation flushing.\n"
+            "• **Biofertilizers**: Inoculate with Rhizobium (for pulses), Azotobacter/Azospirillum (for cereals), and Phosphate Solubilizing Bacteria (PSB) @ 10 g/kg seed to enhance nutrient use efficiency.\n\n"
+            "📌 *Vision Scanner Note: AgriMind provides advisory and nutrient management guidance based on ICAR-Indian Institute of Soil Science literature.*"
+        ),
+        "advisory_hi": (
+            "**मृदा स्वास्थ्य, परीक्षण एवं पोषण प्रबंधन परामर्श (भाकृअनुप-IISS)**:\n"
+            "• **मृदा परीक्षण एवं नमूना**: बुवाई से पहले खेत के 8-10 स्थानों से V-आकार में 15 सेमी गहराई से मिट्टी का नमूना लें। pH, ईसी, जैविक कार्बन, मुख्य पोषक तत्व (N-P-K) और सूक्ष्म तत्वों (Zn, Fe, B) की जांच कराएं।\n"
+            "• **जैविक कार्बन बढ़ाना**: मिट्टी में जैविक कार्बन 0.75% से अधिक रखने के लिए 10-15 टन अच्छी सड़ी गोबर की खाद (FYM), 2.5-5 टन वर्मीकम्पोस्ट या ढैंचा/सनई की हरी खाद अवश्य पलटें।\n"
+            "• **मृदा सुधार**:\n"
+            "  - अम्लीय मिट्टी (pH < 6.0): कृषि चूना या डोलोमाइट का प्रयोग करें।\n"
+            "  - क्षारीय/ऊसर मिट्टी (pH > 8.5): जिप्सम (कैल्शियम सल्फेट) का प्रयोग करें और खेत में पानी भरकर निकालें।\n"
+            "• **जैव उर्वरक (Biofertilizers)**: दलहनी फसलों में राइजोबियम, अनाजों में एजोटोबैक्टर और फॉस्फेट घोलक जीवाणु (PSB) का 10 ग्राम/किग्रा बीज शोधन करें।\n\n"
+            "📌 *विज़न स्कैनर सूचना: एग्रीमाइंड मृदा स्वास्थ्य के लिए भाकृअनुप भारतीय मृदा विज्ञान संस्थान के साहित्य पर आधारित मार्गदर्शन प्रदान करता है।*"
+        ),
+        "citation": {
+            "source": "ICAR-Indian Institute of Soil Science (IISS), Bhopal",
+            "section": "Soil Testing, Organic Carbon & Soil Health Management (2023)",
+            "institution": "Indian Council of Agricultural Research (ICAR)",
+            "evidence_grade": "National Extension Guideline"
+        }
+    },
+    "plant_nutrition": {
+        "crop_en": "Plant Nutrition & Fertilizer Stewardship",
+        "crop_hi": "पादप पोषण एवं उर्वरक प्रबंधन",
+        "patterns": [r"\b(fertilizer|fertiliser|npk|micronutrient|urea|dap|mop|zinc deficiency|boron|chlorosis)\b", r"उर्वरक|खाद|डीएपी|यूरिया|पोटाश|जिंक|बोरॉन|पोषक तत्व"],
+        "advisory_en": (
+            "**Advisory on Balanced Plant Nutrition & 4R Stewardship (ICAR / SAU Advisory)**:\n"
+            "• **4R Nutrient Stewardship**: Right Source, Right Rate, Right Time, and Right Place.\n"
+            "• **Balanced NPK Strategy**: Avoid excessive urea (nitrogen) which causes luxuriant soft growth prone to fungal/bacterial blight and lodging. Maintain balanced N:P:K ratio (ideally 4:2:1 for cereals, 1:2:1 for pulses, 2:1:2 for vegetables).\n"
+            "• **Micronutrient Correction**:\n"
+            "  - **Zinc (Zn) Deficiency**: Interveinal chlorosis on younger leaves; apply foliar zinc sulfate heptahydrate (0.5% with 0.25% lime) or 25 kg/ha ZnSO4 to soil.\n"
+            "  - **Boron (B) Deficiency**: Brittle young leaves, flower drop, hollow stem/fruit cracking; foliar spray of solubor (0.1–0.15%) at pre-flowering.\n"
+            "  - **Iron (Fe) Deficiency**: Complete bleaching of young leaves; spray ferrous sulfate (0.5%–1.0% + citric acid).\n\n"
+            "📌 *Vision Scanner Note: AgriMind provides advisory and IPM fertilizer guidance based on ICAR extension literature.*"
+        ),
+        "advisory_hi": (
+            "**संतुलित पादप पोषण एवं उर्वरक प्रबंधन परामर्श (भाकृअनुप / कृषि विश्वविद्यालय)**:\n"
+            "• **4R सिद्धांत**: सही स्रोत, सही मात्रा, सही समय और सही स्थान।\n"
+            "• **संतुलित NPK उपयोग**: यूरिया का अत्यधिक प्रयोग न करें, क्योंकि इससे पौधे अधिक रसीले हो जाते हैं और फफूंद व कीटों का प्रकोप तेजी से बढ़ता है।\n"
+            "• **सूक्ष्म पोषक तत्वों की कमी का निदान**:\n"
+            "  - **जिंक (जस्ता) की कमी**: नई पत्तियों की शिराओं के बीच पीलापन; 0.5% जिंक सल्फेट और 0.25% बुझे चूने का घोल छिड़कें।\n  - **बोरॉन की कमी**: फूल झड़ना, फल फटना और तने का खोखला होना; फूल आने से पूर्व 0.1% बोरैक्स या सॉल्यूबोर का छिड़काव करें।\n  - **आयरन (लोहा) की कमी**: पत्तियों का सफेद/पीला पड़ना; 0.5% फेरस सल्फेट का छिड़काव करें।\n\n"
+            "📌 *विज़न स्कैनर सूचना: एग्रीमाइंड संतुलित पोषण के लिए भाकृअनुप साहित्य पर आधारित परामर्श प्रदान करता है।*"
+        ),
+        "citation": {
+            "source": "ICAR-Indian Agricultural Research Institute (IARI) & SAU Guidelines",
+            "section": "Balanced Plant Nutrition & Micronutrient Deficiency Management (2023)",
+            "institution": "Indian Council of Agricultural Research (ICAR)",
+            "evidence_grade": "National Extension Guideline"
+        }
+    },
+    "government_schemes": {
+        "crop_en": "Indian Government Agricultural Schemes",
+        "crop_hi": "भारत सरकार की प्रमुख कृषि योजनाएं",
+        "patterns": [r"\b(scheme|pm-kisan|pm kisan|pmfby|fasal bima|kisan credit card|kcc|soil health card scheme|subsidy)\b", r"योजना|सरकारी योजना|पीएम किसान|फसल बीमा|किसान क्रेडिट कार्ड|केसीसी|सब्सिडी"],
+        "advisory_en": (
+            "**Key Indian Government Agricultural Schemes & Farmer Entitlements (MoA&FW)**:\n"
+            "• **PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)**:\n"
+            "  - Direct income support of ₹6,000 per year in 3 equal four-monthly installments of ₹2,000 directly into Aadhaar-seeded bank accounts.\n"
+            "  - Eligibility: All landholding farmer families across India (excluding institutional and income-tax paying categories). Apply via pmkisan.gov.in or CSC.\n"
+            "• **PMFBY (Pradhan Mantri Fasal Bima Yojana)**:\n"
+            "  - Comprehensive crop insurance covering non-preventable natural risks (drought, flood, unseasonal rain, pest outbreaks).\n"
+            "  - Low farmer premium: 2% for Kharif crops, 1.5% for Rabi crops, and 5% for annual commercial/horticultural crops; remainder subsidized equally by Central and State Governments.\n"
+            "• **Kisan Credit Card (KCC)**:\n"
+            "  - Concessional institutional credit up to ₹3 lakh at effective interest rate of 4% per annum (after 3% Prompt Repayment Incentive) to meet cultivation expenses, post-harvest costs, and maintenance of farm assets.\n"
+            "• **Soil Health Card Scheme**:\n"
+            "  - Provides farmers with customized crop-wise fertilizer and micronutrient dosage recommendations every 2 years based on lab testing of 12 soil parameters.\n\n"
+            "📌 *AgriMind provides direct institutional information from the Ministry of Agriculture & Farmers Welfare, Government of India.*"
+        ),
+        "advisory_hi": (
+            "**भारत सरकार की प्रमुख किसान कल्याणकारी योजनाएं (कृषि एवं किसान कल्याण मंत्रालय)**:\n"
+            "• **प्रधानमंत्री किसान सम्मान निधि (PM-KISAN)**:\n"
+            "  - सभी पात्र भूमिधारक किसान परिवारों को ₹6,000 प्रति वर्ष की आय सहायता, ₹2,000 की 3 समान किस्तों में सीधे आधार-सीडेड बैंक खाते में। आधिकारिक पोर्टल: pmkisan.gov.in.\n"
+            "• **प्रधानमंत्री फसल बीमा योजना (PMFBY)**:\n"
+            "  - प्राकृतिक आपदाओं (सूखा, बाढ़, ओलावृष्टि, बेमौसम बारिश, कीट प्रकोप) से फसल नुकसान पर व्यापक बीमा सुरक्षा।\n  - किसानों के लिए न्यूनतम प्रीमियम: खरीफ फसलों पर 2%, रबी फसलों पर 1.5% और बागवानी/व्यावसायिक फसलों पर 5%।\n"
+            "• **किसान क्रेडिट कार्ड (KCC)**:\n"
+            "  - किसानों को खेती की लागत और कृषि उपकरणों के रखरखाव के लिए ₹3 लाख तक का सस्ता संस्थागत ऋण। समय पर ऋण अदायगी पर ब्याज दर मात्र 4% प्रति वर्ष।\n"
+            "• **मृदा स्वास्थ्य कार्ड योजना (Soil Health Card)**:\n"
+            "  - प्रत्येक 2 वर्ष में किसानों को उनकी मिट्टी के 12 मानकों की जांच के आधार पर फसलवार संतुलित उर्वरक सिफारिशें प्रदान की जाती हैं।\n\n"
+            "📌 *एग्रीमाइंड भारत सरकार के कृषि एवं किसान कल्याण मंत्रालय के आधिकारिक दिशानिर्देशों के आधार पर जानकारी प्रदान करता है।*"
+        ),
+        "citation": {
+            "source": "Ministry of Agriculture & Farmers Welfare, Government of India",
+            "section": "Operational Guidelines: PM-KISAN, PMFBY, KCC & Soil Health Scheme (2023-24)",
+            "institution": "Ministry of Agriculture & Farmers Welfare, Govt. of India",
+            "evidence_grade": "National Policy Guideline"
+        }
     }
 }
 
@@ -352,6 +485,13 @@ def resolve_query_referent(
     names_late_blight = bool(re.search(r"(late blight|phytophthora|पछेती)", lower_query))
     names_early_blight = bool(re.search(r"(early blight|alternaria|अगेती)", lower_query))
     names_bacterial_spot = bool(re.search(r"(bacterial spot|xanthomonas|जीवाणु धब्बा)", lower_query))
+    names_septoria = bool(re.search(r"(septoria|leaf spot|सेप्टोरिया)", lower_query))
+    names_leaf_mold = bool(re.search(r"(leaf mold|passalora|फुलविया)", lower_query))
+    names_target_spot = bool(re.search(r"(target spot|corynespora)", lower_query))
+    names_mosaic = bool(re.search(r"(mosaic virus|tomv|tobacco mosaic|मोज़ेक)", lower_query))
+    names_tylcv = bool(re.search(r"(yellow leaf curl|tylcv|पर्ण कुंचन)", lower_query))
+    names_spider_mites = bool(re.search(r"(spider mite|tetranychus|माइट|लाल मकड़ी)", lower_query))
+    names_healthy = bool(re.search(r"(healthy tomato|general tomato|टमाटर की सामान्य देखभाल)", lower_query))
 
     if names_late_blight:
         return clean_query, "Tomato___Late_blight", False
@@ -359,6 +499,20 @@ def resolve_query_referent(
         return clean_query, "Tomato___Early_blight", False
     if names_bacterial_spot:
         return clean_query, "Tomato___Bacterial_spot", False
+    if names_septoria:
+        return clean_query, "Tomato___Septoria_leaf_spot", False
+    if names_leaf_mold:
+        return clean_query, "Tomato___Leaf_Mold", False
+    if names_target_spot:
+        return clean_query, "Tomato___Target_Spot", False
+    if names_mosaic:
+        return clean_query, "Tomato___Tomato_mosaic_virus", False
+    if names_tylcv:
+        return clean_query, "Tomato___Tomato_Yellow_Leaf_Curl_Virus", False
+    if names_spider_mites:
+        return clean_query, "Tomato___Spider_mites Two-spotted_spider_mite", False
+    if names_healthy:
+        return clean_query, "Tomato___healthy", False
 
     # If query is not anaphoric, keep as is
     if not is_anaphoric:

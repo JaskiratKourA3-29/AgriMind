@@ -78,7 +78,7 @@ class InvestigationAgent:
 
         if not is_supported:
             conflicts_detected.append(
-                f"Pathogen '{vision_prediction.predicted_class}' is outside AgriMind's 3-class verified tomato scope."
+                f"Pathogen '{vision_prediction.predicted_class}' is outside AgriMind's 10-class verified tomato scope."
             )
 
         # Vision prediction confidence checks
@@ -101,6 +101,18 @@ class InvestigationAgent:
         if visual_context and visual_context.field_notes:
             notes_lower = visual_context.field_notes.lower()
             pred = vision_prediction.predicted_class
+
+            # Early Blight vs Septoria Leaf Spot differential diagnosis check
+            if "Tomato___Early_blight" in pred and any(w in notes_lower for w in ["pycnidia", "black specks", "small circular", "1-2mm", "1 to 2 mm", "septoria"]):
+                conflicts_detected.append(
+                    "Differential diagnosis alert: Field observations report small circular spots (1.5-3mm) with tiny black fruiting bodies (pycnidia), "
+                    "characteristic of Septoria leaf spot (Septoria lycopersici), distinct from large concentric bullseye rings of Early Blight (Alternaria solani)."
+                )
+            if "Tomato___Septoria_leaf_spot" in pred and any(w in notes_lower for w in ["concentric", "bullseye", "target ring"]):
+                conflicts_detected.append(
+                    "Differential diagnosis alert: Field observations report large concentric target rings typical of Early Blight (Alternaria solani), "
+                    "conflicting with Septoria leaf spot which produces uniform small circular lesions with pycnidia."
+                )
 
             # Early Blight vs Late Blight confusion check
             if "Tomato___Late_blight" in pred and ("concentric" in notes_lower or "target" in notes_lower or "bullseye" in notes_lower):

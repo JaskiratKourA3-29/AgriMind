@@ -77,7 +77,7 @@
   },
   {
     "chunk_id": "DOC-CORNELL-TOM-BS-01-C005",
-    "text": "## Environmental Epidemiology\nThe bacteria survive on contaminated seed, volunteer tomato plants, and infected solanaceous crop debris. Infection and rapid disease spread are strongly favored by warm temperatures between 75\u00b0F and 86\u00b0F (24\u00b0C to 30\u00b0C) combined with high relative humidity, frequent rainfall, or overhead sprinkler irrigation. Bacteria enter through natural leaf openings (stomata) or physical wounds caused by wind, sandblasting, pruning, or insect feeding.",
+    "text": "## Environmental Epidemiology\nThe bacteria survive on contaminated seed, volunteer tomato plants, and infected solanaceous crop debris. Infection and rapid disease spread are strongly favored by warm temperatures between 75°F and 86°F (24°C to 30°C) combined with high relative humidity, frequent rainfall, or overhead sprinkler irrigation. Bacteria enter through natural leaf openings (stomata) or physical wounds caused by wind, sandblasting, pruning, or insect feeding.",
     "metadata": {
       "chunk_id": "DOC-CORNELL-TOM-BS-01-C005",
       "doc_id": "DOC-CORNELL-TOM-BS-01",
@@ -96,7 +96,7 @@
   },
   {
     "chunk_id": "DOC-CORNELL-TOM-BS-01-C006",
-    "text": "## Cultural Management Practices\n1. **Certified Disease-Free Seed:** Use only certified pathogen-free seed. If seed source is uncertain, treat seed with hot water (122\u00b0F / 50\u00b0C for exactly 25 minutes) to eradicate internal and external bacterial contamination without damaging germination.\n2. **Crop Rotation:** Implement a minimum 2-year crop rotation away from all solanaceous crops (tomatoes, peppers, potatoes, eggplants) to starve overwintering bacterial populations in the soil.",
+    "text": "## Cultural Management Practices\n1. **Certified Disease-Free Seed:** Use only certified pathogen-free seed. If seed source is uncertain, treat seed with hot water (122°F / 50°C for exactly 25 minutes) to eradicate internal and external bacterial contamination without damaging germination.\n2. **Crop Rotation:** Implement a minimum 2-year crop rotation away from all solanaceous crops (tomatoes, peppers, potatoes, eggplants) to starve overwintering bacterial populations in the soil.",
     "metadata": {
       "chunk_id": "DOC-CORNELL-TOM-BS-01-C006",
       "doc_id": "DOC-CORNELL-TOM-BS-01",
@@ -362,7 +362,7 @@
   },
   {
     "chunk_id": "DOC-PURDUE-TOM-EB-01-C005",
-    "text": "## Overwintering & Disease Cycle\n*Alternaria solani* overwinters in infested tomato vines, potato debris, and wild solanaceous weeds (such as black nightshade and horsenettle). Spores (conidia) are produced abundantly during warm, humid weather and are disseminated by wind currents, rain splash, and mechanical equipment. Infection occurs rapidly when leaf surfaces remain wet from dew or rain for 8 or more hours at temperatures between 75\u00b0F and 85\u00b0F (24\u00b0C to 29\u00b0C).",
+    "text": "## Overwintering & Disease Cycle\n*Alternaria solani* overwinters in infested tomato vines, potato debris, and wild solanaceous weeds (such as black nightshade and horsenettle). Spores (conidia) are produced abundantly during warm, humid weather and are disseminated by wind currents, rain splash, and mechanical equipment. Infection occurs rapidly when leaf surfaces remain wet from dew or rain for 8 or more hours at temperatures between 75°F and 85°F (24°C to 29°C).",
     "metadata": {
       "chunk_id": "DOC-PURDUE-TOM-EB-01-C005",
       "doc_id": "DOC-PURDUE-TOM-EB-01",
@@ -514,7 +514,7 @@
   },
   {
     "chunk_id": "DOC-UCIPM-TOM-EB-02-C004",
-    "text": "## Environmental Triggers & Epidemiology\n- Optimum fungal growth occurs between 75\u00b0F and 85\u00b0F (24\u00b0C to 29\u00b0C).\n- Prolonged wet periods (at least 6 to 8 hours of continuous leaf wetness from rain, sprinkler irrigation, or heavy coastal fog) are necessary for spore germination and host penetration.\n- Spores survive for more than one year on buried plant residues and on alternative solanaceous hosts.",
+    "text": "## Environmental Triggers & Epidemiology\n- Optimum fungal growth occurs between 75°F and 85°F (24°C to 29°C).\n- Prolonged wet periods (at least 6 to 8 hours of continuous leaf wetness from rain, sprinkler irrigation, or heavy coastal fog) are necessary for spore germination and host penetration.\n- Spores survive for more than one year on buried plant residues and on alternative solanaceous hosts.",
     "metadata": {
       "chunk_id": "DOC-UCIPM-TOM-EB-02-C004",
       "doc_id": "DOC-UCIPM-TOM-EB-02",
@@ -666,7 +666,7 @@
   },
   {
     "chunk_id": "DOC-CORNELL-TOM-LB-01-C004",
-    "text": "## Epidemiology & Weather Requirements\nUnlike early blight and bacterial spot which prefer warm conditions, *Phytophthora infestans* thrives in cool, wet, humid weather:\n- Ideal daytime temperatures: 60\u00b0F to 75\u00b0F (15\u00b0C to 24\u00b0C).\n- Cool nighttime temperatures: 50\u00b0F to 60\u00b0F (10\u00b0C to 15\u00b0C) with fog, dew, or rain.\n- Temperatures above 86\u00b0F (30\u00b0C) halt pathogen spore production and slow down lesion expansion.\n- Millions of microscopic sporangia are produced per lesion and can be transported aloft by wind currents for 5 to 10 miles.",
+    "text": "## Epidemiology & Weather Requirements\nUnlike early blight and bacterial spot which prefer warm conditions, *Phytophthora infestans* thrives in cool, wet, humid weather:\n- Ideal daytime temperatures: 60°F to 75°F (15°C to 24°C).\n- Cool nighttime temperatures: 50°F to 60°F (10°C to 15°C) with fog, dew, or rain.\n- Temperatures above 86°F (30°C) halt pathogen spore production and slow down lesion expansion.\n- Millions of microscopic sporangia are produced per lesion and can be transported aloft by wind currents for 5 to 10 miles.",
     "metadata": {
       "chunk_id": "DOC-CORNELL-TOM-LB-01-C004",
       "doc_id": "DOC-CORNELL-TOM-LB-01",
@@ -1194,6 +1194,566 @@
       "categories": "Cultural Practices,Soil & Fertility,Irrigation & Spacing,Disease Prevention,Sanitation",
       "chunk_index": 13,
       "total_doc_chunks": 13
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIVR-TOM-SEP-01-C001",
+    "text": "## Diagnostic Symptoms of Septoria Leaf Spot\n\nSeptoria leaf spot of tomato is caused by the fungus Septoria lycopersici. Symptoms appear primarily on the lower leaves shortly after fruit set. Lesions begin as small, water-soaked circular spots (1.5 to 3.0 mm in diameter). As lesions mature, they develop dark brown margins with distinctive sunken, ash-gray or tan centers. Under 10x magnification, minute black specks (pycnidia - fruiting bodies) are clearly visible embedded in the central gray tissue. Heavily infected leaves turn yellow, chlorotic, wither, and drop prematurely, leading to severe defoliation and sunscald of exposed tomato fruits.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIVR-TOM-SEP-01-C001",
+      "doc_id": "DOC-ICAR-IIVR-TOM-SEP-01",
+      "title": "Diagnosis and Integrated Management of Septoria Leaf Spot of Tomato",
+      "institution": "ICAR - Indian Institute of Vegetable Research (IIVR Varanasi)",
+      "authors": "A. B. Rai, K. K. Pandey, M. Loganathan",
+      "publication_year": 2022,
+      "source_url": "https://iivr.icar.gov.in/septoria-leaf-spot-tomato-advisory",
+      "disease_targets": "Tomato___Septoria_leaf_spot",
+      "crop_targets": "Tomato",
+      "pathogen": "Septoria lycopersici",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Differential Diagnosis,Chemical Management,Cultural Control",
+      "chunk_index": 1,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIVR-TOM-SEP-01-C002",
+    "text": "## Critical Differential Diagnosis: Septoria Leaf Spot vs Early Blight\n\nDistinguishing Septoria Leaf Spot from Early Blight (Alternaria solani) is critical for accurate agronomic diagnosis. Septoria lesions are characteristically smaller (1.5-3.0 mm), far more numerous per leaflet, and feature distinctive sunken ash-gray centers with tiny black fungal pycnidia embedded inside. In contrast, Early Blight lesions are much larger (5.0-15.0 mm), fewer in number, and display prominent concentric rings (a 'bull's-eye' or target-board pattern) without embedded pycnidia. Furthermore, Early Blight causes dark, sunken leathery cankers on stems and fruit stem-ends, whereas Septoria rarely directly infects the tomato fruit.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIVR-TOM-SEP-01-C002",
+      "doc_id": "DOC-ICAR-IIVR-TOM-SEP-01",
+      "title": "Diagnosis and Integrated Management of Septoria Leaf Spot of Tomato",
+      "institution": "ICAR - Indian Institute of Vegetable Research (IIVR Varanasi)",
+      "authors": "A. B. Rai, K. K. Pandey, M. Loganathan",
+      "publication_year": 2022,
+      "source_url": "https://iivr.icar.gov.in/septoria-leaf-spot-tomato-advisory",
+      "disease_targets": "Tomato___Septoria_leaf_spot",
+      "crop_targets": "Tomato",
+      "pathogen": "Septoria lycopersici",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Differential Diagnosis,Chemical Management,Cultural Control",
+      "chunk_index": 2,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIVR-TOM-SEP-01-C003",
+    "text": "## Integrated Management and Fungicidal Control of Septoria\n\nManage Septoria leaf spot through sanitation, 3-year crop rotation away from solanaceous crops, and elimination of horse-nettle and volunteer tomato weeds. Avoid overhead sprinkler irrigation; employ drip irrigation to maintain dry foliage. Upon first detection of symptoms on lower foliage, apply preventive copper oxychloride 50% WP @ 2.5 g/L or chlorothalonil 75% WP @ 2.0 g/L. In high disease pressure under persistent warm rain, spray systemic azoxystrobin 23% SC @ 1.0 ml/L or tebuconazole 25.9% EC @ 1.0 ml/L at 10-14 day intervals, respecting the 5-day pre-harvest interval.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIVR-TOM-SEP-01-C003",
+      "doc_id": "DOC-ICAR-IIVR-TOM-SEP-01",
+      "title": "Diagnosis and Integrated Management of Septoria Leaf Spot of Tomato",
+      "institution": "ICAR - Indian Institute of Vegetable Research (IIVR Varanasi)",
+      "authors": "A. B. Rai, K. K. Pandey, M. Loganathan",
+      "publication_year": 2022,
+      "source_url": "https://iivr.icar.gov.in/septoria-leaf-spot-tomato-advisory",
+      "disease_targets": "Tomato___Septoria_leaf_spot",
+      "crop_targets": "Tomato",
+      "pathogen": "Septoria lycopersici",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Differential Diagnosis,Chemical Management,Cultural Control",
+      "chunk_index": 3,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIVR-TOM-LM-01-C001",
+    "text": "## Symptoms of Tomato Leaf Mold\n\nTomato leaf mold, caused by Passalora fulva, primarily affects greenhouse, polyhouse, and high-humidity field crops. The earliest visible symptoms appear on the upper surface of older leaves as pale yellow, diffuse chlorotic spots with indefinite borders. On the corresponding lower leaf surface, these spots become covered with a dense, velvety olive-green to grayish-brown fungal mold composed of conidia and conidiophores. As the disease progresses, infected foliage wilts, turns brown, and curls, drying out prematurely.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIVR-TOM-LM-01-C001",
+      "doc_id": "DOC-ICAR-IIVR-TOM-LM-01",
+      "title": "Identification and Management of Tomato Leaf Mold in Protected Cultivation",
+      "institution": "ICAR - Indian Institute of Vegetable Research (IIVR)",
+      "authors": "Nagendra Rai, R. K. Singh",
+      "publication_year": 2021,
+      "source_url": "https://iivr.icar.gov.in/tomato-leaf-mold-management",
+      "disease_targets": "Tomato___Leaf_Mold",
+      "crop_targets": "Tomato",
+      "pathogen": "Passalora fulva (syn. Cladosporium fulvum)",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Protected Cultivation,Cultural Control,Fungicides",
+      "chunk_index": 1,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIVR-TOM-LM-01-C002",
+    "text": "## Environmental Management and Control\n\nLeaf mold requires relative humidity above 85% to sporulate and infect. Primary control is achieved by increasing greenhouse ventilation, spacing plants adequately (60 x 45 cm), maintaining night temperatures to prevent dew formation, and pruning lower foliage to enhance air movement. If fungicidal intervention is required, spray copper hydroxide 53.8% DF @ 2.0 g/L or difenoconazole 25% EC @ 0.5 ml/L. Ensure complete spray coverage of lower leaf surfaces where sporulation occurs.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIVR-TOM-LM-01-C002",
+      "doc_id": "DOC-ICAR-IIVR-TOM-LM-01",
+      "title": "Identification and Management of Tomato Leaf Mold in Protected Cultivation",
+      "institution": "ICAR - Indian Institute of Vegetable Research (IIVR)",
+      "authors": "Nagendra Rai, R. K. Singh",
+      "publication_year": 2021,
+      "source_url": "https://iivr.icar.gov.in/tomato-leaf-mold-management",
+      "disease_targets": "Tomato___Leaf_Mold",
+      "crop_targets": "Tomato",
+      "pathogen": "Passalora fulva (syn. Cladosporium fulvum)",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Protected Cultivation,Cultural Control,Fungicides",
+      "chunk_index": 2,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-TNAU-TOM-TS-01-C001",
+    "text": "## Target Spot Symptomology on Leaves and Fruit\n\nTarget spot of tomato is caused by Corynespora casiicola. Foliar symptoms begin as pinpoint water-soaked lesions that rapidly expand into circular to irregular brown spots with pale brown centers and dark brown margins. Unlike Early Blight which exhibits large concentric rings, Target Spot lesions exhibit smaller concentric rings and frequently cause severe upper canopy defoliation. Fruit lesions appear as small, slightly sunken circular specks with dark brown margins that can crack open as the fruit ripens.",
+    "metadata": {
+      "chunk_id": "DOC-TNAU-TOM-TS-01-C001",
+      "doc_id": "DOC-TNAU-TOM-TS-01",
+      "title": "Target Spot of Tomato: Symptoms and Chemical Management",
+      "institution": "Tamil Nadu Agricultural University (TNAU Agritech Portal)",
+      "authors": "TNAU Plant Pathology Faculty",
+      "publication_year": 2022,
+      "source_url": "https://agritech.tnau.ac.in/horticulture/tomato_target_spot.html",
+      "disease_targets": "Tomato___Target_Spot",
+      "crop_targets": "Tomato",
+      "pathogen": "Corynespora casiicola",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Chemical Management,Defoliation",
+      "chunk_index": 1,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-TNAU-TOM-TS-01-C002",
+    "text": "## Management Practices for Target Spot\n\nDestroy infected crop residues immediately after harvest. Avoid overhead irrigation and provide adequate plant spacing. For chemical control, apply boscalid + pyraclostrobin (Pristine) or fluopyram + tebuconazole (Luna Experience) @ 1.0 ml/L or mancozeb 75% WP @ 2.5 g/L at 10-day intervals during periods of high humidity and temperatures between 25-32°C.",
+    "metadata": {
+      "chunk_id": "DOC-TNAU-TOM-TS-01-C002",
+      "doc_id": "DOC-TNAU-TOM-TS-01",
+      "title": "Target Spot of Tomato: Symptoms and Chemical Management",
+      "institution": "Tamil Nadu Agricultural University (TNAU Agritech Portal)",
+      "authors": "TNAU Plant Pathology Faculty",
+      "publication_year": 2022,
+      "source_url": "https://agritech.tnau.ac.in/horticulture/tomato_target_spot.html",
+      "disease_targets": "Tomato___Target_Spot",
+      "crop_targets": "Tomato",
+      "pathogen": "Corynespora casiicola",
+      "pathogen_type": "Fungal",
+      "categories": "Symptomology,Chemical Management,Defoliation",
+      "chunk_index": 2,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IARI-TOM-TOMV-01-C001",
+    "text": "## ToMV Foliar and Fruit Symptoms\n\nTomato Mosaic Virus (ToMV) causes mottled patterns of light and dark green on foliage, leaf curling, blistering, and distortion. In severe strains, leaves become severely narrowed into a stringy or fern-like appearance ('shoestring' symptom). Plants infected early in the season are stunted with reduced fruit set. Infected fruits exhibit uneven ripening, internal brown necrotic streaks in the outer fruit walls (internal browning or vascular necrosis), and significantly reduced market quality.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IARI-TOM-TOMV-01-C001",
+      "doc_id": "DOC-ICAR-IARI-TOM-TOMV-01",
+      "title": "Epidemiology and Transmission Management of Tomato Mosaic Virus",
+      "institution": "ICAR - Indian Agricultural Research Institute (IARI New Delhi)",
+      "authors": "Bikash Mandal, V. Celia Chalam",
+      "publication_year": 2021,
+      "source_url": "https://iari.res.in/plant-virology/tomato-mosaic-virus",
+      "disease_targets": "Tomato___Tomato_mosaic_virus",
+      "crop_targets": "Tomato",
+      "pathogen": "Tomato mosaic virus (ToMV)",
+      "pathogen_type": "Viral (Tobamovirus)",
+      "categories": "Symptomology,Mechanical Transmission,Sanitation,Resistance",
+      "chunk_index": 1,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IARI-TOM-TOMV-01-C002",
+    "text": "## Prevention and Decontamination Protocols\n\nToMV is extremely stable and easily transmitted mechanically via contaminated hands, tools, grafting knives, and pruning shears. It is also seed-borne on the seed coat. Treat seeds with 10% trisodium phosphate (TSP) solution for 30 minutes followed by thorough rinsing. Workers must wash hands with soap or 20% non-fat dry milk solution before handling plants. Smokers must wash thoroughly because tobacco products can harbor mosaic viruses. Immediately rogue out and burn infected plants upon first symptom appearance.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IARI-TOM-TOMV-01-C002",
+      "doc_id": "DOC-ICAR-IARI-TOM-TOMV-01",
+      "title": "Epidemiology and Transmission Management of Tomato Mosaic Virus",
+      "institution": "ICAR - Indian Agricultural Research Institute (IARI New Delhi)",
+      "authors": "Bikash Mandal, V. Celia Chalam",
+      "publication_year": 2021,
+      "source_url": "https://iari.res.in/plant-virology/tomato-mosaic-virus",
+      "disease_targets": "Tomato___Tomato_mosaic_virus",
+      "crop_targets": "Tomato",
+      "pathogen": "Tomato mosaic virus (ToMV)",
+      "pathogen_type": "Viral (Tobamovirus)",
+      "categories": "Symptomology,Mechanical Transmission,Sanitation,Resistance",
+      "chunk_index": 2,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-NIPB-TOM-TYLCV-01-C001",
+    "text": "## TYLCV Characteristic Symptoms\n\nTomato Yellow Leaf Curl Virus (TYLCV) is a devastating begomovirus transmitted persistently by the silverleaf whitefly (Bemisia tabaci). Symptoms include pronounced upward cupping and curling of leaf margins, severe interveinal and marginal chlorosis (yellowing), marked reduction in leaf size, and severely shortened internodes producing a stunted, bushy appearance. When infection occurs prior to flowering, blossom drop is nearly complete, resulting in 100% marketable yield loss.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-NIPB-TOM-TYLCV-01-C001",
+      "doc_id": "DOC-ICAR-NIPB-TOM-TYLCV-01",
+      "title": "Vector Management and Resistant Hybrids for Tomato Yellow Leaf Curl Virus",
+      "institution": "ICAR - National Institute for Plant Biotechnology (NIPB)",
+      "authors": "M. K. Reddy, R. Selvakumar",
+      "publication_year": 2022,
+      "source_url": "https://nipb.icar.gov.in/tylcv-management-guide",
+      "disease_targets": "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+      "crop_targets": "Tomato",
+      "pathogen": "Tomato yellow leaf curl virus (TYLCV)",
+      "pathogen_type": "Viral (Begomovirus)",
+      "categories": "Symptomology,Vector Control,Whitefly Management,Resistant Cultivars",
+      "chunk_index": 1,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-NIPB-TOM-TYLCV-01-C002",
+    "text": "## Whitefly Vector Control and Management Strategy\n\nBecause TYLCV is whitefly-transmitted, management focuses on vector exclusion. Raise tomato seedlings under 40-mesh insect-proof nylon nets. Install yellow sticky traps (@ 15-20 traps per acre) at canopy height to monitor and mass-trap adult whiteflies. Spray systemic insecticides such as imidacloprid 17.8% SL @ 0.5 ml/L, thiamethoxam 25% WG @ 0.3 g/L, or diafenthiuron 50% WP @ 1.0 g/L alternating with 2% neem oil (10,000 ppm) to prevent insecticide resistance. Plant TYLCV-resistant tomato hybrids (e.g., US-440, NS-501, Abhinav) in endemic regions.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-NIPB-TOM-TYLCV-01-C002",
+      "doc_id": "DOC-ICAR-NIPB-TOM-TYLCV-01",
+      "title": "Vector Management and Resistant Hybrids for Tomato Yellow Leaf Curl Virus",
+      "institution": "ICAR - National Institute for Plant Biotechnology (NIPB)",
+      "authors": "M. K. Reddy, R. Selvakumar",
+      "publication_year": 2022,
+      "source_url": "https://nipb.icar.gov.in/tylcv-management-guide",
+      "disease_targets": "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+      "crop_targets": "Tomato",
+      "pathogen": "Tomato yellow leaf curl virus (TYLCV)",
+      "pathogen_type": "Viral (Begomovirus)",
+      "categories": "Symptomology,Vector Control,Whitefly Management,Resistant Cultivars",
+      "chunk_index": 2,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-NBAIR-TOM-MITE-01-C001",
+    "text": "## Spider Mite Damage Symptoms on Tomato Foliage\n\nTwo-spotted spider mites (Tetranychus urticae) pierce individual plant cells with stylets and suck sap from leaf undersides. Symptoms begin as minute yellow or white stippling (speckling) on the upper surface of leaves. As populations multiply exponentially during hot, dry weather (temperature >30°C, RH <60%), leaves turn bronze or yellowish-brown, dry up, and drop. Fine silken webbing covers leaf undersides and apical growing points, trapping dust and impairing photosynthesis.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-NBAIR-TOM-MITE-01-C001",
+      "doc_id": "DOC-ICAR-NBAIR-TOM-MITE-01",
+      "title": "Bio-Intensive and Chemical Management of Spider Mites in Solanaceous Crops",
+      "institution": "ICAR - National Bureau of Agricultural Insect Resources (NBAIR)",
+      "authors": "P. Sreerama Kumar, B. Ramanujam",
+      "publication_year": 2022,
+      "source_url": "https://nbair.res.in/spider-mite-solanaceous-advisory",
+      "disease_targets": "Tomato___Spider_mites Two-spotted_spider_mite",
+      "crop_targets": "Tomato",
+      "pathogen": "Tetranychus urticae",
+      "pathogen_type": "Acarine Pest",
+      "categories": "Symptomology,Acaricides,Biological Control,Dry Weather",
+      "chunk_index": 1,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-NBAIR-TOM-MITE-01-C002",
+    "text": "## Biological and Acaricidal Management of Spider Mites\n\nConserve predatory mites (Phytoseiidae such as Neoseiulus longispinosus) and predatory thrips. Avoid excessive nitrogenous fertilizer application which accelerates mite reproduction. Apply bio-pesticide Beauveria bassiana @ 5 g/L or neem seed kernel extract (NSKE 5%). When mite density exceeds 5-10 mites per leaflet, spray selective acaricides: propargite 57% EC @ 2.0 ml/L, spiromesifen 22.9% SC @ 1.0 ml/L, or fenazaquin 10% EC @ 1.5 ml/L. Ensure high-pressure spray reaches the undersides of leaves.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-NBAIR-TOM-MITE-01-C002",
+      "doc_id": "DOC-ICAR-NBAIR-TOM-MITE-01",
+      "title": "Bio-Intensive and Chemical Management of Spider Mites in Solanaceous Crops",
+      "institution": "ICAR - National Bureau of Agricultural Insect Resources (NBAIR)",
+      "authors": "P. Sreerama Kumar, B. Ramanujam",
+      "publication_year": 2022,
+      "source_url": "https://nbair.res.in/spider-mite-solanaceous-advisory",
+      "disease_targets": "Tomato___Spider_mites Two-spotted_spider_mite",
+      "crop_targets": "Tomato",
+      "pathogen": "Tetranychus urticae",
+      "pathogen_type": "Acarine Pest",
+      "categories": "Symptomology,Acaricides,Biological Control,Dry Weather",
+      "chunk_index": 2,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIWBR-WHEAT-01-C001",
+    "text": "## Wheat Rust Diseases: Yellow (Stripe) and Brown (Leaf) Rust\n\nStripe rust (Yellow rust) caused by Puccinia striiformis f. sp. tritici is the foremost threat in Northern Plains and hill zones. It forms yellow pustules (uredinia) arranged in distinct linear stripes along leaf veins. Leaf rust (Brown rust) caused by Puccinia triticina produces small, round to oval orange-brown pustules scattered randomly over leaf blades without forming stripes. Rust spores are wind-borne; cool temperatures (10-15°C) with fog favor yellow rust, while warmer temperatures (15-25°C) favor brown rust.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIWBR-WHEAT-01-C001",
+      "doc_id": "DOC-ICAR-IIWBR-WHEAT-01",
+      "title": "Comprehensive Wheat Production Technology and Rust Management in India",
+      "institution": "ICAR - Indian Institute of Wheat and Barley Research (IIWBR Karnal)",
+      "authors": "Gyanendra Singh, Sendhil R., O. P. Gangwar",
+      "publication_year": 2023,
+      "source_url": "https://iiwbr.icar.gov.in/wheat-production-package-practices",
+      "disease_targets": "Wheat",
+      "crop_targets": "Wheat",
+      "pathogen": "Puccinia striiformis / Puccinia triticina",
+      "pathogen_type": "Fungal & Agronomic",
+      "categories": "Agronomy,Yellow Rust,Fertilizers,Irrigation Stages,Varieties",
+      "chunk_index": 1,
+      "total_doc_chunks": 4
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIWBR-WHEAT-01-C002",
+    "text": "## Critical Irrigation Stages for Wheat\n\nWheat requires 4 to 6 irrigations at physiological critical growth stages: 1. Crown Root Initiation (CRI at 20-25 days after sowing - most critical; moisture stress here cuts yield by 30%), 2. Tillering stage (40-45 DAS), 3. Late Jointing stage (60-65 DAS), 4. Flowering stage (80-85 DAS), 5. Milk stage (100-105 DAS), and 6. Dough stage (115-120 DAS). Avoid irrigation during high winds at grain-filling to prevent lodging.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIWBR-WHEAT-01-C002",
+      "doc_id": "DOC-ICAR-IIWBR-WHEAT-01",
+      "title": "Comprehensive Wheat Production Technology and Rust Management in India",
+      "institution": "ICAR - Indian Institute of Wheat and Barley Research (IIWBR Karnal)",
+      "authors": "Gyanendra Singh, Sendhil R., O. P. Gangwar",
+      "publication_year": 2023,
+      "source_url": "https://iiwbr.icar.gov.in/wheat-production-package-practices",
+      "disease_targets": "Wheat",
+      "crop_targets": "Wheat",
+      "pathogen": "Puccinia striiformis / Puccinia triticina",
+      "pathogen_type": "Fungal & Agronomic",
+      "categories": "Agronomy,Yellow Rust,Fertilizers,Irrigation Stages,Varieties",
+      "chunk_index": 2,
+      "total_doc_chunks": 4
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIWBR-WHEAT-01-C003",
+    "text": "## Nutrient Management and High-Yielding Wheat Varieties\n\nRecommended fertilizer dose for timely-sown irrigated wheat is 120-150 kg N, 60 kg P2O5, and 40 kg K2O per hectare. Apply all P, K, and 1/3 N as basal dose at sowing; top-dress remaining N in two equal splits after first and second irrigations. In zinc-deficient soils, apply 25 kg zinc sulfate (21% Zn) per hectare. High-yielding rust-resistant varieties include DBW-187 (Karan Vandana), DBW-303 (Karan Vaishnavi), HD-2967, HD-3086, and PBW-725.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIWBR-WHEAT-01-C003",
+      "doc_id": "DOC-ICAR-IIWBR-WHEAT-01",
+      "title": "Comprehensive Wheat Production Technology and Rust Management in India",
+      "institution": "ICAR - Indian Institute of Wheat and Barley Research (IIWBR Karnal)",
+      "authors": "Gyanendra Singh, Sendhil R., O. P. Gangwar",
+      "publication_year": 2023,
+      "source_url": "https://iiwbr.icar.gov.in/wheat-production-package-practices",
+      "disease_targets": "Wheat",
+      "crop_targets": "Wheat",
+      "pathogen": "Puccinia striiformis / Puccinia triticina",
+      "pathogen_type": "Fungal & Agronomic",
+      "categories": "Agronomy,Yellow Rust,Fertilizers,Irrigation Stages,Varieties",
+      "chunk_index": 3,
+      "total_doc_chunks": 4
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIWBR-WHEAT-01-C004",
+    "text": "## Chemical Control of Stripe Rust in Wheat\n\nUpon detecting the first foci of yellow rust in the field, immediately spray propiconazole 25% EC (Tilt) @ 1.0 ml/L or tebuconazole 25.9% EC @ 1.0 ml/L in 200 liters of water per acre. A single well-timed spray at initial incidence halts rust progression and protects the flag leaf which contributes over 50% of grain dry matter.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIWBR-WHEAT-01-C004",
+      "doc_id": "DOC-ICAR-IIWBR-WHEAT-01",
+      "title": "Comprehensive Wheat Production Technology and Rust Management in India",
+      "institution": "ICAR - Indian Institute of Wheat and Barley Research (IIWBR Karnal)",
+      "authors": "Gyanendra Singh, Sendhil R., O. P. Gangwar",
+      "publication_year": 2023,
+      "source_url": "https://iiwbr.icar.gov.in/wheat-production-package-practices",
+      "disease_targets": "Wheat",
+      "crop_targets": "Wheat",
+      "pathogen": "Puccinia striiformis / Puccinia triticina",
+      "pathogen_type": "Fungal & Agronomic",
+      "categories": "Agronomy,Yellow Rust,Fertilizers,Irrigation Stages,Varieties",
+      "chunk_index": 4,
+      "total_doc_chunks": 4
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-NRRI-RICE-01-C001",
+    "text": "## Rice Blast: Leaf Blast and Neck Blast Identification\n\nRice blast, caused by the fungus Magnaporthe oryzae (Pyricularia oryzae), attacks all aerial parts. Leaf blast lesions are spindle-shaped (eye-shaped) with grey or whitish centers and brown or reddish-brown borders. Neck blast occurs when the fungus infects the panicle base (neck node), causing the neck to turn blackish-brown and rot, resulting in sterile empty grains ('whiteheads') or panicle breakage.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-NRRI-RICE-01-C001",
+      "doc_id": "DOC-ICAR-NRRI-RICE-01",
+      "title": "Package of Practices for High-Yielding Paddy and Major Disease Management",
+      "institution": "ICAR - National Rice Research Institute (NRRI Cuttack)",
+      "authors": "P. C. Rath, S. D. Mohapatra, B. C. Patra",
+      "publication_year": 2023,
+      "source_url": "https://icar-nrri.gov.in/rice-blast-package-practices",
+      "disease_targets": "Rice",
+      "crop_targets": "Rice",
+      "pathogen": "Magnaporthe oryzae / Xanthomonas oryzae",
+      "pathogen_type": "Fungal & Bacterial",
+      "categories": "Agronomy,Rice Blast,Bacterial Blight,Direct Seeded Rice,Nutrients",
+      "chunk_index": 1,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-NRRI-RICE-01-C002",
+    "text": "## Bacterial Blight and Sheath Blight of Rice\n\nBacterial leaf blight (Xanthomonas oryzae pv. oryzae) produces wavy, water-soaked marginal lesions on leaf blades that turn yellow to straw-colored, with milky bacterial ooze droplets visible early morning. Sheath blight (Rhizoctonia solani) produces large, greenish-grey oval lesions on leaf sheaths near water level that coalesce into irregular snake-skin patterns, causing lodging.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-NRRI-RICE-01-C002",
+      "doc_id": "DOC-ICAR-NRRI-RICE-01",
+      "title": "Package of Practices for High-Yielding Paddy and Major Disease Management",
+      "institution": "ICAR - National Rice Research Institute (NRRI Cuttack)",
+      "authors": "P. C. Rath, S. D. Mohapatra, B. C. Patra",
+      "publication_year": 2023,
+      "source_url": "https://icar-nrri.gov.in/rice-blast-package-practices",
+      "disease_targets": "Rice",
+      "crop_targets": "Rice",
+      "pathogen": "Magnaporthe oryzae / Xanthomonas oryzae",
+      "pathogen_type": "Fungal & Bacterial",
+      "categories": "Agronomy,Rice Blast,Bacterial Blight,Direct Seeded Rice,Nutrients",
+      "chunk_index": 2,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-NRRI-RICE-01-C003",
+    "text": "## Nutrient Management and Cultivation Techniques in Rice\n\nApply recommended NPK @ 100-120:50-60:40-50 kg/ha. Apply full P2O5 and 50% K2O as basal; split nitrogen into three applications: 50% at basal/active tillering, 25% at panicle initiation, and 25% at boot leaf stage. In Direct Seeded Rice (DSR), maintain weed-free condition during first 30 days using pre-emergence pendimethalin 30% EC @ 1.0 kg a.i./ha followed by post-emergence bispyribac-sodium 10% SC @ 25 g a.i./ha at 15-20 DAS. For blast control, spray tricyclazole 75% WP @ 0.6 g/L or isoprothiolane 40% EC @ 1.5 ml/L.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-NRRI-RICE-01-C003",
+      "doc_id": "DOC-ICAR-NRRI-RICE-01",
+      "title": "Package of Practices for High-Yielding Paddy and Major Disease Management",
+      "institution": "ICAR - National Rice Research Institute (NRRI Cuttack)",
+      "authors": "P. C. Rath, S. D. Mohapatra, B. C. Patra",
+      "publication_year": 2023,
+      "source_url": "https://icar-nrri.gov.in/rice-blast-package-practices",
+      "disease_targets": "Rice",
+      "crop_targets": "Rice",
+      "pathogen": "Magnaporthe oryzae / Xanthomonas oryzae",
+      "pathogen_type": "Fungal & Bacterial",
+      "categories": "Agronomy,Rice Blast,Bacterial Blight,Direct Seeded Rice,Nutrients",
+      "chunk_index": 3,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIMR-MAIZE-01-C001",
+    "text": "## Fall Armyworm Identification and Crop Damage Symptoms\n\nFall Armyworm (FAW - Spodoptera frugiperda) is an aggressive invasive pest attacking maize from seedling to cob harvest. Early instar larvae scrape green leaf tissue causing characteristic 'papery windows' on leaves. Older larvae migrate into the central whorl, feeding voraciously and producing prominent ragged pinholes, extensive leaf shredding, and large quantities of coarse, sawdust-like brownish frass inside the whorl. Larvae feature four dark spots forming a square on the 8th abdominal segment and an inverted 'Y' suture on the dark head capsule.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIMR-MAIZE-01-C001",
+      "doc_id": "DOC-ICAR-IIMR-MAIZE-01",
+      "title": "Maize Cultivation Guide and Fall Armyworm (Spodoptera frugiperda) IPM",
+      "institution": "ICAR - Indian Institute of Maize Research (IIMR Ludhiana)",
+      "authors": "Sujay Rakshit, J. C. Sekhar, Pradyumn Kumar",
+      "publication_year": 2022,
+      "source_url": "https://iimr.icar.gov.in/fall-armyworm-management-protocol",
+      "disease_targets": "Maize",
+      "crop_targets": "Maize",
+      "pathogen": "Spodoptera frugiperda",
+      "pathogen_type": "Insect Pest",
+      "categories": "Agronomy,Fall Armyworm,IPM,Pheromone Traps,Whorl Application",
+      "chunk_index": 1,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IIMR-MAIZE-01-C002",
+    "text": "## Integrated Pest Management (IPM) for Fall Armyworm\n\nImplement IPM from sowing: Deep summer plowing exposes pupae to predators. Install pheromone traps (@ 5 traps/acre) immediately after germination to monitor adult moth flights. Conserve natural enemies (egg parasitoids Telenomus remus, Trichogramma). Apply 5% neem seed kernel extract (NSKE) or azadirachtin 10,000 ppm @ 2 ml/L at early vegetative stage. If whorl damage exceeds 10%, apply targeted whorl sprays of chlorantraniliprole 18.5% SC @ 0.4 ml/L or emamectin benzoate 5% SG @ 0.4 g/L using a nozzle directed straight into the plant whorls.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IIMR-MAIZE-01-C002",
+      "doc_id": "DOC-ICAR-IIMR-MAIZE-01",
+      "title": "Maize Cultivation Guide and Fall Armyworm (Spodoptera frugiperda) IPM",
+      "institution": "ICAR - Indian Institute of Maize Research (IIMR Ludhiana)",
+      "authors": "Sujay Rakshit, J. C. Sekhar, Pradyumn Kumar",
+      "publication_year": 2022,
+      "source_url": "https://iimr.icar.gov.in/fall-armyworm-management-protocol",
+      "disease_targets": "Maize",
+      "crop_targets": "Maize",
+      "pathogen": "Spodoptera frugiperda",
+      "pathogen_type": "Insect Pest",
+      "categories": "Agronomy,Fall Armyworm,IPM,Pheromone Traps,Whorl Application",
+      "chunk_index": 2,
+      "total_doc_chunks": 2
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IISS-SOIL-01-C001",
+    "text": "## Soil Testing Protocol and Soil Health Card Interpretation\n\nCollect representative soil samples following a zigzag pattern across the field at 0-15 cm depth for field crops and 0-30 cm for horticultural crops. Test for 12 key parameters: pH, Electrical Conductivity (EC), Organic Carbon (OC), available Nitrogen (N), Phosphorus (P2O5), Potassium (K2O), Sulfur (S), and micronutrients Zinc (Zn), Iron (Fe), Copper (Cu), Manganese (Mn), and Boron (B). Optimal soil pH is 6.5 to 7.5; organic carbon should ideally exceed 0.75%. Electrical conductivity below 1.0 dS/m indicates non-saline soil.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IISS-SOIL-01-C001",
+      "doc_id": "DOC-ICAR-IISS-SOIL-01",
+      "title": "Soil Health Management, Soil Testing and Balanced Nutrient Application",
+      "institution": "ICAR - Indian Institute of Soil Science (IISS Bhopal)",
+      "authors": "A. K. Patra, Muneshwar Singh",
+      "publication_year": 2023,
+      "source_url": "https://iiss.icar.gov.in/soil-health-management-handbook",
+      "disease_targets": "Soil Health",
+      "crop_targets": "All Crops",
+      "pathogen": "Abiotic Soil Disorders",
+      "pathogen_type": "Nutrient Management",
+      "categories": "Soil Testing,pH Correction,Salinity,Organic Carbon,Biofertilizers",
+      "chunk_index": 1,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IISS-SOIL-01-C002",
+    "text": "## Correction of Acidic and Saline/Alkaline Soils\n\nIn acidic soils (pH < 6.0), phosphorus fixation occurs, reducing availability. Correct by applying agricultural lime (calcium carbonate) or dolomite @ 2 to 4 tonnes/ha based on buffer pH test every 3 years. In sodic/alkaline soils (pH > 8.5 with high exchangeable sodium), apply gypsum (calcium sulfate) calculated from gypsum requirement (GR), followed by leaching with good quality irrigation water. Incorporate green manuring crops like Dhaincha (Sesbania aculeata) to lower soil pH naturally through organic acids.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IISS-SOIL-01-C002",
+      "doc_id": "DOC-ICAR-IISS-SOIL-01",
+      "title": "Soil Health Management, Soil Testing and Balanced Nutrient Application",
+      "institution": "ICAR - Indian Institute of Soil Science (IISS Bhopal)",
+      "authors": "A. K. Patra, Muneshwar Singh",
+      "publication_year": 2023,
+      "source_url": "https://iiss.icar.gov.in/soil-health-management-handbook",
+      "disease_targets": "Soil Health",
+      "crop_targets": "All Crops",
+      "pathogen": "Abiotic Soil Disorders",
+      "pathogen_type": "Nutrient Management",
+      "categories": "Soil Testing,pH Correction,Salinity,Organic Carbon,Biofertilizers",
+      "chunk_index": 2,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-ICAR-IISS-SOIL-01-C003",
+    "text": "## Organic Carbon Enrichment and Biofertilizers\n\nMaintain soil microbiological health by applying 10 tonnes of well-rotted Farmyard Manure (FYM) or 3-5 tonnes of vermicompost per hectare annually. Inoculate seeds or soil with Rhizobium (for pulses), Azotobacter or Azospirillum (for cereals), and Phosphate Solubilizing Bacteria (PSB) @ 10 g/kg seed or 2.5 kg/ha in 50 kg FYM. PSB solubilizes fixed insoluble tricalcium phosphate into bioavailable monocalcium form, improving P fertilizer efficiency by 20-30%.",
+    "metadata": {
+      "chunk_id": "DOC-ICAR-IISS-SOIL-01-C003",
+      "doc_id": "DOC-ICAR-IISS-SOIL-01",
+      "title": "Soil Health Management, Soil Testing and Balanced Nutrient Application",
+      "institution": "ICAR - Indian Institute of Soil Science (IISS Bhopal)",
+      "authors": "A. K. Patra, Muneshwar Singh",
+      "publication_year": 2023,
+      "source_url": "https://iiss.icar.gov.in/soil-health-management-handbook",
+      "disease_targets": "Soil Health",
+      "crop_targets": "All Crops",
+      "pathogen": "Abiotic Soil Disorders",
+      "pathogen_type": "Nutrient Management",
+      "categories": "Soil Testing,pH Correction,Salinity,Organic Carbon,Biofertilizers",
+      "chunk_index": 3,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-GOI-MOA-SCHEMES-01-C001",
+    "text": "## Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)\n\nPM-KISAN is a central sector scheme providing direct income support of ₹6,000 per year to all landholding farmer families across India. The financial benefit is transferred directly into beneficiaries' Aadhaar-linked bank accounts in three equal installments of ₹2,000 every four months. Farmers must complete e-KYC on the pmkisan.gov.in portal or via biometric verification at Common Service Centers (CSCs). Land records must be seeded in the state portal for verification.",
+    "metadata": {
+      "chunk_id": "DOC-GOI-MOA-SCHEMES-01-C001",
+      "doc_id": "DOC-GOI-MOA-SCHEMES-01",
+      "title": "Government Agricultural Support Schemes: PM-KISAN, PMFBY, Soil Health Card and KCC",
+      "institution": "Ministry of Agriculture & Farmers Welfare, Government of India",
+      "authors": "Department of Agriculture & Farmers Welfare",
+      "publication_year": 2023,
+      "source_url": "https://agricoop.gov.in/en/major-flagship-schemes-guidelines",
+      "disease_targets": "Government Schemes",
+      "crop_targets": "All Crops",
+      "pathogen": "Policy & Financial Support",
+      "pathogen_type": "Institutional Scheme",
+      "categories": "PM-KISAN,PMFBY,Crop Insurance,Credit,Subsidies",
+      "chunk_index": 1,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-GOI-MOA-SCHEMES-01-C002",
+    "text": "## Pradhan Mantri Fasal Bima Yojana (PMFBY)\n\nPMFBY provides comprehensive crop insurance cover against non-preventable natural risks (drought, flood, unseasonal rain, hailstorm, pests, and diseases). Farmer premium rates are capped at 2.0% of sum insured for Kharif food and oilseed crops, 1.5% for Rabi crops, and 5.0% for commercial and annual horticultural crops. The remaining actuarial premium is subsidized equally by Central and State Governments. Post-harvest localized losses must be reported within 72 hours via the Crop Insurance App or toll-free number 14447.",
+    "metadata": {
+      "chunk_id": "DOC-GOI-MOA-SCHEMES-01-C002",
+      "doc_id": "DOC-GOI-MOA-SCHEMES-01",
+      "title": "Government Agricultural Support Schemes: PM-KISAN, PMFBY, Soil Health Card and KCC",
+      "institution": "Ministry of Agriculture & Farmers Welfare, Government of India",
+      "authors": "Department of Agriculture & Farmers Welfare",
+      "publication_year": 2023,
+      "source_url": "https://agricoop.gov.in/en/major-flagship-schemes-guidelines",
+      "disease_targets": "Government Schemes",
+      "crop_targets": "All Crops",
+      "pathogen": "Policy & Financial Support",
+      "pathogen_type": "Institutional Scheme",
+      "categories": "PM-KISAN,PMFBY,Crop Insurance,Credit,Subsidies",
+      "chunk_index": 2,
+      "total_doc_chunks": 3
+    }
+  },
+  {
+    "chunk_id": "DOC-GOI-MOA-SCHEMES-01-C003",
+    "text": "## Kisan Credit Card (KCC) and Subsidized Institutional Credit\n\nThe Kisan Credit Card (KCC) scheme provides farmers with flexible, timely institutional short-term credit for crop cultivation, post-harvest expenses, and farm maintenance. Baseline interest rate is 9.0%, with a 2.0% interest subvention by the Central Government, lowering the rate to 7.0%. An additional 3.0% Prompt Repayment Incentive (PRI) reduces the effective interest rate to only 4.0% per annum for loans up to ₹3 lakh. Collateral-free agricultural loans are sanctioned up to ₹1.60 lakh.",
+    "metadata": {
+      "chunk_id": "DOC-GOI-MOA-SCHEMES-01-C003",
+      "doc_id": "DOC-GOI-MOA-SCHEMES-01",
+      "title": "Government Agricultural Support Schemes: PM-KISAN, PMFBY, Soil Health Card and KCC",
+      "institution": "Ministry of Agriculture & Farmers Welfare, Government of India",
+      "authors": "Department of Agriculture & Farmers Welfare",
+      "publication_year": 2023,
+      "source_url": "https://agricoop.gov.in/en/major-flagship-schemes-guidelines",
+      "disease_targets": "Government Schemes",
+      "crop_targets": "All Crops",
+      "pathogen": "Policy & Financial Support",
+      "pathogen_type": "Institutional Scheme",
+      "categories": "PM-KISAN,PMFBY,Crop Insurance,Credit,Subsidies",
+      "chunk_index": 3,
+      "total_doc_chunks": 3
     }
   }
 ]

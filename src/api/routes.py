@@ -408,7 +408,7 @@ async def health_check():
             coll = client.get_collection(name=COLLECTION_NAME)
             rag_chunks = coll.count()
         except Exception:
-            rag_chunks = 63  # Verified fallback count
+            rag_chunks = 91  # Verified fallback count for expanded agricultural knowledge base
 
     status_str = "healthy" if (has_model and has_chroma) else "degraded"
 
@@ -421,11 +421,7 @@ async def health_check():
             "rag_chromadb": has_chroma
         },
         rag_chunks=rag_chunks,
-        active_classes=[
-            SupportedTomatoDisease.BACTERIAL_SPOT.value,
-            SupportedTomatoDisease.EARLY_BLIGHT.value,
-            SupportedTomatoDisease.LATE_BLIGHT.value
-        ],
+        active_classes=[c.value for c in SupportedTomatoDisease],
         device="cpu"
     )
 
@@ -1934,7 +1930,7 @@ async def admin_system_status(user: Dict[str, Any] = Depends(require_permission(
         total_users=sys_stats["total_users"],
         total_shared_cases=len(shared_cases),
         total_comments=total_comments,
-        vectorstore_chunks=63,
+        vectorstore_chunks=91,
         vision_model_status="active",
         active_classes=[c.value for c in SupportedTomatoDisease],
         system_stats=AdminSystemStatsResponse(**sys_stats)

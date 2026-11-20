@@ -153,6 +153,12 @@ class DecisionPlanningAgent:
         is_late_blight = "Late_blight" in disease
         is_early_blight = "Early_blight" in disease
         is_bacterial_spot = "Bacterial_spot" in disease
+        is_septoria = "Septoria" in disease
+        is_leaf_mold = "Leaf_Mold" in disease
+        is_target_spot = "Target_Spot" in disease
+        is_spider_mites = "Spider_mites" in disease
+        is_mosaic_virus = "mosaic_virus" in disease
+        is_tylcv = "Yellow_Leaf_Curl" in disease
 
         if severity == SeverityLevel.CRITICAL:
             urgency = PlanUrgency.CRITICAL
@@ -388,6 +394,238 @@ class DecisionPlanningAgent:
                         "Inspect upper and lower leaf surfaces for small (1/8 inch), water-soaked, angular dark lesions. "
                         "Inspect green fruit for small, raised, brown blister-like scab lesions."
                     ),
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+
+        elif is_septoria:
+            # 1. Cultural Controls
+            cultural_controls.append(
+                ManagementAction(
+                    category="cultural",
+                    action_summary="Bottom-leaf pruning, mulching, and solanaceous weed eradication (Cornell Extension)",
+                    details=(
+                        "Prune lower 12-18 inches of foliage after fruit set. Mulch beds with clean straw or plastic to block rain-splashed "
+                        "spores from soil. Eliminate horsenettle and solanaceous weed reservoirs within and around the field."
+                    ),
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            cultural_controls.append(
+                ManagementAction(
+                    category="cultural",
+                    action_summary="Strict 2-3 year crop rotation with non-solanaceous crops (Purdue Extension)",
+                    details=(
+                        "Rotate fields out of tomatoes and solanaceous crops for 2-3 years. Deeply plow or bury all crop debris "
+                        "immediately after harvest to decompose overwintering pycnidia."
+                    ),
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+
+            # 2. Resistant Varieties
+            resistant_varieties.append(
+                ManagementAction(
+                    category="resistant_variety",
+                    action_summary="Select vigorous hybrids with strong foliar tolerance",
+                    details=(
+                        "Plant indeterminate, disease-tolerant hybrids with vigorous canopy development (e.g. Jasper, Iron Lady). "
+                        "Avoid planting susceptible heirloom cultivars in fields with past Septoria history."
+                    ),
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+
+            # 3. Chemical Controls
+            chemical_controls.append(
+                ManagementAction(
+                    category="chemical",
+                    action_summary="Preventative broad-spectrum protectant fungicide (Cornell Extension)",
+                    details=(
+                        "Apply chlorothalonil, mancozeb, or copper hydroxide starting at first sighting of lower-canopy circular lesions. "
+                        "Repeat at 7-10 day intervals during wet periods. Alternate with FRAC 11 (azoxystrobin) to manage resistance."
+                    ),
+                    is_chemical=True,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+
+            # 4. Monitoring & Differential Diagnosis
+            monitoring_actions.append(
+                ManagementAction(
+                    category="monitoring",
+                    action_summary="Hand-lens examination for pycnidia; differentiate from Early Blight",
+                    details=(
+                        "Inspect lower leaves using 10x hand lens: Septoria shows small circular spots (1.5-3mm) with gray/tan centers and "
+                        "tiny black specks (pycnidia). Unlike Early Blight, Septoria lesions lack large concentric bullseye target rings."
+                    ),
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+
+        elif is_leaf_mold:
+            cultural_controls.append(
+                ManagementAction(
+                    category="cultural",
+                    action_summary="Maximize canopy ventilation and keep relative humidity below 85%",
+                    details="Increase spacing and vent tunnels. Avoid overhead watering to keep leaf surfaces dry.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            resistant_varieties.append(
+                ManagementAction(
+                    category="resistant_variety",
+                    action_summary="Plant Cf-gene resistant tomato cultivars",
+                    details="Deploy varieties bearing Cf-2, Cf-4, or Cf-9 resistance genes for greenhouse or high tunnel production.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            chemical_controls.append(
+                ManagementAction(
+                    category="chemical",
+                    action_summary="Preventative copper or chlorothalonil foliar spray",
+                    details="Apply protectant fungicides when persistent humidity exceeds 85% in closed structures.",
+                    is_chemical=True,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            monitoring_actions.append(
+                ManagementAction(
+                    category="monitoring",
+                    action_summary="Inspect leaf undersides for olive-brown velvety sporulation",
+                    details="Check for corresponding chlorotic yellow patches on upper leaf surfaces.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+
+        elif is_target_spot:
+            cultural_controls.append(
+                ManagementAction(
+                    category="cultural",
+                    action_summary="Improve canopy airflow and prune lower infected foliage",
+                    details="Trellis plants and ensure adequate spacing. Remove lower symptomatic leaves to reduce inoculum.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            chemical_controls.append(
+                ManagementAction(
+                    category="chemical",
+                    action_summary="Targeted fungicide spray (azoxystrobin or chlorothalonil)",
+                    details="Apply protectant fungicides at first sign of circular necrotic lesions with subtle target rings.",
+                    is_chemical=True,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            monitoring_actions.append(
+                ManagementAction(
+                    category="monitoring",
+                    action_summary="Distinguish Target Spot from Early Blight and Septoria",
+                    details="Target Spot lesions are typically 4-10mm with subtle concentric zonation but lack pycnidia (unlike Septoria).",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+
+        elif is_spider_mites:
+            cultural_controls.append(
+                ManagementAction(
+                    category="cultural",
+                    action_summary="Suppress dust on field borders and avoid broad-spectrum pyrethroids",
+                    details="Water field perimeters to reduce dust. Avoid broad pyrethroids that destroy natural predatory mites.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            chemical_controls.append(
+                ManagementAction(
+                    category="chemical",
+                    action_summary="Apply horticultural neem oil, insecticidal soap, or selective acaricides",
+                    details="Spray neem oil or abamectin with thorough coverage of leaf undersides during early infestation.",
+                    is_chemical=True,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            monitoring_actions.append(
+                ManagementAction(
+                    category="monitoring",
+                    action_summary="Inspect leaf undersides for stippling, bronzing, and fine webbing",
+                    details="Tap leaves over white paper to identify tiny moving spider mites.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+
+        elif is_mosaic_virus:
+            cultural_controls.append(
+                ManagementAction(
+                    category="cultural",
+                    action_summary="Strict sanitation, hand washing with soap/milk, and rogueing",
+                    details="Immediately remove and bag infected plants. Disinfect hands and tools; prohibit tobacco use near crop.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            resistant_varieties.append(
+                ManagementAction(
+                    category="resistant_variety",
+                    action_summary="Deploy Tm-2 or Tm-2^2 virus-resistant hybrids",
+                    details="Plant certified virus-free seed with genetic resistance to Tobacco/Tomato Mosaic Virus.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            monitoring_actions.append(
+                ManagementAction(
+                    category="monitoring",
+                    action_summary="Scout for foliar mosaic mottling and shoestring leaf distortion",
+                    details="Inspect young foliage for alternating dark and light green patterns.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+
+        elif is_tylcv:
+            cultural_controls.append(
+                ManagementAction(
+                    category="cultural",
+                    action_summary="Install 50-mesh netting in nurseries and deploy yellow sticky traps",
+                    details="Prevent whitefly (Bemisia tabaci) feeding. Rogue infected seedlings before transplanting.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            resistant_varieties.append(
+                ManagementAction(
+                    category="resistant_variety",
+                    action_summary="Plant TYLCV-resistant hybrids carrying Ty-1 or Ty-3 genes",
+                    details="Utilize modern commercial hybrids bred specifically with Tomato Yellow Leaf Curl Virus resistance.",
+                    is_chemical=False,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            chemical_controls.append(
+                ManagementAction(
+                    category="chemical",
+                    action_summary="Targeted vector control with neem-based azadirachtin or systemic insecticides",
+                    details="Control whitefly populations early before virus inoculation occurs.",
+                    is_chemical=True,
+                    citation_numbers=citation_nums[:1] if citation_nums else []
+                )
+            )
+            monitoring_actions.append(
+                ManagementAction(
+                    category="monitoring",
+                    action_summary="Monitor for upward cupping, severe chlorosis, and stunted growth",
+                    details="Scout weekly for whiteflies on leaf undersides and early leaf cupping symptoms.",
                     is_chemical=False,
                     citation_numbers=citation_nums[:1] if citation_nums else []
                 )
