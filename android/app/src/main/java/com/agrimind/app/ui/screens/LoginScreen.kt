@@ -391,36 +391,6 @@ fun LoginScreen(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Safe Autofill for Project Owner & Admin Console Evaluation
-                    OutlinedButton(
-                        onClick = {
-                            usernameOrEmail = "jaskiratkourjk2005@gmail.com"
-                            password = "AgriMind@Owner2026!"
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = Color(0xFF6A1B9A)
-                        ),
-                        contentPadding = PaddingValues(vertical = 6.dp)
-                    ) {
-                        Icon(
-                            Icons.Default.AdminPanelSettings,
-                            contentDescription = null,
-                            tint = Color(0xFF6A1B9A),
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "Fill Verified Project Owner Credentials",
-                            fontSize = 12.sp,
-                            color = Color(0xFF6A1B9A),
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
                     TextButton(
                         onClick = onContinueAsGuest,
                         modifier = Modifier.fillMaxWidth()
