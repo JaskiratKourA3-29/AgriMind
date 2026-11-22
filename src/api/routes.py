@@ -1924,13 +1924,23 @@ async def admin_system_status(user: Dict[str, Any] = Depends(require_permission(
         row = conn.execute("SELECT count(*) AS count FROM case_comments;").fetchone()
         if row: total_comments = row["count"]
 
+    # Dynamic knowledge base chunk count
+    chunk_count = 91
+    try:
+        from src.rag.vectorstore import PROCESSED_CHUNKS_PATH
+        if os.path.exists(PROCESSED_CHUNKS_PATH):
+            with open(PROCESSED_CHUNKS_PATH, "r", encoding="utf-8") as f:
+                chunk_count = len(json.load(f))
+    except Exception:
+        pass
+
     return AdminSystemStatusResponse(
         server_time=datetime.now(timezone.utc).isoformat(),
         total_cases=total_cases,
         total_users=sys_stats["total_users"],
         total_shared_cases=total_shared_cases,
         total_comments=total_comments,
-        vectorstore_chunks=91,
+        vectorstore_chunks=chunk_count,
         vision_model_status="active",
         active_classes=[c.value for c in SupportedTomatoDisease],
         system_stats=AdminSystemStatsResponse(**sys_stats)

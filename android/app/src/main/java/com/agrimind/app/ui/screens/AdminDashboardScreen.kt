@@ -1346,8 +1346,9 @@ fun AdminTelemetryTab(
 
                 Text("Core Model & Knowledge Infrastructure:", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(6.dp))
-                Text("• Vision Classifier: ResNet-50 PyTorch (3 classes: Early Blight, Late Blight, Bacterial Spot)", fontSize = 12.sp, color = Color.DarkGray)
-                Text("• RAG Retrieval: ChromaDB (63 chunks, SKUAST-J & ICAR Grounded)", fontSize = 12.sp, color = Color.DarkGray)
+                val activeClassesCount = systemStatus?.activeClasses?.size ?: 10
+                Text("• Vision Classifier: ResNet-50 PyTorch ($activeClassesCount classes, including Septoria & Blight)", fontSize = 12.sp, color = Color.DarkGray)
+                Text("• RAG Retrieval: ChromaDB (${systemStatus?.vectorstoreChunks ?: 91} chunks, SKUAST-J & ICAR Grounded)", fontSize = 12.sp, color = Color.DarkGray)
                 Text("• Critic Agent: 3-rule deterministic verification & safety gate", fontSize = 12.sp, color = Color.DarkGray)
                 Text("• Server Time: ${systemStatus?.serverTime ?: "Connected"}", fontSize = 12.sp, color = Color.Gray)
             }
