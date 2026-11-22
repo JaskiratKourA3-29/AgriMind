@@ -168,133 +168,141 @@ fun SettingsScreen(
             }
         }
 
-        // 2. Backend Gateway & Server Configuration Card
-        Card(
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.CloudSync,
-                        contentDescription = null,
-                        tint = ForestGreenDark,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = if (uiState.language == "hi") "बैकएंड गेटवे कॉन्फ़िगरेशन" else "Backend Gateway URL",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = ForestGreenDark
-                    )
-                }
+        val isOwnerOrAdmin = uiState.isLoggedIn && (
+            uiState.role.equals("owner", ignoreCase = true) ||
+            uiState.role.equals("admin", ignoreCase = true) ||
+            uiState.role.equals("sub_owner", ignoreCase = true)
+        )
 
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = if (uiState.language == "hi")
-                        "एग्रीमाइंड क्लाउड प्रोडक्शन गेटवे (HTTPS) URL दर्ज करें:"
-                    else
-                        "Configure AgriMind cloud production gateway (HTTPS) URL:",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.DarkGray
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                OutlinedTextField(
-                    value = uiState.gatewayInput,
-                    onValueChange = { viewModel.setGatewayInput(it) },
-                    label = { Text(if (uiState.language == "hi") "सर्वर गेटवे URL" else "Server Gateway URL") },
-                    placeholder = { Text("https://agrimind-seven.vercel.app/") },
-                    singleLine = true,
-                    isError = uiState.gatewayError != null,
-                    supportingText = {
-                        uiState.gatewayError?.let { err ->
-                            Text(text = err, color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = ForestGreenPrimary,
-                        unfocusedBorderColor = Color.Gray
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Button(
-                        onClick = { viewModel.saveGatewayUrl() },
-                        colors = ButtonDefaults.buttonColors(containerColor = ForestGreenPrimary),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(Icons.Default.Save, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(if (uiState.language == "hi") "लागू करें" else "Apply", fontSize = 13.sp)
-                    }
-
-                    OutlinedButton(
-                        onClick = { viewModel.resetToEmulatorGateway() },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(Icons.Default.RestartAlt, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(if (uiState.language == "hi") "एमुलेटर डिफ़ॉल्ट" else "Reset Default", fontSize = 12.sp)
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Button(
-                    onClick = { viewModel.testGatewayConnection() },
-                    colors = ButtonDefaults.buttonColors(containerColor = ForestGreenDark),
-                    enabled = !uiState.isTestingGateway,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    if (uiState.isTestingGateway) {
-                        CircularProgressIndicator(color = Color.White, modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(if (uiState.language == "hi") "परीक्षण जारी है..." else "Testing Connection...", fontSize = 13.sp)
-                    } else {
-                        Icon(Icons.Default.NetworkCheck, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(if (uiState.language == "hi") "गेटवे का परीक्षण करें" else "Test Gateway Health", fontSize = 13.sp)
-                    }
-                }
-
-                // Test result banner
-                uiState.gatewayTestResult?.let { result ->
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Surface(
-                        shape = RoundedCornerShape(8.dp),
-                        color = if (uiState.gatewayTestSuccess == true) Color(0xFFE8F5E9) else Color(0xFFFFEBEE),
+        // 2. Backend Gateway & Server Configuration Card (Visible exclusively to Project Owner & Administrators)
+        if (isOwnerOrAdmin) {
+            Card(
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Row(
-                            modifier = Modifier.padding(10.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        Icon(
+                            imageVector = Icons.Default.CloudSync,
+                            contentDescription = null,
+                            tint = ForestGreenDark,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = if (uiState.language == "hi") "बैकएंड गेटवे कॉन्फ़िगरेशन" else "Backend Gateway URL",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = ForestGreenDark
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = if (uiState.language == "hi")
+                            "एग्रीमाइंड क्लाउड प्रोडक्शन गेटवे (HTTPS) URL दर्ज करें:"
+                        else
+                            "Configure AgriMind cloud production gateway (HTTPS) URL:",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.DarkGray
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    OutlinedTextField(
+                        value = uiState.gatewayInput,
+                        onValueChange = { viewModel.setGatewayInput(it) },
+                        label = { Text(if (uiState.language == "hi") "सर्वर गेटवे URL" else "Server Gateway URL") },
+                        placeholder = { Text("https://agrimind-seven.vercel.app/") },
+                        singleLine = true,
+                        isError = uiState.gatewayError != null,
+                        supportingText = {
+                            uiState.gatewayError?.let { err ->
+                                Text(text = err, color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = ForestGreenPrimary,
+                            unfocusedBorderColor = Color.Gray
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Button(
+                            onClick = { viewModel.saveGatewayUrl() },
+                            colors = ButtonDefaults.buttonColors(containerColor = ForestGreenPrimary),
+                            modifier = Modifier.weight(1f)
                         ) {
-                            Icon(
-                                imageVector = if (uiState.gatewayTestSuccess == true) Icons.Default.CheckCircle else Icons.Default.Error,
-                                contentDescription = null,
-                                tint = if (uiState.gatewayTestSuccess == true) ForestGreenDark else Color(0xFFC62828),
-                                modifier = Modifier.size(20.dp)
-                            )
+                            Icon(Icons.Default.Save, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(if (uiState.language == "hi") "लागू करें" else "Apply", fontSize = 13.sp)
+                        }
+
+                        OutlinedButton(
+                            onClick = { viewModel.resetToEmulatorGateway() },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(Icons.Default.RestartAlt, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(if (uiState.language == "hi") "एमुलेटर डिफ़ॉल्ट" else "Reset Default", fontSize = 12.sp)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(
+                        onClick = { viewModel.testGatewayConnection() },
+                        colors = ButtonDefaults.buttonColors(containerColor = ForestGreenDark),
+                        enabled = !uiState.isTestingGateway,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        if (uiState.isTestingGateway) {
+                            CircularProgressIndicator(color = Color.White, modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = result,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = if (uiState.gatewayTestSuccess == true) ForestGreenDark else Color(0xFFC62828)
-                            )
+                            Text(if (uiState.language == "hi") "परीक्षण जारी है..." else "Testing Connection...", fontSize = 13.sp)
+                        } else {
+                            Icon(Icons.Default.NetworkCheck, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(if (uiState.language == "hi") "गेटवे का परीक्षण करें" else "Test Gateway Health", fontSize = 13.sp)
+                        }
+                    }
+
+                    // Test result banner
+                    uiState.gatewayTestResult?.let { result ->
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = if (uiState.gatewayTestSuccess == true) Color(0xFFE8F5E9) else Color(0xFFFFEBEE),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(10.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = if (uiState.gatewayTestSuccess == true) Icons.Default.CheckCircle else Icons.Default.Error,
+                                    contentDescription = null,
+                                    tint = if (uiState.gatewayTestSuccess == true) ForestGreenDark else Color(0xFFC62828),
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = result,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = if (uiState.gatewayTestSuccess == true) ForestGreenDark else Color(0xFFC62828)
+                                )
+                            }
                         }
                     }
                 }
@@ -488,7 +496,7 @@ fun SettingsScreen(
                 color = ForestGreenDark
             )
             Text(
-                text = "FastAPI Backend + ChromaDB (63 chunks) + Jetpack Compose Android",
+                text = "FastAPI Backend + ChromaDB (91 chunks) + Jetpack Compose Android",
                 style = MaterialTheme.typography.labelSmall,
                 color = Color.Gray
             )
