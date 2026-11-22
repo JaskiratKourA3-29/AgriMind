@@ -20,6 +20,7 @@ import sqlite3
 from contextlib import contextmanager
 from datetime import datetime, timezone, timedelta
 from typing import Dict, Any, Optional, List, Tuple
+from src.services.db_pool import get_db_connection
 
 WORKSPACE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DEFAULT_DB_PATH = os.environ.get(
@@ -66,7 +67,8 @@ class DBConnectionWrapper:
         self._conn.rollback()
 
     def close(self):
-        self._conn.close()
+        # In a pooled environment, closing the underlying connection directly is managed by get_db_connection
+        pass
 
 
 class AuthService:
@@ -90,30 +92,14 @@ class AuthService:
 
     @contextmanager
     def _connection(self):
-        if self.is_postgres:
-            raw_conn = psycopg2.connect(self.db_path)
-            raw_conn.autocommit = False
-            wrapper = DBConnectionWrapper(raw_conn, is_postgres=True)
+        with get_db_connection(self.db_path) as raw_conn:
+            wrapper = DBConnectionWrapper(raw_conn, is_postgres=self.is_postgres)
             try:
                 yield wrapper
                 wrapper.commit()
             except Exception:
                 wrapper.rollback()
                 raise
-            finally:
-                wrapper.close()
-        else:
-            raw_conn = sqlite3.connect(self.db_path, timeout=10.0)
-            raw_conn.row_factory = sqlite3.Row
-            wrapper = DBConnectionWrapper(raw_conn, is_postgres=False)
-            try:
-                yield wrapper
-                wrapper.commit()
-            except Exception:
-                wrapper.rollback()
-                raise
-            finally:
-                wrapper.close()
 
     def _table_exists(self, conn, table_name: str) -> bool:
         """Checks if a table exists in an engine-safe manner without aborting transactions."""
@@ -193,6 +179,11 @@ class AuthService:
                 conn.execute("ALTER TABLE cases ADD COLUMN owner_user_id TEXT;")
             if not self._column_exists(conn, "users", "updated_at"):
                 conn.execute("ALTER TABLE users ADD COLUMN updated_at TEXT;")
+
+            # Optimized performance indexes for sorting and filtering
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_audit_logs_timestamp ON audit_logs (timestamp DESC);")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_users_created_at ON users (created_at DESC);")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_users_role ON users (role);")
 
             conn.commit()
 
@@ -696,15 +687,28 @@ class AuthService:
             return [dict(r) for r in rows]
 
     def get_system_stats(self) -> Dict[str, Any]:
-        """Retrieves system counts for admin dashboard."""
+        """Retrieves system counts for admin dashboard using consolidated aggregation."""
         with self._connection() as conn:
-            total_users = conn.execute("SELECT COUNT(*) AS count FROM users;").fetchone()["count"]
-            total_farmers = conn.execute("SELECT COUNT(*) AS count FROM users WHERE role = 'farmer';").fetchone()["count"]
-            total_admins = conn.execute("SELECT COUNT(*) AS count FROM users WHERE role IN ('admin', 'owner');").fetchone()["count"]
-            total_sub_owners = conn.execute("SELECT COUNT(*) AS count FROM users WHERE role = 'sub_owner';").fetchone()["count"]
-            active_users = conn.execute("SELECT COUNT(*) AS count FROM users WHERE is_active = 1;").fetchone()["count"]
-            suspended_users = conn.execute("SELECT COUNT(*) AS count FROM users WHERE is_active = 0;").fetchone()["count"]
-            total_audits = conn.execute("SELECT COUNT(*) AS count FROM audit_logs;").fetchone()["count"]
+            row = conn.execute("""
+                SELECT 
+                    COUNT(*) as total_users,
+                    SUM(CASE WHEN role = 'farmer' THEN 1 ELSE 0 END) as total_farmers,
+                    SUM(CASE WHEN role IN ('admin', 'owner') THEN 1 ELSE 0 END) as total_admins,
+                    SUM(CASE WHEN role = 'sub_owner' THEN 1 ELSE 0 END) as total_sub_owners,
+                    SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END) as active_users,
+                    SUM(CASE WHEN is_active = 0 THEN 1 ELSE 0 END) as suspended_users
+                FROM users;
+            """).fetchone()
+
+            audit_row = conn.execute("SELECT COUNT(*) AS count FROM audit_logs;").fetchone()
+            total_audits = audit_row["count"] if audit_row else 0
+
+        total_users = int(row["total_users"] or 0) if row else 0
+        total_farmers = int(row["total_farmers"] or 0) if row else 0
+        total_admins = int(row["total_admins"] or 0) if row else 0
+        total_sub_owners = int(row["total_sub_owners"] or 0) if row else 0
+        active_users = int(row["active_users"] or 0) if row else 0
+        suspended_users = int(row["suspended_users"] or 0) if row else 0
 
         return {
             "total_users": total_users,

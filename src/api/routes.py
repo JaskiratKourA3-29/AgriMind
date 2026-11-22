@@ -1916,7 +1916,7 @@ async def admin_system_status(user: Dict[str, Any] = Depends(require_permission(
     total_cases = case_store.get_case_count()
 
     sys_stats = auth_svc.get_system_stats()
-    shared_cases = sharing_svc.list_shared_cases(target_entity="cooperative_all", limit=1000)
+    total_shared_cases = sharing_svc.get_shared_case_count()
 
     # Count comments
     total_comments = 0
@@ -1928,7 +1928,7 @@ async def admin_system_status(user: Dict[str, Any] = Depends(require_permission(
         server_time=datetime.now(timezone.utc).isoformat(),
         total_cases=total_cases,
         total_users=sys_stats["total_users"],
-        total_shared_cases=len(shared_cases),
+        total_shared_cases=total_shared_cases,
         total_comments=total_comments,
         vectorstore_chunks=91,
         vision_model_status="active",

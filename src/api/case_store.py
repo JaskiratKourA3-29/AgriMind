@@ -11,6 +11,7 @@ import sqlite3
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from typing import Dict, Any, Optional
+from src.services.db_pool import get_db_connection
 
 try:
     import psycopg2
@@ -53,28 +54,8 @@ class CaseStore:
 
     @contextmanager
     def _connection(self):
-        if self.is_postgres:
-            conn = psycopg2.connect(self.db_path)
-            conn.autocommit = False
-            try:
-                yield conn
-                conn.commit()
-            except Exception:
-                conn.rollback()
-                raise
-            finally:
-                conn.close()
-        else:
-            conn = sqlite3.connect(self.db_path, timeout=10.0)
-            conn.row_factory = sqlite3.Row
-            try:
-                yield conn
-                conn.commit()
-            except Exception:
-                conn.rollback()
-                raise
-            finally:
-                conn.close()
+        with get_db_connection(self.db_path) as conn:
+            yield conn
 
     def _execute(self, conn, sql: str, params: tuple = ()):
         """Executes a parameterized query with engine-specific placeholder translation."""

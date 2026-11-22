@@ -14,6 +14,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Dict, Any, Optional, List
 from contextlib import contextmanager
+from src.services.db_pool import get_db_connection
 
 WORKSPACE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DEFAULT_DB_PATH = os.environ.get(
@@ -57,7 +58,8 @@ class DBConnectionWrapper:
         self._conn.rollback()
 
     def close(self):
-        self._conn.close()
+        # Managed by get_db_connection context manager
+        pass
 
 
 class CaseSharingService:
@@ -120,30 +122,14 @@ class CaseSharingService:
 
     @contextmanager
     def _connection(self):
-        if self.is_postgres:
-            raw_conn = psycopg2.connect(self.db_path)
-            raw_conn.autocommit = False
-            wrapper = DBConnectionWrapper(raw_conn, is_postgres=True)
+        with get_db_connection(self.db_path) as raw_conn:
+            wrapper = DBConnectionWrapper(raw_conn, is_postgres=self.is_postgres)
             try:
                 yield wrapper
                 wrapper.commit()
             except Exception:
                 wrapper.rollback()
                 raise
-            finally:
-                wrapper.close()
-        else:
-            raw_conn = sqlite3.connect(self.db_path, timeout=10.0)
-            raw_conn.row_factory = sqlite3.Row
-            wrapper = DBConnectionWrapper(raw_conn, is_postgres=False)
-            try:
-                yield wrapper
-                wrapper.commit()
-            except Exception:
-                wrapper.rollback()
-                raise
-            finally:
-                wrapper.close()
 
     def share_case(
         self,
@@ -279,6 +265,14 @@ class CaseSharingService:
                     }
                 })
             return results
+
+    def get_shared_case_count(self) -> int:
+        """Returns total active shared cases without fetching or parsing full JSON records."""
+        with self._connection() as conn:
+            row = conn.execute("SELECT count(*) AS count FROM shared_cases WHERE status = 'active';").fetchone()
+            if row:
+                return row["count"] if isinstance(row, dict) or hasattr(row, "__getitem__") else row[0]
+            return 0
 
     def revoke_share(self, share_id: str, owner_farmer_id: str) -> bool:
         """Revokes access to a shared case. Only the owner can revoke."""

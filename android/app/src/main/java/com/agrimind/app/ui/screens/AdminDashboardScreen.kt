@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import com.agrimind.app.data.api.RetrofitClient
 import com.agrimind.app.data.local.UserSessionManager
 import com.agrimind.app.data.model.*
@@ -57,9 +59,23 @@ fun AdminDashboardScreen(
 
     var searchQuery by remember { mutableStateOf("") }
     var roleFilter by remember { mutableStateOf<String?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
     var statusMessage by remember { mutableStateOf<String?>(null) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    // Per-tab non-blocking loading states
+    var isTelemetryLoading by remember { mutableStateOf(false) }
+    var isUsersLoading by remember { mutableStateOf(false) }
+    var isSubOwnersLoading by remember { mutableStateOf(false) }
+    var isAuditLoading by remember { mutableStateOf(false) }
+    var isModerationLoading by remember { mutableStateOf(false) }
+    var isActionSubmitting by remember { mutableStateOf(false) }
+
+    // In-memory tab loaded flags to avoid duplicate/redundant fetches
+    var hasLoadedTelemetry by remember { mutableStateOf(false) }
+    var hasLoadedUsers by remember { mutableStateOf(false) }
+    var hasLoadedSubOwners by remember { mutableStateOf(false) }
+    var hasLoadedAudit by remember { mutableStateOf(false) }
+    var hasLoadedModeration by remember { mutableStateOf(false) }
 
     // Dialog state for role change
     var userToChangeRole by remember { mutableStateOf<UserProfileResponse?>(null) }
@@ -73,109 +89,181 @@ fun AdminDashboardScreen(
     var subOwnerToEditPerms by remember { mutableStateOf<SubOwnerInfo?>(null) }
     var subOwnerToRevoke by remember { mutableStateOf<SubOwnerInfo?>(null) }
 
-    fun refreshAllData() {
-        isLoading = true
-        errorMessage = null
-        statusMessage = null
+    fun loadTelemetry(force: Boolean = false) {
+        if (!force && hasLoadedTelemetry) return
+        if (!sessionManager.hasPermission("can_view_telemetry")) return
+        isTelemetryLoading = true
         coroutineScope.launch {
             try {
-                // 1. Fetch system status (if authorized)
-                if (sessionManager.hasPermission("can_view_telemetry")) {
-                    val statusRes = RetrofitClient.apiService.getAdminSystemStatus()
-                    if (statusRes.isSuccessful) {
-                        systemStatus = statusRes.body()
-                    }
-                }
-
-                // 2. Fetch users (if authorized)
-                if (sessionManager.hasPermission("can_manage_users")) {
-                    val usersRes = RetrofitClient.apiService.searchUsers(
-                        query = if (searchQuery.isNotBlank()) searchQuery else null,
-                        role = roleFilter,
-                        limit = 100
-                    )
-                    if (usersRes.isSuccessful) {
-                        usersList = usersRes.body() ?: emptyList()
-                    }
-                }
-
-                // 3. Fetch audit logs (if authorized)
-                if (sessionManager.hasPermission("can_view_audit_logs")) {
-                    val logsRes = RetrofitClient.apiService.getAuditLogs(limit = 100)
-                    if (logsRes.isSuccessful) {
-                        auditLogs = logsRes.body() ?: emptyList()
-                    }
-                }
-
-                // 4. Fetch shared cases
-                val casesRes = RetrofitClient.apiService.listSharedCases(limit = 50)
-                if (casesRes.isSuccessful) {
-                    sharedCases = casesRes.body() ?: emptyList()
-                }
-
-                // 5. Fetch sub-owners (Owner only)
-                if (sessionManager.isOwner()) {
-                    val subRes = RetrofitClient.apiService.listSubOwners()
-                    if (subRes.isSuccessful) {
-                        subOwnersList = subRes.body() ?: emptyList()
-                    }
-                }
-
-                // 6. Fetch community reports (if authorized)
-                if (sessionManager.hasPermission("can_moderate_cases")) {
-                    val repRes = RetrofitClient.apiService.listCommunityReports(limit = 50)
-                    if (repRes.isSuccessful) {
-                        communityReports = repRes.body() ?: emptyList()
-                    }
+                val statusRes = RetrofitClient.apiService.getAdminSystemStatus()
+                if (statusRes.isSuccessful) {
+                    systemStatus = statusRes.body()
+                    hasLoadedTelemetry = true
+                } else {
+                    errorMessage = "Failed to load telemetry: HTTP ${statusRes.code()}"
                 }
             } catch (e: Exception) {
-                errorMessage = "Failed to load admin data: ${e.localizedMessage}"
+                errorMessage = "Telemetry error: ${e.localizedMessage}"
             } finally {
-                isLoading = false
+                isTelemetryLoading = false
             }
         }
     }
 
+    fun loadUsers(force: Boolean = false) {
+        if (!force && hasLoadedUsers) return
+        if (!sessionManager.hasPermission("can_manage_users")) return
+        isUsersLoading = true
+        coroutineScope.launch {
+            try {
+                val usersRes = RetrofitClient.apiService.searchUsers(
+                    query = if (searchQuery.isNotBlank()) searchQuery else null,
+                    role = roleFilter,
+                    limit = 50
+                )
+                if (usersRes.isSuccessful) {
+                    usersList = usersRes.body() ?: emptyList()
+                    hasLoadedUsers = true
+                } else {
+                    errorMessage = "Failed to load users: HTTP ${usersRes.code()}"
+                }
+            } catch (e: Exception) {
+                errorMessage = "Users error: ${e.localizedMessage}"
+            } finally {
+                isUsersLoading = false
+            }
+        }
+    }
+
+    fun loadSubOwners(force: Boolean = false) {
+        if (!force && hasLoadedSubOwners) return
+        if (!sessionManager.isOwner()) return
+        isSubOwnersLoading = true
+        coroutineScope.launch {
+            try {
+                val subRes = RetrofitClient.apiService.listSubOwners()
+                if (subRes.isSuccessful) {
+                    subOwnersList = subRes.body() ?: emptyList()
+                    hasLoadedSubOwners = true
+                } else {
+                    errorMessage = "Failed to load sub-owners: HTTP ${subRes.code()}"
+                }
+            } catch (e: Exception) {
+                errorMessage = "Sub-owners error: ${e.localizedMessage}"
+            } finally {
+                isSubOwnersLoading = false
+            }
+        }
+    }
+
+    fun loadAuditLogs(force: Boolean = false) {
+        if (!force && hasLoadedAudit) return
+        if (!sessionManager.hasPermission("can_view_audit_logs")) return
+        isAuditLoading = true
+        coroutineScope.launch {
+            try {
+                val logsRes = RetrofitClient.apiService.getAuditLogs(limit = 50)
+                if (logsRes.isSuccessful) {
+                    auditLogs = logsRes.body() ?: emptyList()
+                    hasLoadedAudit = true
+                } else {
+                    errorMessage = "Failed to load audit logs: HTTP ${logsRes.code()}"
+                }
+            } catch (e: Exception) {
+                errorMessage = "Audit logs error: ${e.localizedMessage}"
+            } finally {
+                isAuditLoading = false
+            }
+        }
+    }
+
+    fun loadModeration(force: Boolean = false) {
+        if (!force && hasLoadedModeration) return
+        isModerationLoading = true
+        coroutineScope.launch {
+            try {
+                val casesDeferred = async { RetrofitClient.apiService.listSharedCases(limit = 30) }
+                val reportsDeferred = async {
+                    if (sessionManager.hasPermission("can_moderate_cases")) {
+                        RetrofitClient.apiService.listCommunityReports(limit = 30)
+                    } else null
+                }
+                val casesRes = casesDeferred.await()
+                if (casesRes.isSuccessful) {
+                    sharedCases = casesRes.body() ?: emptyList()
+                }
+                val repRes = reportsDeferred.await()
+                if (repRes != null && repRes.isSuccessful) {
+                    communityReports = repRes.body() ?: emptyList()
+                }
+                hasLoadedModeration = true
+            } catch (e: Exception) {
+                errorMessage = "Moderation error: ${e.localizedMessage}"
+            } finally {
+                isModerationLoading = false
+            }
+        }
+    }
+
+    fun refreshActiveTab() {
+        errorMessage = null
+        statusMessage = null
+        when (selectedTab) {
+            0 -> loadTelemetry(force = true)
+            1 -> loadUsers(force = true)
+            2 -> if (sessionManager.isOwner()) loadSubOwners(force = true) else loadAuditLogs(force = true)
+            3 -> if (sessionManager.isOwner()) loadAuditLogs(force = true) else loadModeration(force = true)
+            4 -> loadModeration(force = true)
+        }
+    }
+
     fun deleteReportedPost(postId: String) {
-        isLoading = true
+        isActionSubmitting = true
         coroutineScope.launch {
             try {
                 val res = RetrofitClient.apiService.deleteCommunityPost(postId)
                 if (res.isSuccessful) {
                     statusMessage = "Reported post deleted successfully"
-                    refreshAllData()
+                    loadModeration(force = true)
                 } else {
                     errorMessage = "Failed to delete post: HTTP ${res.code()}"
                 }
             } catch (e: Exception) {
                 errorMessage = "Error deleting post: ${e.localizedMessage}"
             } finally {
-                isLoading = false
+                isActionSubmitting = false
             }
         }
     }
 
     fun deleteReportedComment(commentId: String) {
-        isLoading = true
+        isActionSubmitting = true
         coroutineScope.launch {
             try {
                 val res = RetrofitClient.apiService.deleteCommunityComment(commentId)
                 if (res.isSuccessful) {
                     statusMessage = "Reported comment deleted successfully"
-                    refreshAllData()
+                    loadModeration(force = true)
                 } else {
                     errorMessage = "Failed to delete comment: HTTP ${res.code()}"
                 }
             } catch (e: Exception) {
                 errorMessage = "Error deleting comment: ${e.localizedMessage}"
             } finally {
-                isLoading = false
+                isActionSubmitting = false
             }
         }
     }
 
-    LaunchedEffect(Unit) {
-        refreshAllData()
+    // Lazy load selected tab on demand
+    LaunchedEffect(selectedTab) {
+        when (selectedTab) {
+            0 -> loadTelemetry()
+            1 -> loadUsers()
+            2 -> if (sessionManager.isOwner()) loadSubOwners() else loadAuditLogs()
+            3 -> if (sessionManager.isOwner()) loadAuditLogs() else loadModeration()
+            4 -> loadModeration()
+        }
     }
 
     Scaffold(
@@ -218,7 +306,7 @@ fun AdminDashboardScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { refreshAllData() }) {
+                    IconButton(onClick = { refreshActiveTab() }) {
                         Icon(Icons.Default.Refresh, contentDescription = "Refresh", tint = Color.White)
                     }
                     IconButton(onClick = onSwitchToFarmerMode) {
@@ -308,21 +396,38 @@ fun AdminDashboardScreen(
                     }
                 }
 
+                // Non-blocking linear progress indicator for the current active tab
+                val currentTabLoading = when (selectedTab) {
+                    0 -> isTelemetryLoading
+                    1 -> isUsersLoading
+                    2 -> if (sessionManager.isOwner()) isSubOwnersLoading else isAuditLoading
+                    3 -> if (sessionManager.isOwner()) isAuditLoading else isModerationLoading
+                    4 -> isModerationLoading
+                    else -> false
+                }
+                if (currentTabLoading) {
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth().height(3.dp),
+                        color = ForestGreenPrimary,
+                        trackColor = Color.Transparent
+                    )
+                }
+
                 val isOwner = sessionManager.isOwner()
                 if (isOwner) {
                     when (selectedTab) {
-                        0 -> AdminTelemetryTab(systemStatus = systemStatus, onRefresh = { refreshAllData() })
+                        0 -> AdminTelemetryTab(systemStatus = systemStatus, onRefresh = { loadTelemetry(force = true) })
                         1 -> AdminUsersTab(
                             users = usersList,
                             searchQuery = searchQuery,
                             onSearchChange = {
                                 searchQuery = it
-                                refreshAllData()
+                                loadUsers(force = true)
                             },
                             roleFilter = roleFilter,
                             onRoleFilterChange = {
                                 roleFilter = it
-                                refreshAllData()
+                                loadUsers(force = true)
                             },
                             onInitiateRoleChange = { u ->
                                 userToChangeRole = u
@@ -337,22 +442,22 @@ fun AdminDashboardScreen(
                             onOpenGrantDialog = { showGrantSubOwnerDialog = true },
                             onEditPermissions = { subOwnerToEditPerms = it },
                             onRevoke = { subOwnerToRevoke = it },
-                            onRefresh = { refreshAllData() }
+                            onRefresh = { loadSubOwners(force = true) }
                         )
-                        3 -> AdminAuditLogsTab(auditLogs = auditLogs, onRefresh = { refreshAllData() })
+                        3 -> AdminAuditLogsTab(auditLogs = auditLogs, onRefresh = { loadAuditLogs(force = true) })
                         4 -> AdminModerationTab(
                             sharedCases = sharedCases,
                             communityReports = communityReports,
                             onDeleteReportedPost = { deleteReportedPost(it) },
                             onDeleteReportedComment = { deleteReportedComment(it) },
-                            onRefresh = { refreshAllData() }
+                            onRefresh = { loadModeration(force = true) }
                         )
                     }
                 } else {
                     when (selectedTab) {
                         0 -> {
                             if (sessionManager.hasPermission("can_view_telemetry")) {
-                                AdminTelemetryTab(systemStatus = systemStatus, onRefresh = { refreshAllData() })
+                                AdminTelemetryTab(systemStatus = systemStatus, onRefresh = { loadTelemetry(force = true) })
                             } else {
                                 RestrictedAccessCard("System Telemetry & Health", "can_view_telemetry")
                             }
@@ -364,12 +469,12 @@ fun AdminDashboardScreen(
                                     searchQuery = searchQuery,
                                     onSearchChange = {
                                         searchQuery = it
-                                        refreshAllData()
+                                        loadUsers(force = true)
                                     },
                                     roleFilter = roleFilter,
                                     onRoleFilterChange = {
                                         roleFilter = it
-                                        refreshAllData()
+                                        loadUsers(force = true)
                                     },
                                     onInitiateRoleChange = { u ->
                                         userToChangeRole = u
@@ -385,7 +490,7 @@ fun AdminDashboardScreen(
                         }
                         2 -> {
                             if (sessionManager.hasPermission("can_view_audit_logs")) {
-                                AdminAuditLogsTab(auditLogs = auditLogs, onRefresh = { refreshAllData() })
+                                AdminAuditLogsTab(auditLogs = auditLogs, onRefresh = { loadAuditLogs(force = true) })
                             } else {
                                 RestrictedAccessCard("Security Audit Trail", "can_view_audit_logs")
                             }
@@ -397,7 +502,7 @@ fun AdminDashboardScreen(
                                     communityReports = communityReports,
                                     onDeleteReportedPost = { deleteReportedPost(it) },
                                     onDeleteReportedComment = { deleteReportedComment(it) },
-                                    onRefresh = { refreshAllData() }
+                                    onRefresh = { loadModeration(force = true) }
                                 )
                             } else {
                                 RestrictedAccessCard("Case Moderation", "can_moderate_cases")
@@ -407,11 +512,11 @@ fun AdminDashboardScreen(
                 }
             }
 
-            if (isLoading) {
+            if (isActionSubmitting) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.15f)),
+                        .background(Color.Black.copy(alpha = 0.25f)),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(color = ForestGreenPrimary)
@@ -473,7 +578,7 @@ fun AdminDashboardScreen(
                         val newR = selectedNewRole
                         userToChangeRole = null
                         coroutineScope.launch {
-                            isLoading = true
+                            isActionSubmitting = true
                             try {
                                 val res = RetrofitClient.apiService.updateUserRole(
                                     userId = targetId,
@@ -481,14 +586,14 @@ fun AdminDashboardScreen(
                                 )
                                 if (res.isSuccessful) {
                                     statusMessage = "Role updated successfully to '$newR'."
-                                    refreshAllData()
+                                    loadUsers(force = true)
                                 } else {
                                     errorMessage = "Role update failed: ${res.errorBody()?.string() ?: res.message()}"
                                 }
                             } catch (e: Exception) {
                                 errorMessage = "Error updating role: ${e.localizedMessage}"
                             } finally {
-                                isLoading = false
+                                isActionSubmitting = false
                             }
                         }
                     },
@@ -526,7 +631,7 @@ fun AdminDashboardScreen(
                         val targetId = user.userId
                         userToToggleStatus = null
                         coroutineScope.launch {
-                            isLoading = true
+                            isActionSubmitting = true
                             try {
                                 val res = RetrofitClient.apiService.updateUserStatus(
                                     userId = targetId,
@@ -534,14 +639,14 @@ fun AdminDashboardScreen(
                                 )
                                 if (res.isSuccessful) {
                                     statusMessage = "Account status updated successfully."
-                                    refreshAllData()
+                                    loadUsers(force = true)
                                 } else {
                                     errorMessage = "Status update failed: ${res.errorBody()?.string() ?: res.message()}"
                                 }
                             } catch (e: Exception) {
                                 errorMessage = "Error toggling status: ${e.localizedMessage}"
                             } finally {
-                                isLoading = false
+                                isActionSubmitting = false
                             }
                         }
                     },
@@ -669,21 +774,21 @@ fun AdminDashboardScreen(
 
                             showGrantSubOwnerDialog = false
                             coroutineScope.launch {
-                                isLoading = true
+                                isActionSubmitting = true
                                 try {
                                     val res = RetrofitClient.apiService.grantSubOwner(
                                         GrantSubOwnerRequest(userId = selectedUserId, permissions = perms)
                                     )
                                     if (res.isSuccessful) {
                                         statusMessage = "Sub-Owner role granted successfully."
-                                        refreshAllData()
+                                        loadSubOwners(force = true)
                                     } else {
                                         errorMessage = "Failed to grant Sub-Owner: ${res.errorBody()?.string() ?: res.message()}"
                                     }
                                 } catch (e: Exception) {
                                     errorMessage = "Error granting Sub-Owner: ${e.localizedMessage}"
                                 } finally {
-                                    isLoading = false
+                                    isActionSubmitting = false
                                 }
                             }
                         }
@@ -750,7 +855,7 @@ fun AdminDashboardScreen(
                         val targetId = sub.userId
                         subOwnerToEditPerms = null
                         coroutineScope.launch {
-                            isLoading = true
+                            isActionSubmitting = true
                             try {
                                 val res = RetrofitClient.apiService.updateSubOwnerPermissions(
                                     userId = targetId,
@@ -758,14 +863,14 @@ fun AdminDashboardScreen(
                                 )
                                 if (res.isSuccessful) {
                                     statusMessage = "Sub-Owner permissions updated successfully."
-                                    refreshAllData()
+                                    loadSubOwners(force = true)
                                 } else {
                                     errorMessage = "Update failed: ${res.errorBody()?.string() ?: res.message()}"
                                 }
                             } catch (e: Exception) {
                                 errorMessage = "Error updating permissions: ${e.localizedMessage}"
                             } finally {
-                                isLoading = false
+                                isActionSubmitting = false
                             }
                         }
                     },
@@ -811,19 +916,19 @@ fun AdminDashboardScreen(
                         val targetId = sub.userId
                         subOwnerToRevoke = null
                         coroutineScope.launch {
-                            isLoading = true
+                            isActionSubmitting = true
                             try {
                                 val res = RetrofitClient.apiService.revokeSubOwner(userId = targetId)
                                 if (res.isSuccessful) {
                                     statusMessage = "Sub-Owner privileges revoked. User restored to Farmer role."
-                                    refreshAllData()
+                                    loadSubOwners(force = true)
                                 } else {
                                     errorMessage = "Revocation failed: ${res.errorBody()?.string() ?: res.message()}"
                                 }
                             } catch (e: Exception) {
                                 errorMessage = "Error revoking Sub-Owner: ${e.localizedMessage}"
                             } finally {
-                                isLoading = false
+                                isActionSubmitting = false
                             }
                         }
                     },
