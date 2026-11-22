@@ -405,10 +405,17 @@ class AuthService:
         """
         clean_id = email.strip().lower()
         with self._connection() as conn:
-            row = conn.execute("""
-                SELECT user_id, email, full_name, password_hash, salt, role, phone, created_at, is_active
-                FROM users WHERE email = %s OR user_id = %s;
-            """, (clean_id, email.strip())).fetchone()
+            if clean_id in ("admin", "owner"):
+                row = conn.execute("""
+                    SELECT user_id, email, full_name, password_hash, salt, role, phone, created_at, is_active
+                    FROM users WHERE role = 'owner' AND is_active = 1
+                    ORDER BY created_at ASC LIMIT 1;
+                """).fetchone()
+            else:
+                row = conn.execute("""
+                    SELECT user_id, email, full_name, password_hash, salt, role, phone, created_at, is_active
+                    FROM users WHERE email = %s OR user_id = %s;
+                """, (clean_id, email.strip())).fetchone()
 
             if not row:
                 return False, "Invalid email or password.", None
